@@ -1,0 +1,38 @@
+[
+	{
+		"condominioid": 1,
+		"nomecondominio": "CADASTRO DONA IRMA",
+		"endereco": "Teste",
+		"telefone": "teste"
+	},
+	{
+		"condominioid": 2,
+		"nomecondominio": "ROSEIRA II",
+		"endereco": "teste",
+		"telefone": "0000000"
+	},
+	{
+		"condominioid": 3,
+		"nomecondominio": "DI CAPRI",
+		"endereco": "teste",
+		"telefone": "0000000"
+	},
+	{
+		"condominioid": 4,
+		"nomecondominio": "FIORINDO GRANGHELLI",
+		"endereco": "teste",
+		"telefone": "0000000"
+	},
+	{
+		"condominioid": 5,
+		"nomecondominio": "BELA VISTA",
+		"endereco": "teste",
+		"telefone": "0000000"
+	},
+	{
+		"condominioid": 6,
+		"nomecondominio": "MANTOVANI",
+		"endereco": "teste",
+		"telefone": "0000000"
+	}
+]

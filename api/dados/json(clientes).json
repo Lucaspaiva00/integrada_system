@@ -1,0 +1,681 @@
+[
+	{
+		"clienteid": 1,
+		"apartamento": "CADASTRO DONA IRMA",
+		"nome": "Teste",
+		"cpf": "11111111111111",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 2,
+		"apartamento": "APTO 01",
+		"nome": "Bruna Aparecida Zanelato Passadori",
+		"cpf": "409.182.668-74",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 3,
+		"apartamento": "APTO 02",
+		"nome": "Caio Henrique de Paula",
+		"cpf": "234.769.358-17",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 4,
+		"apartamento": "APTO 03",
+		"nome": "Micaela Gon?alez Bovi",
+		"cpf": "455.567.568-13",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 5,
+		"apartamento": "APTO 04",
+		"nome": "Eduardo Dal Bo",
+		"cpf": "030.786.798-61",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 6,
+		"apartamento": "APTO 05",
+		"nome": "Leandro Jorge",
+		"cpf": "412.646.568-58",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 7,
+		"apartamento": "APTO 06",
+		"nome": "Maria Divina De Castro Barboza",
+		"cpf": "279.571.848-04",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 8,
+		"apartamento": "APTO 07",
+		"nome": "Denis Winder Gomes",
+		"cpf": "164.904.698-71",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 9,
+		"apartamento": "APTO 08",
+		"nome": "Edvaldo Antonio da Silva",
+		"cpf": "754.173.756-91",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 10,
+		"apartamento": "APTO 09",
+		"nome": "Maria Rosa Crispim Pinto",
+		"cpf": "078.669.748-29",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 11,
+		"apartamento": "APTO 10",
+		"nome": "Laura Gabriele da Silva",
+		"cpf": "468.062.388-82",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 12,
+		"apartamento": "APTO 11",
+		"nome": "Jonas Henrique Camargo dos Santos",
+		"cpf": "452.880.398-44",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 13,
+		"apartamento": "APTO 12",
+		"nome": "Franciane Mathias de Oliveira",
+		"cpf": "350.493.298-84",
+		"CondominioID": 1
+	},
+	{
+		"clienteid": 14,
+		"apartamento": "CASA 01",
+		"nome": "BETANIA R. DE MELO DOS SANTOS",
+		"cpf": "843.881.532-49",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 15,
+		"apartamento": "CASA 02",
+		"nome": "ROSA MARIA BARALDI DA SILVA",
+		"cpf": "058.361.568-67",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 16,
+		"apartamento": "CASA 03",
+		"nome": "ROAN OLIVEIRA ARRAES",
+		"cpf": "405.274.658-95",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 17,
+		"apartamento": "CASA 04",
+		"nome": "MARIA RENATA VENTURINI",
+		"cpf": "266.375.568-07",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 18,
+		"apartamento": "CASA 05",
+		"nome": "ADRIANA DE CASSIA PEREIRA",
+		"cpf": "290.831.058-90",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 19,
+		"apartamento": "CASA 06",
+		"nome": "KAREN CRISTINA MOLINA",
+		"cpf": "350.125.458-00",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 20,
+		"apartamento": "CASA 07",
+		"nome": "JOSE CARLOS ALVES DE SANTANA",
+		"cpf": "254.350.888-01",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 21,
+		"apartamento": "CASA 08",
+		"nome": "APARECIDO FERNANDES",
+		"cpf": "620.985.948-87",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 22,
+		"apartamento": "CASA 09",
+		"nome": "CELSO ELECIR VARGAS",
+		"cpf": "595.342.141-91",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 23,
+		"apartamento": "CASA 10",
+		"nome": "ERICA DE CASSIA P. CHRISPIM",
+		"cpf": "280.095.528-79",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 24,
+		"apartamento": "CASA 11",
+		"nome": "ALEX SANTHIAGO RIBEIRO",
+		"cpf": "274.249.568-17",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 25,
+		"apartamento": "CASA 12",
+		"nome": "ANTONIO VALDECIR DA SILVA",
+		"cpf": "107.929.118-06",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 26,
+		"apartamento": "CASA 13",
+		"nome": "ANTONIO MARCOS TREVISAN",
+		"cpf": "104.638.278-05",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 27,
+		"apartamento": "CASA 14",
+		"nome": "CLAUDIO RENAN DA SILVA",
+		"cpf": "344.472.408-07",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 28,
+		"apartamento": "CASA 15",
+		"nome": "WILIANS RUBENS PEZZO",
+		"cpf": "763.609.388-04",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 29,
+		"apartamento": "CASA 16",
+		"nome": "ROBERTO PAVANI FILHO",
+		"cpf": "377.649.668-19",
+		"CondominioID": 2
+	},
+	{
+		"clienteid": 205,
+		"apartamento": "APTO 11",
+		"nome": "JOSE AUGUSTO BORGES",
+		"cpf": "002.451.198-68",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 206,
+		"apartamento": "APTO 12",
+		"nome": "LUCIMARA BOIAGO TOSCO",
+		"cpf": "158.593.098-99",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 207,
+		"apartamento": "APTO 13",
+		"nome": "LEIDES MARCHESINI",
+		"cpf": "168.602.838-58",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 208,
+		"apartamento": "APTO 14",
+		"nome": "MARLENE AP MARMIROLL",
+		"cpf": "182.166.478-75",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 209,
+		"apartamento": "APTO 21",
+		"nome": "JOAO VIANA FREITAS",
+		"cpf": "023.821.998-49",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 210,
+		"apartamento": "APTO 22",
+		"nome": "ABILIO ANTONIO FERNANDES COSTODIO",
+		"cpf": "932.052.608-72",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 211,
+		"apartamento": "APTO 23",
+		"nome": "RENATO DE SOUZA SILVA",
+		"cpf": "192.608.438-12",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 212,
+		"apartamento": "APTO 24",
+		"nome": "JOSE AUGUSTO BORGES",
+		"cpf": "0000000000000",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 213,
+		"apartamento": "APTO 31",
+		"nome": "ANA PAULA SANCHEZ GARBIN",
+		"cpf": "120.747.018-02",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 214,
+		"apartamento": "APTO 32",
+		"nome": "MAGUIDA DE F. ROMIO",
+		"cpf": "102.703.248-60",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 215,
+		"apartamento": "APTO 33",
+		"nome": "VALERIA MARCHESINI CAVALLARI",
+		"cpf": "137.396.608-48",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 216,
+		"apartamento": "APTO 34",
+		"nome": "JOSE LUIZ FERNANDES COSTODIO",
+		"cpf": "016.153.118-07",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 217,
+		"apartamento": "APTO 41",
+		"nome": "HELENA REGINA MAFRA",
+		"cpf": "553.437.168-49",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 218,
+		"apartamento": "APTO 42",
+		"nome": "EDUARDO PENTEADO GOTTARDO",
+		"cpf": "313.584.528-14",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 219,
+		"apartamento": "APTO 43",
+		"nome": "JOSE AUGUSTO BORGES",
+		"cpf": "0000000000001",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 220,
+		"apartamento": "APTO 44",
+		"nome": "RAPHAEL ANDRADE PACHECO",
+		"cpf": "354.536.738-00",
+		"CondominioID": 3
+	},
+	{
+		"clienteid": 253,
+		"apartamento": "APTO 01",
+		"nome": "LUIZ CARLOS LEME",
+		"cpf": "717.565.588-68",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 254,
+		"apartamento": "APTO 02",
+		"nome": "SUELI THEREZINHA G DE SOUZA",
+		"cpf": "195.613.528-69",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 255,
+		"apartamento": "APTO 03",
+		"nome": "V GRANGHELLI NETO ADM",
+		"cpf": "33.039.428/0001-05",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 256,
+		"apartamento": "APTO 04",
+		"nome": "THEREZA MARCO GRANGHELLI",
+		"cpf": "107.928.668-35",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 257,
+		"apartamento": "APTO 05",
+		"nome": "ANA CRISTINA GRANGHELLI SISTI",
+		"cpf": "102.491.308-23",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 258,
+		"apartamento": "APTO 06",
+		"nome": "ORLANDO GRANGHELLI",
+		"cpf": "968.695.008-78",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 259,
+		"apartamento": "APTO 07",
+		"nome": "LOURDES VIGATO GRANGHELLI",
+		"cpf": "195.498.938-55",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 260,
+		"apartamento": "APTO 08",
+		"nome": "DERCI GRANGHELLI PANINI",
+		"cpf": "214.168.618-07",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 261,
+		"apartamento": "APTO 09",
+		"nome": "LOURDES VIGATO GRANGHELLI",
+		"cpf": "1000000000001",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 262,
+		"apartamento": "APTO 10",
+		"nome": "DERCI GRANGHELLI PANINI",
+		"cpf": "1000000000002",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 263,
+		"apartamento": "APTO 11",
+		"nome": "RAMON GRANGHELLI BRANCALHONE",
+		"cpf": "275.322.618-08",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 264,
+		"apartamento": "APTO 12",
+		"nome": "ORLANDO GRANGHELLI",
+		"cpf": "1000000000003",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 265,
+		"apartamento": "APTO 13",
+		"nome": "V GRANGHELLI NETO ADM",
+		"cpf": "1000000000004",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 266,
+		"apartamento": "APTO 14",
+		"nome": "THEREZA MARCO GRANGHELLI",
+		"cpf": "1000000000005",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 267,
+		"apartamento": "APTO 15",
+		"nome": "MARIA DE FATIMA GRANGHELLI FAVERO",
+		"cpf": "188.105.248-61",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 268,
+		"apartamento": "APTO 16",
+		"nome": "FRANCISCO GRANGHELLI",
+		"cpf": "164.129.408-63",
+		"CondominioID": 4
+	},
+	{
+		"clienteid": 269,
+		"apartamento": "APTO 01",
+		"nome": "ADRIANO JORGE NOGUEIRA",
+		"cpf": "025.435.446-74",
+		"CondominioID": 5
+	},
+	{
+		"clienteid": 270,
+		"apartamento": "APTO 02",
+		"nome": "APARECIDA CALEFFI LOPES",
+		"cpf": "363.516.446-15",
+		"CondominioID": 5
+	},
+	{
+		"clienteid": 271,
+		"apartamento": "APTO 03",
+		"nome": "OLAVO XAVIER",
+		"cpf": "024.709.628-89",
+		"CondominioID": 5
+	},
+	{
+		"clienteid": 272,
+		"apartamento": "APTO 04",
+		"nome": "MARIA CLAUDIA T B PASCHOIN",
+		"cpf": "192.180.098-42",
+		"CondominioID": 5
+	},
+	{
+		"clienteid": 273,
+		"apartamento": "APTO 05",
+		"nome": "GUSTAVO BIANCHINI DE MORAIS",
+		"cpf": "430.586.668-45",
+		"CondominioID": 5
+	},
+	{
+		"clienteid": 274,
+		"apartamento": "APTO 06",
+		"nome": "JANICI MELO",
+		"cpf": "268.589.978-22",
+		"CondominioID": 5
+	},
+	{
+		"clienteid": 305,
+		"apartamento": "APTO 11",
+		"nome": "MAURICIO A. FERRARI",
+		"cpf": "127.390.738-87",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 306,
+		"apartamento": "APTO 12",
+		"nome": "JOANA FABIOLA P. DO N. SANTIBANEZ",
+		"cpf": "498.361.109-68",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 307,
+		"apartamento": "APTO 13",
+		"nome": "SIMONE R. FAIDIGA",
+		"cpf": "171.801.968-86",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 308,
+		"apartamento": "APTO 21",
+		"nome": "ADRIANA MARQUES",
+		"cpf": "647.337.340-34",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 309,
+		"apartamento": "APTO 22",
+		"nome": "JOSEFA MORAES DE OLIVEIRA",
+		"cpf": "102.681.208-97",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 310,
+		"apartamento": "APTO 23",
+		"nome": "FERNANDO MAURO PEREIRA SOARES",
+		"cpf": "227.897.368-12",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 311,
+		"apartamento": "APTO 31",
+		"nome": "PEDRO TADEU PENTEADO",
+		"cpf": "016.157.048-84",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 312,
+		"apartamento": "APTO 32",
+		"nome": "SILVIA HELENA MANTOVANI PENTEADO",
+		"cpf": "184.226.718-32",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 313,
+		"apartamento": "APTO 33",
+		"nome": "JOANA GARCIA P. VALERIO",
+		"cpf": "535.490.588-53",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 314,
+		"apartamento": "APTO 41",
+		"nome": "ELZA ARLETE CASTELANI POZZEBON",
+		"cpf": "201.768.498-82",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 315,
+		"apartamento": "APTO 42",
+		"nome": "MARCO AURELIO DOS REIS SILVA",
+		"cpf": "075.325.366-61",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 316,
+		"apartamento": "APTO 43",
+		"nome": "FLAVIA PINA",
+		"cpf": "265.812.198-94",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 317,
+		"apartamento": "APTO 51",
+		"nome": "ROSANA M. P. REIS TOTTI",
+		"cpf": "532.698.616-72",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 318,
+		"apartamento": "APTO 52",
+		"nome": "ANDR? CELOTTO DE SOUZA",
+		"cpf": "129.492.908-92",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 319,
+		"apartamento": "APTO 53",
+		"nome": "MARIA EUGENIA CHIAROTTI GOTHARDO",
+		"cpf": "137.945.878-12",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 320,
+		"apartamento": "APTO 61",
+		"nome": "FATIMA AP. B DE SOUZA",
+		"cpf": "037.297.588-70",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 321,
+		"apartamento": "APTO 62",
+		"nome": "DURVALINA CESTARI SONCIN",
+		"cpf": "120.726.698-12",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 322,
+		"apartamento": "APTO 63",
+		"nome": "IOLANDA MAFALDA FABRI",
+		"cpf": "049.668.838-30",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 323,
+		"apartamento": "APTO 71",
+		"nome": "JO?O CARLOS GOTTARDO",
+		"cpf": "016.163.198-36",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 324,
+		"apartamento": "APTO 72",
+		"nome": "FERNANDO P. CAT?O",
+		"cpf": "137.961.408-23",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 325,
+		"apartamento": "APTO 73",
+		"nome": "JOSE RENER BEZERRA DE MORAES",
+		"cpf": "2000000000001",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 326,
+		"apartamento": "APTO 81",
+		"nome": "JOSE RENER BEZERRA DE MORAES",
+		"cpf": "2000000000002",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 327,
+		"apartamento": "APTO 82",
+		"nome": "ALBERTO VITORIO RIZZON",
+		"cpf": "059.206.008-02",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 328,
+		"apartamento": "APTO 83",
+		"nome": "DECIO GOTHARDO",
+		"cpf": "068.590.938-70",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 329,
+		"apartamento": "APTO 91",
+		"nome": "GLAUCIO AP. PANIGASSI",
+		"cpf": "2000000000003",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 330,
+		"apartamento": "APTO 92",
+		"nome": "MARIA CELIA DE FARIA",
+		"cpf": "046.726.098-20",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 331,
+		"apartamento": "APTO 93",
+		"nome": "GLAUCIO AP. PANIGASSI",
+		"cpf": "2000000000004",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 332,
+		"apartamento": "APTO 101",
+		"nome": "CRISTINA TIEMI SHOYAMA",
+		"cpf": "102.039.958-99",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 333,
+		"apartamento": "APTO 102",
+		"nome": "LUIZ ANTONIO VILELA",
+		"cpf": "154.584.638-38",
+		"CondominioID": 6
+	},
+	{
+		"clienteid": 334,
+		"apartamento": "APTO 103",
+		"nome": "LUIS AIRTON PATARO",
+		"cpf": "049.018.838-95",
+		"CondominioID": 6
+	}
+]
