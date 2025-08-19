@@ -13,16 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model apartamento{
-  condominioid Int @id @default(autoincrement())
+model Condominio {
+  condominioid   Int        @id @default(autoincrement())
   nomecondominio String
-  endereco String
-  telefone String
+  endereco       String
+  telefone       String
+  Clientes       Clientes[]
 }
 
-model clientes {
-  clienteid Int @id @default(autoincrement())
-  apartamento String
-  nome String
-  cpf String @unique
+model Clientes {
+  clienteid    Int        @id @default(autoincrement())
+  apartamento  String
+  nome         String
+  cpf          String     @unique
+  CondominioID Int
+  Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid])
 }
