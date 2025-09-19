@@ -22,16 +22,17 @@ model Condominio {
 }
 
 model Clientes {
-  clienteid    Int           @id @default(autoincrement())
-  apartamento  String
-  nome         String
-  cpf          String        @unique
-  CondominioID Int
-  Condominio   Condominio    @relation(fields: [CondominioID], references: [condominioid])
-  ocorrencias  ocorrencias[]
-  reservas     reservas[]
-  assembleia   assembleia[]
-  comunicados  comunicados[]
+  clienteid       Int               @id @default(autoincrement())
+  apartamento     String
+  nome            String
+  cpf             String            @unique
+  CondominioID    Int
+  Condominio      Condominio        @relation(fields: [CondominioID], references: [condominioid])
+  ocorrencias     ocorrencias[]
+  reservas        reservas[]
+  assembleia      assembleia[]
+  comunicados     comunicados[]
+  prestacaocontas prestacaocontas[]
 }
 
 model ocorrencias {
@@ -65,3 +66,10 @@ model comunicados {
   descricao      String
 }
 
+model prestacaocontas {
+  pretacaoid    Int      @id @default(autoincrement())
+  demonstrativo String
+  datacriado    String
+  ClienteID     Int
+  Cliente       Clientes @relation(fields: [ClienteID], references: [clienteid])
+}
