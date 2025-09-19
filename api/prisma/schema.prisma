@@ -22,10 +22,46 @@ model Condominio {
 }
 
 model Clientes {
-  clienteid    Int        @id @default(autoincrement())
+  clienteid    Int           @id @default(autoincrement())
   apartamento  String
   nome         String
-  cpf          String     @unique
+  cpf          String        @unique
   CondominioID Int
-  Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid])
+  Condominio   Condominio    @relation(fields: [CondominioID], references: [condominioid])
+  ocorrencias  ocorrencias[]
+  reservas     reservas[]
+  assembleia   assembleia[]
+  comunicados  comunicados[]
 }
+
+model ocorrencias {
+  ocorrenciasid Int      @id @default(autoincrement())
+  ClienteID     Int
+  Cliente       Clientes @relation(fields: [ClienteID], references: [clienteid])
+  descricao     String
+  datacriado    String
+}
+
+model reservas {
+  reservaid   Int      @id @default(autoincrement())
+  ClienteID   Int
+  Cliente     Clientes @relation(fields: [ClienteID], references: [clienteid])
+  datareserva String
+  local       String
+}
+
+model assembleia {
+  assembleiaid Int      @id @default(autoincrement())
+  ClienteID    Int
+  Cliente      Clientes @relation(fields: [ClienteID], references: [clienteid])
+  descricao    String
+}
+
+model comunicados {
+  comunicadosid  Int      @id @default(autoincrement())
+  ClienteID      Int
+  Cliente        Clientes @relation(fields: [ClienteID], references: [clienteid])
+  datacomunicado String
+  descricao      String
+}
+
