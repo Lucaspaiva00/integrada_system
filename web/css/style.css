@@ -10,11 +10,35 @@
     opacity: 1.0;
 } */
 
+
+
 #caixaForm {
     height: 300px;
     width: 400px;
     padding: 20px 0px 50px 0px;
 }
+
+#cardsContainer {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 20px !important;
+  margin-top: 20px !important;
+}
+
+#cardsContainer .card {
+  width: 380px !important;  /* ajuste aqui se quiser mais largo */
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+#cardsContainer .card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
 
 #caixaForm input {
     width: 300px;

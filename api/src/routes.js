@@ -4,7 +4,7 @@ const router = express.Router();
 const clientescontroller = require('./controllers/clientescontroller');
 const condominiocontroller = require('./controllers/condominiocontrollers');
 const assembleiascontroller = require('./controllers/assembleiascontroller')
-const comunicadoscontroller = require('./controllers/conunicadoscontroller')
+const comunicadoscontroller = require('./controllers/comunicadoscontroller')
 const prestacaocontascontroller = require('./controllers/prestacaocontascontroller')
 
 router.get('/', (req, res) => { return res.json("API respondendo") });

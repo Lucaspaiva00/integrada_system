@@ -14,11 +14,12 @@ datasource db {
 }
 
 model Condominio {
-  condominioid   Int        @id @default(autoincrement())
+  condominioid   Int          @id @default(autoincrement())
   nomecondominio String
   endereco       String
   telefone       String
   Clientes       Clientes[]
+  assembleia     assembleia[]
 }
 
 model Clientes {
@@ -30,7 +31,6 @@ model Clientes {
   Condominio   Condominio    @relation(fields: [CondominioID], references: [condominioid])
   ocorrencias  ocorrencias[]
   reservas     reservas[]
-  assembleia   assembleia[]
 }
 
 model ocorrencias {
@@ -50,10 +50,10 @@ model reservas {
 }
 
 model assembleia {
-  assembleiaid Int      @id @default(autoincrement())
-  ClienteID    Int
-  Cliente      Clientes @relation(fields: [ClienteID], references: [clienteid])
+  assembleiaid Int        @id @default(autoincrement())
   descricao    String
+  CondominioID Int
+  Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid])
 }
 
 model comunicados {

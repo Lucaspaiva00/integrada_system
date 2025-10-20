@@ -1,4 +1,26 @@
 -- CreateTable
+CREATE TABLE `Condominio` (
+    `condominioid` INTEGER NOT NULL AUTO_INCREMENT,
+    `nomecondominio` VARCHAR(191) NOT NULL,
+    `endereco` VARCHAR(191) NOT NULL,
+    `telefone` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`condominioid`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Clientes` (
+    `clienteid` INTEGER NOT NULL AUTO_INCREMENT,
+    `apartamento` VARCHAR(191) NOT NULL,
+    `nome` VARCHAR(191) NOT NULL,
+    `cpf` VARCHAR(191) NOT NULL,
+    `CondominioID` INTEGER NOT NULL,
+
+    UNIQUE INDEX `Clientes_cpf_key`(`cpf`),
+    PRIMARY KEY (`clienteid`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `ocorrencias` (
     `ocorrenciasid` INTEGER NOT NULL AUTO_INCREMENT,
     `ClienteID` INTEGER NOT NULL,
@@ -30,7 +52,6 @@ CREATE TABLE `assembleia` (
 -- CreateTable
 CREATE TABLE `comunicados` (
     `comunicadosid` INTEGER NOT NULL AUTO_INCREMENT,
-    `ClienteID` INTEGER NOT NULL,
     `datacomunicado` VARCHAR(191) NOT NULL,
     `descricao` VARCHAR(191) NOT NULL,
 
@@ -40,12 +61,14 @@ CREATE TABLE `comunicados` (
 -- CreateTable
 CREATE TABLE `prestacaocontas` (
     `pretacaoid` INTEGER NOT NULL AUTO_INCREMENT,
-    `demonstrativo` VARCHAR(191) NOT NULL,
-    `datacriado` VARCHAR(191) NOT NULL,
-    `ClienteID` INTEGER NOT NULL,
+    `documento` VARCHAR(191) NOT NULL,
+    `mes` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`pretacaoid`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Clientes` ADD CONSTRAINT `Clientes_CondominioID_fkey` FOREIGN KEY (`CondominioID`) REFERENCES `Condominio`(`condominioid`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ocorrencias` ADD CONSTRAINT `ocorrencias_ClienteID_fkey` FOREIGN KEY (`ClienteID`) REFERENCES `Clientes`(`clienteid`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -55,9 +78,3 @@ ALTER TABLE `reservas` ADD CONSTRAINT `reservas_ClienteID_fkey` FOREIGN KEY (`Cl
 
 -- AddForeignKey
 ALTER TABLE `assembleia` ADD CONSTRAINT `assembleia_ClienteID_fkey` FOREIGN KEY (`ClienteID`) REFERENCES `Clientes`(`clienteid`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `comunicados` ADD CONSTRAINT `comunicados_ClienteID_fkey` FOREIGN KEY (`ClienteID`) REFERENCES `Clientes`(`clienteid`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `prestacaocontas` ADD CONSTRAINT `prestacaocontas_ClienteID_fkey` FOREIGN KEY (`ClienteID`) REFERENCES `Clientes`(`clienteid`) ON DELETE RESTRICT ON UPDATE CASCADE;

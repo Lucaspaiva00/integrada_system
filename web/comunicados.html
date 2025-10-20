@@ -123,21 +123,21 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <li class="nav-item dropdown no-arrow">
-                       
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-900">Opções</span>
 
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                            aria-labelledby="userDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-900">Opções</span>
 
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="login.html">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Sair
                             </a>
-                        </div>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="login.html">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Sair
+                                </a>
+                            </div>
                         </li>
 
                     </ul>
@@ -151,25 +151,34 @@
                             </div>
 
 
-                            <!-- <div class="card card-body">
+                            <div class="card card-body">
                                 <form id="caixaForms">
-                                    <input type="text" name="descricao" placeholder="Descreva o motivo da assembléia"
-                                        required>
+                                    <input type="date" name="datacomunicado" placeholder="Data do comunicado" required>
+                                    <input type="text" name="descricao" placeholder="Descreva..." required>
                                     <button type="submit" class='btn btn-success'>Cadastrar</button>
                                 </form>
-                            </div> -->
+                            </div>
 
                             <br>
                         </div>
                     </div>
-                    <!-- Adicionar um card aqui -->
+                    <table class="table table-dark table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>DATA</th>
+                                <th>COMUNICADOS</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comunicado"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </body>
 
-<script src="js/scriptassembleia.js"></script>
+<script src="js/scrpiptcomunicados.js"></script>
 <script src="vendor2/jquery/jquery.min.js"></script>
 <script src="vendor2/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor2/jquery-easing/jquery.easing.min.js"></script>

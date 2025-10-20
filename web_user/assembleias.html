@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assembleias</title>
+    <link rel="stylesheet" href="css/style2.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <span class="menu-btn"><i class="fas fa-bars"></i></span>
+        <h1>Assembléias</h1>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <span class="close-btn" id="closeBtn"><i class="fas fa-times"></i></span>
+        <div class="cards-container">
+            <div class="card"><i class="fas fa-bullhorn"></i>
+                <p><a href="index.html">Index</a></p>
+            </div>
+            <div class="card"><i class="fas fa-bullhorn"></i>
+                <p><a href="comunicados.html">Comunicados</a></p>
+            </div>
+            <div class="card"><i class="fas fa-calendar-alt"></i>
+                <p><a href="reservas.html">Reservas de Áreas Comuns</a></p>
+            </div>
+            <div class="card"><i class="fas fa-chart-bar"></i>
+                <p><a href="prestacaocontas.html">Prestação de Contas</a></p>
+            </div>
+            <div class="card"><i class="fas fa-users"></i>
+                <p><a href="assembleias.html">Assembleias</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <h2>Bem-vindo à tela de Assembleias</h2>
+        <p>Aqui você pode acompanhar todas as assembleias do condomínio. Use o menu para navegar entre as
+            funcionalidades.</p>
+    </main>
+
+    <div id="assembleiasCards" class="cards-container"></div>
+
+
+    <!-- JS -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.querySelector('.menu-btn');
+        const closeBtn = document.getElementById('closeBtn');
+
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+    </script>
+
+</body>
+<script src="js/assembleia.js"></script>
+</html>
