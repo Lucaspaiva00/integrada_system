@@ -2,29 +2,37 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const read = async (req, res) => {
-    const prestacaocontas = await prisma.prestacaocontas.findMany();
-    return res.json(prestacaocontas)
-}
+  try {
+    const prestacoes = await prisma.prestacaoContas.findMany({
+      include: { Condominio: true },
+      orderBy: { mes: 'desc' },
+    });
+    return res.json(prestacoes);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
 
 const create = async (req, res) => {
-    const data = req.body
-    let prestacaocontas = await prisma.prestacaocontas.create({
-        data: data
-    })
-    return res.status(201).json(prestacaocontas).end();
-}
+  try {
+    const { mes, CondominioID } = req.body;
+    const documento = req.file ? req.file.filename : null;
 
-const del = async (req, res)=>{
-    let prestacaocontas = await prisma.prestacaocontas.delete({
-        where:{
-            id: parseInt(req.params.id)
-        }
+    if (!documento) return res.status(400).json({ error: "Nenhum arquivo enviado." });
+    if (!CondominioID) return res.status(400).json({ error: "Condomínio não informado." });
+
+    const prestacao = await prisma.prestacaoContas.create({
+      data: {
+        documento,
+        mes: new Date(mes),
+        CondominioID: parseInt(CondominioID)
+      }
     });
-    return res.status(204).json(prestacaocontas).end();
-}
 
-module.exports = {
-    read,
-    create,
-    del
-}
+    return res.status(201).json(prestacao);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { read, create };

@@ -14,17 +14,7 @@ const create = async (req, res) => {
     return res.status(201).json(condominio).end();
 }
 
-const del = async (req, res)=>{
-    let condominio = await prisma.condominio.delete({
-        where:{
-            id: parseInt(req.params.id)
-        }
-    });
-    return res.status(204).json(condominio).end();
-}
-
 module.exports = {
     read,
-    create,
-    del
+    create
 }

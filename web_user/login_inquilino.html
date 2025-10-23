@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login do Inquilino</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Login do Inquilino</h2>
+    <form id="loginForm">
+      <input type="text" name="cpf" placeholder="CPF" required>
+      <input type="email" name="email" placeholder="E-mail" required>
+      <button type="submit">Entrar</button>
+    </form>
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    const form = document.querySelector("#loginForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        cpf: form.cpf.value,
+        email: form.email.value
+      };
+
+      const res = await fetch("http://localhost:3000/login/inquilino", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("inquilino", JSON.stringify(json.inquilino));
+        window.location.href = "painel_inquilino.html";
+      } else {
+        document.querySelector("#msg").innerText = json.error || "Erro ao logar.";
+      }
+    });
+  </script>
+</body>
+</html>

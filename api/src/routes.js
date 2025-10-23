@@ -1,37 +1,47 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 
 const clientescontroller = require('./controllers/clientescontroller');
+const inquilinoscontroller = require('./controllers/inquilinoscontroller')
 const condominiocontroller = require('./controllers/condominiocontrollers');
 const assembleiascontroller = require('./controllers/assembleiascontroller')
 const comunicadoscontroller = require('./controllers/comunicadoscontroller')
-const prestacaocontascontroller = require('./controllers/prestacaocontascontroller')
+const prestacaocontascontroller = require('./controllers/prestacaocontascontroller');
+const logincontroller = require('./controllers/logincontroller');
+
+router.post('/login/inquilino', logincontroller.loginInquilino);
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'uploads/prestacoes'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 router.get('/', (req, res) => { return res.json("API respondendo") });
 router.post('/clientescontroller', clientescontroller.create);
 router.get('/clientescontroller', clientescontroller.read);
-// router.put('/clientescontroller', clientescontroller.update);
-router.delete('/clientescontroller/:id', clientescontroller.del);
+
+router.post('/inquilinoscontroller', inquilinoscontroller.create);
+router.get('/inquilinoscontroller', inquilinoscontroller.read);
 
 router.post('/condominiocontroller', condominiocontroller.create);
 router.get('/condominiocontroller', condominiocontroller.read);
-// router.put('/condominiocontroller', clientescontroller.update);
-router.delete('/condominiocontroller/:id', condominiocontroller.del);
 
 router.post('/assembleiascontroller', assembleiascontroller.create);
 router.get('/assembleiascontroller', assembleiascontroller.read);
-// router.put('/assembleiascontroller', assembleiascontroller.update);
-router.delete('/assembleiascontroller/:id', assembleiascontroller.del);
 
 router.post('/comunicadoscontroller', comunicadoscontroller.create);
 router.get('/comunicadoscontroller', comunicadoscontroller.read);
-// router.put('/comunicadoscontroller', comunicadoscontroller.update);
-router.delete('/comunicadoscontroller/:id', comunicadoscontroller.del);
 
-router.post('/prestacaocontascontroller', prestacaocontascontroller.create);
 router.get('/prestacaocontascontroller', prestacaocontascontroller.read);
-// router.put('/prestacaocontascontroller', prestacaocontascontroller.update);
-router.delete('/prestacaocontascontroller/:id', prestacaocontascontroller.del);
-
+router.post('/prestacaocontascontroller', upload.single('documento'), prestacaocontascontroller.create);
 
 module.exports = router;

@@ -2,29 +2,54 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const read = async (req, res) => {
-    const clientes = await prisma.clientes.findMany();
-    return res.json(clientes)
-}
+  try {
+    const clientes = await prisma.clientes.findMany({
+      include: {
+        Condominio: {
+          select: {
+            nomecondominio: true
+          }
+        }
+      }
+    });
+    return res.json(clientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar clientes" });
+  }
+};
 
 const create = async (req, res) => {
-    const data = req.body
-    let clientes = await prisma.clientes.create({
-        data: data
-    })
-    return res.status(201).json(clientes).end();
-}
+  try {
+    const data = req.body;
 
-const del = async (req, res)=>{
-    let clientes = await prisma.clientes.delete({
-        where:{
-            id: parseInt(req.params.id)
+    if (!data.telefone || !data.email) {
+      return res.status(400).json({ error: "Telefone e email são obrigatórios" });
+    }
+
+    const cliente = await prisma.clientes.create({
+      data: {
+        apartamento: data.apartamento,
+        nome: data.nome,
+        cpf: data.cpf,
+        telefone: data.telefone,
+        email: data.email,
+        CondominioID: Number(data.CondominioID)
+      },
+      include: {
+        Condominio: {
+          select: {
+            nomecondominio: true
+          }
         }
+      }
     });
-    return res.status(204).json(clientes).end();
-}
 
-module.exports = {
-    read,
-    create,
-    del
-}
+    res.status(201).json(cliente);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao criar cliente" });
+  }
+};
+
+module.exports = { read, create };

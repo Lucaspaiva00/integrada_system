@@ -32,17 +32,7 @@ const create = async (req, res) => {
     }
 };
 
-const del = async (req, res) => {
-    let assembleia = await prisma.assembleia.delete({
-        where: {
-            id: parseInt(req.params.id)
-        }
-    });
-    return res.status(204).json(assembleia).end();
-}
-
 module.exports = {
     read,
-    create,
-    del
+    create
 }

@@ -14,39 +14,39 @@ datasource db {
 }
 
 model Condominio {
-  condominioid   Int          @id @default(autoincrement())
-  nomecondominio String
-  endereco       String
-  telefone       String
-  Clientes       Clientes[]
-  assembleia     assembleia[]
+  condominioid    Int               @id @default(autoincrement())
+  nomecondominio  String
+  endereco        String
+  telefone        String
+  Clientes        Clientes[]
+  assembleia      assembleia[]
+  Inquilinos      Inquilinos[]
+  PrestacaoContas PrestacaoContas[]
 }
 
 model Clientes {
-  clienteid    Int           @id @default(autoincrement())
+  clienteid    Int          @id @default(autoincrement())
   apartamento  String
   nome         String
-  cpf          String        @unique
+  cpf          String       @unique
+  telefone     String
+  email        String
   CondominioID Int
-  Condominio   Condominio    @relation(fields: [CondominioID], references: [condominioid])
-  ocorrencias  ocorrencias[]
-  reservas     reservas[]
+  Condominio   Condominio   @relation(fields: [CondominioID], references: [condominioid])
+  Inquilinos   Inquilinos[]
 }
 
-model ocorrencias {
-  ocorrenciasid Int      @id @default(autoincrement())
-  ClienteID     Int
-  Cliente       Clientes @relation(fields: [ClienteID], references: [clienteid])
-  descricao     String
-  datacriado    String
-}
-
-model reservas {
-  reservaid   Int      @id @default(autoincrement())
-  ClienteID   Int
-  Cliente     Clientes @relation(fields: [ClienteID], references: [clienteid])
-  datareserva String
-  local       String
+model Inquilinos {
+  inquilinosid Int        @id @default(autoincrement())
+  apartamento  String
+  nome         String
+  cpf          String     @unique
+  telefone     String
+  email        String
+  CondominioID Int
+  Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid])
+  ClienteID    Int // <--- novo campo
+  Cliente      Clientes   @relation(fields: [ClienteID], references: [clienteid])
 }
 
 model assembleia {
@@ -62,8 +62,10 @@ model comunicados {
   descricao      String
 }
 
-model prestacaocontas {
-  pretacaoid Int    @id @default(autoincrement())
-  documento  String
-  mes        String
+model PrestacaoContas {
+  prestacaoid  Int        @id @default(autoincrement())
+  documento    String // nome do arquivo PDF
+  mes          DateTime
+  CondominioID Int
+  Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid])
 }
