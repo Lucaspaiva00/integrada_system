@@ -16,7 +16,7 @@ contarRegistros("condominiocontroller", "qtdCondominios");
 contarRegistros("inquilinoscontroller", "qtdInquilinos");
 contarRegistros("comunicadoscontroller", "qtdComunicados");
 contarRegistros("assembleiascontroller", "qtdAssembleias");
-contarRegistros("prestacaocontascontroller", "qtdPrestacoes");
+// contarRegistros("prestacaocontascontroller", "qtdPrestacoes");
 
 async function graficoComunicados() {
   const resp = await fetch(`${baseURL}/comunicadoscontroller`);
