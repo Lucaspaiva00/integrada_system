@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // Login do proprietário (Clientes)
@@ -6,7 +6,9 @@ const loginProprietario = async (req, res) => {
   const { apartamento, cpf } = req.body;
 
   if (!apartamento || !cpf) {
-    return res.status(400).json({ error: "Apartamento e CPF são obrigatórios." });
+    return res
+      .status(400)
+      .json({ error: "Apartamento e CPF são obrigatórios." });
   }
 
   try {
@@ -36,8 +38,12 @@ const loginProprietario = async (req, res) => {
         nome: cliente.nome,
         apartamento: cliente.apartamento,
         condominio: cliente.Condominio.nomecondominio,
-        condominioid: cliente.Condominio.condominioid
-      }
+        condominioid: cliente.Condominio.condominioid,
+        condominio: {
+          nome: cliente.Condominio.nomecondominio,
+          condominioid: cliente.Condominio.condominioid,
+        },
+      },
     });
   } catch (err) {
     console.error(err);

@@ -6,7 +6,7 @@ if (!inquilino) {
   window.location.href = "login_inquilino.html";
 }
 
-const condominioID = inquilino.Condominio.condominioid;
+const condominioID = inquilino.condominioId;
 const uri = "https://integrada-api.onrender.com/prestacaocontascontroller";
 
 async function listarPrestacoes() {

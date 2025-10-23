@@ -5,7 +5,7 @@ const inquilino = JSON.parse(localStorage.getItem("inquilino"));
 if (!inquilino) {
   window.location.href = "login_inquilino.html";
 }
-const condominioID = inquilino.Condominio.condominioid;
+const condominioID = inquilino.condominioId;
 
 async function listarAssembleias() {
   try {
