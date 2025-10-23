@@ -2,8 +2,10 @@ const caixaForms = document.querySelector("#caixaForms");
 const selectCondominio = document.querySelector("#condominioSelect");
 const tbodyAssembleia = document.querySelector("#assembleia");
 
-const uriCondominios = "http://localhost:3000/condominiocontroller";
-const uriAssembleias = "http://localhost:3000/assembleiascontroller";
+const uriCondominios =
+  "https://integrada-api.onrender.com/condominiocontroller";
+const uriAssembleias =
+  "https://integrada-api.onrender.com/assembleiascontroller";
 
 // 🏢 Carrega os condomínios no select
 async function carregarCondominios() {
@@ -13,7 +15,7 @@ async function carregarCondominios() {
 
     selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
 
-    dados.forEach(cond => {
+    dados.forEach((cond) => {
       const option = document.createElement("option");
       option.value = cond.condominioid;
       option.textContent = cond.nomecondominio;
@@ -38,10 +40,10 @@ async function listarAssembleias() {
       return;
     }
 
-    dados.forEach(item => {
+    dados.forEach((item) => {
       const tr = document.createElement("tr");
       const linkDocumento = item.documento
-        ? `<a href="http://localhost:3000/uploads/assembleia/${item.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
+        ? `<a href="https://integrada-api.onrender.com/uploads/assembleia/${item.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
         : "—";
 
       tr.innerHTML = `
@@ -59,18 +61,18 @@ async function listarAssembleias() {
 }
 
 // 📤 Enviar formulário com arquivo
-caixaForms.addEventListener('submit', async (e) => {
+caixaForms.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const formData = new FormData();
-  formData.append('descricao', caixaForms.descricao.value);
-  formData.append('CondominioID', selectCondominio.value);
-  formData.append('documento', caixaForms.documento.files[0]);
+  formData.append("descricao", caixaForms.descricao.value);
+  formData.append("CondominioID", selectCondominio.value);
+  formData.append("documento", caixaForms.documento.files[0]);
 
   try {
     const res = await fetch(uriAssembleias, {
       method: "POST",
-      body: formData
+      body: formData,
     });
 
     if (res.status === 201) {

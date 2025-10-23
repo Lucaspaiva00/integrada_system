@@ -7,7 +7,7 @@ if (!inquilino) {
 }
 
 const condominioID = inquilino.Condominio.condominioid;
-const uri = "http://localhost:3000/comunicadoscontroller";
+const uri = "https://integrada-api.onrender.com/comunicadoscontroller";
 
 async function listarComunicados() {
   try {
@@ -17,19 +17,21 @@ async function listarComunicados() {
     caixaForms.innerHTML = ""; // limpa os comunicados anteriores
 
     // Filtra apenas comunicados do condomínio do inquilino logado
-    const comunicadosFiltrados = dados.filter(c => c.CondominioID === condominioID);
+    const comunicadosFiltrados = dados.filter(
+      (c) => c.CondominioID === condominioID
+    );
 
     if (comunicadosFiltrados.length === 0) {
       caixaForms.innerHTML = `<p style="text-align:center; color:#666;">Nenhum comunicado disponível para o seu condomínio.</p>`;
       return;
     }
 
-    comunicadosFiltrados.forEach(e => {
+    comunicadosFiltrados.forEach((e) => {
       const card = document.createElement("div");
       card.classList.add("card");
 
       const linkDocumento = e.documento
-        ? `<a href="http://localhost:3000/uploads/comunicados/${e.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver Documento</a>`
+        ? `<a href="https://integrada-api.onrender.com/uploads/comunicados/${e.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver Documento</a>`
         : `<span class="sem-doc">Sem documento</span>`;
 
       card.innerHTML = `

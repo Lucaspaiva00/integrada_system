@@ -132,7 +132,7 @@
         cpf: form.cpf.value.trim()
       };
 
-      const res = await fetch("http://localhost:3000/login/proprietario", {
+      const res = await fetch("https://integrada-api.onrender.com/login/proprietario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
