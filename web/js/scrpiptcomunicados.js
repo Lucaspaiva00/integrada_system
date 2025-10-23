@@ -1,40 +1,77 @@
-const caixaForms = document.querySelector("#caixaForms")
-const uri = "http://localhost:3000/comunicadoscontroller"
+const caixaForms = document.querySelector("#caixaForms");
+const uri = "http://localhost:3000/comunicadoscontroller";
+const uriCondominio = "http://localhost:3000/condominiocontroller";
+const tbody = document.querySelector("#comunicado");
+const selectCondominio = document.querySelector("#CondominioID");
 
-caixaForms.addEventListener('submit', (e) => {
-    e.preventDefault()
-    const data = {
-        datacomunicado: caixaForms.datacomunicado.value,
-        descricao: caixaForms.descricao.value
-    }
-    fetch(`${uri}`, {
+// 🏢 Carregar condomínios no select
+async function carregarCondominios() {
+    const res = await fetch(uriCondominio);
+    const dados = await res.json();
+
+    selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
+
+    dados.forEach(cond => {
+        const option = document.createElement("option");
+        option.value = cond.condominioid;
+        option.textContent = cond.nomecondominio;
+        selectCondominio.appendChild(option);
+    });
+}
+
+// 🧾 Cadastrar comunicado com arquivo
+caixaForms.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("datacomunicado", caixaForms.datacomunicado.value);
+    formData.append("descricao", caixaForms.descricao.value);
+    formData.append("CondominioID", selectCondominio.value);
+    formData.append("documento", caixaForms.documento.files[0]);
+
+    const res = await fetch(uri, {
         method: "POST",
-        headers: {
-            'Content-Type': "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-        .then(res => res.status)
-        .then(status => {
-            if (status == 201) {
-                window.location.reload()
-            } else {
-                alert("Erro ao inserir um Comunicado")
-            }
-        })
-})
+        body: formData
+    });
 
-fetch(uri)
-    .then(resp => resp.json())
-    .then(resp => {
-        resp.forEach(e => {
-            comunicado.innerHTML += `
-            <td>${e.datacomunicado}</td>
-            <td>${e.descricao}</td>
-            <td>                
-            <button type="button" title="button" class='btn btn-primary' id='editaroperacao' onClick='editaroperacao(this)'>Editar</button>
-            </td>
-            `
+    if (res.status === 201) {
+        alert("✅ Comunicado cadastrado com sucesso!");
+        caixaForms.reset();
+        listarComunicados();
+    } else {
+        alert("❌ Erro ao cadastrar comunicado.");
+    }
+});
 
-        })
-    })
+// 📋 Listar comunicados na tabela
+async function listarComunicados() {
+    const res = await fetch(uri);
+    const dados = await res.json();
+
+    tbody.innerHTML = "";
+
+    if (!dados.length) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Nenhum comunicado cadastrado.</td></tr>`;
+        return;
+    }
+
+    dados.forEach(c => {
+        const tr = document.createElement("tr");
+        const linkDocumento = c.documento
+            ? `<a href="http://localhost:3000/uploads/comunicados/${c.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
+            : "—";
+
+        tr.innerHTML = `
+      <td>${c.datacomunicado}</td>
+      <td>${c.descricao}</td>
+      <td>${c.Condominio?.nomecondominio || "—"}</td>
+      <td>${linkDocumento}</td>
+    `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+// 🚀 Inicialização
+carregarCondominios();
+listarComunicados();

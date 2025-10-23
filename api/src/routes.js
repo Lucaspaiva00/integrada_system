@@ -11,6 +11,7 @@ const comunicadoscontroller = require('./controllers/comunicadoscontroller')
 const prestacaocontascontroller = require('./controllers/prestacaocontascontroller');
 const logincontroller = require('./controllers/logincontroller');
 
+
 router.post('/login/inquilino', logincontroller.loginInquilino);
 
 
@@ -22,6 +23,28 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname);
   },
 });
+
+const storageAssembleia = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'uploads/assembleia')); // 📁 pasta já criada
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const storageComunicado = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'uploads/comunicados'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const uploadComunicado = multer({ storage: storageComunicado });
+
+const uploadAssembleia = multer({ storage: storageAssembleia });
 
 const upload = multer({ storage });
 
@@ -35,10 +58,10 @@ router.get('/inquilinoscontroller', inquilinoscontroller.read);
 router.post('/condominiocontroller', condominiocontroller.create);
 router.get('/condominiocontroller', condominiocontroller.read);
 
-router.post('/assembleiascontroller', assembleiascontroller.create);
+router.post('/assembleiascontroller', uploadAssembleia.single('documento'), assembleiascontroller.create);
 router.get('/assembleiascontroller', assembleiascontroller.read);
 
-router.post('/comunicadoscontroller', comunicadoscontroller.create);
+router.post('/comunicadoscontroller', uploadComunicado.single('documento'), comunicadoscontroller.create);
 router.get('/comunicadoscontroller', comunicadoscontroller.read);
 
 router.get('/prestacaocontascontroller', prestacaocontascontroller.read);

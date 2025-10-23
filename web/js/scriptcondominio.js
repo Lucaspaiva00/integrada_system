@@ -34,9 +34,7 @@ fetch(uri)
             <td>${e.nomecondominio}</td>
             <td>${e.endereco}</td>
             <td>${e.telefone}</td>
-            <td>                
-            <button type="button" title="button" class='btn btn-primary' id='editaroperacao' onClick='editaroperacao(this)'>Editar</button>
-            </td>
+            
             `
 
         })

@@ -10,7 +10,20 @@ const read = async (req, res) => {
         Cliente: { select: { nome: true } }
       }
     });
-    return res.json(inquilinos);
+
+    // Formata os dados pra ficar mais simples no front-end
+    const formatado = inquilinos.map(i => ({
+      id: i.inquilinosid,
+      nome: i.nome,
+      cpf: i.cpf,
+      telefone: i.telefone,
+      email: i.email,
+      apartamento: i.apartamento,
+      condominio: i.Condominio?.nomecondominio || "-",
+      proprietario: i.Cliente?.nome || "-"
+    }));
+
+    return res.json(formatado);
   } catch (error) {
     console.error("Erro ao buscar inquilinos:", error);
     res.status(500).json({ error: "Erro ao buscar inquilinos" });

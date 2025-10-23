@@ -22,6 +22,7 @@ model Condominio {
   assembleia      assembleia[]
   Inquilinos      Inquilinos[]
   PrestacaoContas PrestacaoContas[]
+  comunicados     comunicados[]
 }
 
 model Clientes {
@@ -52,14 +53,18 @@ model Inquilinos {
 model assembleia {
   assembleiaid Int        @id @default(autoincrement())
   descricao    String
+  documento    String
   CondominioID Int
-  Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid])
+  Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid], onDelete: Cascade)
 }
 
 model comunicados {
-  comunicadosid  Int    @id @default(autoincrement())
+  comunicadosid  Int        @id @default(autoincrement())
   datacomunicado String
   descricao      String
+  documento      String
+  CondominioID   Int
+  Condominio     Condominio @relation(fields: [CondominioID], references: [condominioid], onDelete: Cascade)
 }
 
 model PrestacaoContas {

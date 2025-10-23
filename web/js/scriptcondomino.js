@@ -75,11 +75,7 @@ function carregarCondominos() {
               <p class="card-text"><strong>Telefone:</strong> ${cliente.telefone}</p>
               <p class="card-text"><strong>Email:</strong> ${cliente.email}</p>
               <p class="card-text"><strong>Condomínio:</strong> ${cliente.Condominio?.nomecondominio || "Não definido"}</p>
-              <div class="d-flex justify-content-end">
-                <button class="btn btn-sm btn-danger" onclick="deletarCliente(${cliente.clienteid})">
-                  Excluir
-                </button>
-              </div>
+              
             </div>
           </div>
         `;

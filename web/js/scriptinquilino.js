@@ -2,14 +2,13 @@ const caixaForms = document.querySelector("#caixaForms");
 const uri = "http://localhost:3000/inquilinoscontroller";
 const uriCondominio = "http://localhost:3000/condominiocontroller";
 const uriClientes = "http://localhost:3000/clientescontroller";
+const cardsContainer = document.querySelector("#cardsContainer");
 
-// 🏢 Preencher o select de condomínios
+// Carregar condomínios
 fetch(uriCondominio)
   .then(res => res.json())
   .then(condominios => {
     const selectCondominio = document.querySelector("#CondominioID");
-    selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
-
     condominios.forEach(c => {
       const option = document.createElement("option");
       option.value = c.condominioid;
@@ -19,32 +18,30 @@ fetch(uriCondominio)
   })
   .catch(err => console.error("Erro ao carregar condomínios:", err));
 
-// 👨‍💼 Preencher o select de proprietários
+// Carregar proprietários
 fetch(uriClientes)
   .then(res => res.json())
   .then(clientes => {
     const selectCliente = document.querySelector("#ClienteID");
-    selectCliente.innerHTML = `<option value="">Selecione o proprietário</option>`;
-
-    clientes.forEach(cliente => {
+    clientes.forEach(c => {
       const option = document.createElement("option");
-      option.value = cliente.clienteid;
-      option.textContent = `${cliente.nome} - (Ap: ${cliente.apartamento})`;
+      option.value = c.clienteid;
+      option.textContent = `${c.nome} (Ap: ${c.apartamento})`;
       selectCliente.appendChild(option);
     });
   })
   .catch(err => console.error("Erro ao carregar proprietários:", err));
 
-// 🧾 Cadastrar inquilino
+// Cadastrar inquilino
 caixaForms.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const data = {
-    apartamento: caixaForms.apartamento.value,
-    nome: caixaForms.nome.value,
-    cpf: caixaForms.cpf.value,
-    telefone: caixaForms.telefone.value,
-    email: caixaForms.email.value,
+    apartamento: caixaForms.apartamento.value.trim(),
+    nome: caixaForms.nome.value.trim(),
+    cpf: caixaForms.cpf.value.trim(),
+    telefone: caixaForms.telefone.value.trim(),
+    email: caixaForms.email.value.trim(),
     CondominioID: Number(caixaForms.CondominioID.value),
     ClienteID: Number(caixaForms.ClienteID.value)
   };
@@ -59,9 +56,43 @@ caixaForms.addEventListener("submit", (e) => {
       if (status === 201) {
         alert("✅ Inquilino cadastrado com sucesso!");
         caixaForms.reset();
+        carregarInquilinos();
       } else {
-        alert("❌ Erro ao cadastrar inquilino");
+        alert("❌ Erro ao cadastrar inquilino.");
       }
     })
     .catch(err => console.error("Erro ao cadastrar inquilino:", err));
 });
+
+function carregarInquilinos() {
+  fetch(uri)
+    .then(res => res.json())
+    .then(dados => {
+      const tbody = document.querySelector("#tbodyInquilinos");
+      tbody.innerHTML = "";
+
+      if (!dados.length) {
+        tbody.innerHTML = `
+          <tr><td colspan="6" class="text-center text-muted">Nenhum inquilino cadastrado.</td></tr>
+        `;
+        return;
+      }
+
+      dados.forEach(i => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i.nome}</td>
+          <td>${i.cpf}</td>
+          <td>${i.telefone}</td>
+          <td>${i.email}</td>
+          <td>${i.condominio}</td>
+          <td>${i.proprietario}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(err => console.error("Erro ao carregar inquilinos:", err));
+}
+
+document.addEventListener("DOMContentLoaded", carregarInquilinos);
+
