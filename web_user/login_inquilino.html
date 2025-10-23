@@ -141,7 +141,7 @@
       const json = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("cliente", JSON.stringify(json.cliente));
+        localStorage.setItem("inquilino", JSON.stringify(json.cliente));
         window.location.href = "index.html";
       } else {
         document.querySelector("#msg").innerText = json.error || "❌ Credenciais inválidas.";
