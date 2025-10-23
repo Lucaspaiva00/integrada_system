@@ -1,36 +1,36 @@
 const caixaForms = document.querySelector("#caixaForms");
-const uri = "http://localhost:3000/inquilinoscontroller";
-const uriCondominio = "http://localhost:3000/condominiocontroller";
-const uriClientes = "http://localhost:3000/clientescontroller";
+const uri = "https://integrada-api.onrender.com/inquilinoscontroller";
+const uriCondominio = "https://integrada-api.onrender.com/condominiocontroller";
+const uriClientes = "https://integrada-api.onrender.com/clientescontroller";
 const cardsContainer = document.querySelector("#cardsContainer");
 
 // Carregar condomínios
 fetch(uriCondominio)
-  .then(res => res.json())
-  .then(condominios => {
+  .then((res) => res.json())
+  .then((condominios) => {
     const selectCondominio = document.querySelector("#CondominioID");
-    condominios.forEach(c => {
+    condominios.forEach((c) => {
       const option = document.createElement("option");
       option.value = c.condominioid;
       option.textContent = c.nomecondominio;
       selectCondominio.appendChild(option);
     });
   })
-  .catch(err => console.error("Erro ao carregar condomínios:", err));
+  .catch((err) => console.error("Erro ao carregar condomínios:", err));
 
 // Carregar proprietários
 fetch(uriClientes)
-  .then(res => res.json())
-  .then(clientes => {
+  .then((res) => res.json())
+  .then((clientes) => {
     const selectCliente = document.querySelector("#ClienteID");
-    clientes.forEach(c => {
+    clientes.forEach((c) => {
       const option = document.createElement("option");
       option.value = c.clienteid;
       option.textContent = `${c.nome} (Ap: ${c.apartamento})`;
       selectCliente.appendChild(option);
     });
   })
-  .catch(err => console.error("Erro ao carregar proprietários:", err));
+  .catch((err) => console.error("Erro ao carregar proprietários:", err));
 
 // Cadastrar inquilino
 caixaForms.addEventListener("submit", (e) => {
@@ -43,16 +43,16 @@ caixaForms.addEventListener("submit", (e) => {
     telefone: caixaForms.telefone.value.trim(),
     email: caixaForms.email.value.trim(),
     CondominioID: Number(caixaForms.CondominioID.value),
-    ClienteID: Number(caixaForms.ClienteID.value)
+    ClienteID: Number(caixaForms.ClienteID.value),
   };
 
   fetch(uri, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   })
-    .then(res => res.status)
-    .then(status => {
+    .then((res) => res.status)
+    .then((status) => {
       if (status === 201) {
         alert("✅ Inquilino cadastrado com sucesso!");
         caixaForms.reset();
@@ -61,13 +61,13 @@ caixaForms.addEventListener("submit", (e) => {
         alert("❌ Erro ao cadastrar inquilino.");
       }
     })
-    .catch(err => console.error("Erro ao cadastrar inquilino:", err));
+    .catch((err) => console.error("Erro ao cadastrar inquilino:", err));
 });
 
 function carregarInquilinos() {
   fetch(uri)
-    .then(res => res.json())
-    .then(dados => {
+    .then((res) => res.json())
+    .then((dados) => {
       const tbody = document.querySelector("#tbodyInquilinos");
       tbody.innerHTML = "";
 
@@ -78,7 +78,7 @@ function carregarInquilinos() {
         return;
       }
 
-      dados.forEach(i => {
+      dados.forEach((i) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${i.nome}</td>
@@ -91,8 +91,7 @@ function carregarInquilinos() {
         tbody.appendChild(tr);
       });
     })
-    .catch(err => console.error("Erro ao carregar inquilinos:", err));
+    .catch((err) => console.error("Erro ao carregar inquilinos:", err));
 }
 
 document.addEventListener("DOMContentLoaded", carregarInquilinos);
-

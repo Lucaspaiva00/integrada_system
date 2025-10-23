@@ -7,7 +7,7 @@ if (!inquilino) {
 }
 
 const condominioID = inquilino.Condominio.condominioid;
-const uri = "http://localhost:3000/prestacaocontascontroller";
+const uri = "https://integrada-api.onrender.com/prestacaocontascontroller";
 
 async function listarPrestacoes() {
   try {
@@ -17,28 +17,35 @@ async function listarPrestacoes() {
     caixaForms.innerHTML = ""; // limpa cards anteriores
 
     // Filtra apenas as prestações do condomínio do inquilino
-    const prestacoesFiltradas = dados.filter(p => p.CondominioID === condominioID);
+    const prestacoesFiltradas = dados.filter(
+      (p) => p.CondominioID === condominioID
+    );
 
     if (prestacoesFiltradas.length === 0) {
       caixaForms.innerHTML = `<p style="text-align:center; color:#666;">Nenhuma prestação de contas disponível para o seu condomínio.</p>`;
       return;
     }
 
-    prestacoesFiltradas.forEach(p => {
+    prestacoesFiltradas.forEach((p) => {
       const card = document.createElement("div");
       card.classList.add("card");
 
-      const dataMes = new Date(p.mes).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+      const dataMes = new Date(p.mes).toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
 
       const linkDocumento = p.documento
-        ? `<a href="http://localhost:3000/uploads/prestacoes/${p.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver PDF</a>`
+        ? `<a href="https://integrada-api.onrender.com/uploads/prestacoes/${p.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver PDF</a>`
         : `<span class="sem-doc">Sem documento</span>`;
 
       card.innerHTML = `
         <i class="fas fa-chart-bar"></i>
         <div>
           <p><strong>Mês de Referência:</strong> ${dataMes}</p>
-          <p><strong>Condomínio:</strong> ${p.Condominio?.nomecondominio || "—"}</p>
+          <p><strong>Condomínio:</strong> ${
+            p.Condominio?.nomecondominio || "—"
+          }</p>
           ${linkDocumento}
         </div>
       `;
