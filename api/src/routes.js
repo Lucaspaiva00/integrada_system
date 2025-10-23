@@ -12,7 +12,8 @@ const prestacaocontascontroller = require('./controllers/prestacaocontascontroll
 const logincontroller = require('./controllers/logincontroller');
 
 
-router.post('/login/inquilino', logincontroller.loginInquilino);
+router.post('/login/proprietario', logincontroller.loginProprietario);
+
 
 
 const storage = multer.diskStorage({
