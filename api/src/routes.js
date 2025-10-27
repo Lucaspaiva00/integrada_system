@@ -11,7 +11,7 @@ import * as comunicadosController from "./controllers/comunicadoscontroller.cjs"
 import * as prestacaoContasController from "./controllers/prestacaocontascontroller.cjs";
 import * as loginControllerfrom from "./controllers/logincontroller.cjs";
 
-router.post("/login/proprietario", loginProprietario);
+router.post("/login/proprietario", loginControllerfrom.loginProprietario);
 
 const __dirname = process.cwd();
 
