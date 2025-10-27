@@ -37,4 +37,4 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { read, create };
+export { read, create };

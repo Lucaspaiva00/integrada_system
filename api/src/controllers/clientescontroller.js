@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const read = async (req, res) => {
@@ -7,10 +7,10 @@ const read = async (req, res) => {
       include: {
         Condominio: {
           select: {
-            nomecondominio: true
-          }
-        }
-      }
+            nomecondominio: true,
+          },
+        },
+      },
     });
     return res.json(clientes);
   } catch (error) {
@@ -24,7 +24,9 @@ const create = async (req, res) => {
     const data = req.body;
 
     if (!data.telefone || !data.email) {
-      return res.status(400).json({ error: "Telefone e email são obrigatórios" });
+      return res
+        .status(400)
+        .json({ error: "Telefone e email são obrigatórios" });
     }
 
     const cliente = await prisma.clientes.create({
@@ -34,15 +36,15 @@ const create = async (req, res) => {
         cpf: data.cpf,
         telefone: data.telefone,
         email: data.email,
-        CondominioID: Number(data.CondominioID)
+        CondominioID: Number(data.CondominioID),
       },
       include: {
         Condominio: {
           select: {
-            nomecondominio: true
-          }
-        }
-      }
+            nomecondominio: true,
+          },
+        },
+      },
     });
 
     res.status(201).json(cliente);
@@ -52,4 +54,4 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { read, create };
+export { read, create };

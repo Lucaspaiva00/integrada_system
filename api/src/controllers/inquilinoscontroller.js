@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // 🔹 Lista todos os inquilinos com os nomes do condomínio e do proprietário
@@ -7,12 +7,12 @@ const read = async (req, res) => {
     const inquilinos = await prisma.inquilinos.findMany({
       include: {
         Condominio: { select: { nomecondominio: true } },
-        Cliente: { select: { nome: true } }
-      }
+        Cliente: { select: { nome: true } },
+      },
     });
 
     // Formata os dados pra ficar mais simples no front-end
-    const formatado = inquilinos.map(i => ({
+    const formatado = inquilinos.map((i) => ({
       id: i.inquilinosid,
       nome: i.nome,
       cpf: i.cpf,
@@ -20,7 +20,7 @@ const read = async (req, res) => {
       email: i.email,
       apartamento: i.apartamento,
       condominio: i.Condominio?.nomecondominio || "-",
-      proprietario: i.Cliente?.nome || "-"
+      proprietario: i.Cliente?.nome || "-",
     }));
 
     return res.json(formatado);
@@ -37,7 +37,7 @@ const create = async (req, res) => {
 
     // 🔍 Verifica se condomínio existe
     const condominio = await prisma.condominio.findUnique({
-      where: { condominioid: data.CondominioID }
+      where: { condominioid: data.CondominioID },
     });
 
     if (!condominio) {
@@ -46,7 +46,7 @@ const create = async (req, res) => {
 
     // 🔍 Verifica se proprietário existe
     const cliente = await prisma.clientes.findUnique({
-      where: { clienteid: data.ClienteID }
+      where: { clienteid: data.ClienteID },
     });
 
     if (!cliente) {
@@ -62,12 +62,12 @@ const create = async (req, res) => {
         telefone: data.telefone,
         email: data.email,
         Condominio: { connect: { condominioid: data.CondominioID } },
-        Cliente: { connect: { clienteid: data.ClienteID } }
+        Cliente: { connect: { clienteid: data.ClienteID } },
       },
       include: {
         Condominio: { select: { nomecondominio: true } },
-        Cliente: { select: { nome: true } }
-      }
+        Cliente: { select: { nome: true } },
+      },
     });
 
     return res.status(201).json(inquilino);
@@ -77,4 +77,4 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { read, create };
+export { read, create };

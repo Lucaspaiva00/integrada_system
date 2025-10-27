@@ -1,15 +1,15 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const path = require('path');
+const path = require("path");
 
 // 📋 Listar comunicados (com o nome do condomínio)
 const read = async (req, res) => {
   try {
     const comunicados = await prisma.comunicados.findMany({
       include: {
-        Condominio: { select: { nomecondominio: true } }
+        Condominio: { select: { nomecondominio: true } },
       },
-      orderBy: { comunicadosid: 'desc' }
+      orderBy: { comunicadosid: "desc" },
     });
     res.json(comunicados);
   } catch (error) {
@@ -32,11 +32,11 @@ const create = async (req, res) => {
         datacomunicado,
         descricao,
         documento: req.file.filename,
-        Condominio: { connect: { condominioid: Number(CondominioID) } }
+        Condominio: { connect: { condominioid: Number(CondominioID) } },
       },
       include: {
-        Condominio: { select: { nomecondominio: true } }
-      }
+        Condominio: { select: { nomecondominio: true } },
+      },
     });
 
     res.status(201).json(novoComunicado);
@@ -46,4 +46,4 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { read, create };
+export { read, create };
