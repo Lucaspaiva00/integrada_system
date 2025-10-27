@@ -43,7 +43,7 @@ async function listarAssembleias() {
     dados.forEach((item) => {
       const tr = document.createElement("tr");
       const linkDocumento = item.documento
-        ? `<a href="https://integrada-api.onrender.com/uploads/assembleia/${item.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
+        ? `<a href="https://integrada-api.onrender.com/documentos/assembleia/${item.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
         : "—";
 
       tr.innerHTML = `
