@@ -43,7 +43,7 @@ fetch(uri)
         <tr>
           <td>${e.Condominio?.nomecondominio}</td>
           <td>${new Date(e.mes).toLocaleDateString()}</td>
-          <td><a href="https://integrada-api.onrender.com/uploads/prestacoes/${
+          <td><a href="https://integrada-api.onrender.com/files/prestacoes/${
             e.documento
           }" target="_blank">Abrir PDF</a></td>
         </tr>

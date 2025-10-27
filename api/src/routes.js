@@ -10,6 +10,7 @@ import * as assembleiasController from "./controllers/assembleiascontroller.cjs"
 import * as comunicadosController from "./controllers/comunicadoscontroller.cjs";
 import * as prestacaoContasController from "./controllers/prestacaocontascontroller.cjs";
 import * as loginControllerfrom from "./controllers/logincontroller.cjs";
+import * as filesController from "./controllers/filescontroller.cjs";
 
 router.post("/login/proprietario", loginControllerfrom.loginProprietario);
 
@@ -80,6 +81,7 @@ router.post(
   upload.single("documento"),
   prestacaoContasController.create
 );
+router.get("/files/:modulo/:filename", filesController.readFile);
 router.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
