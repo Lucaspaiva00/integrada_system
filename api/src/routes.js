@@ -82,6 +82,7 @@ router.post(
   prestacaoContasController.create
 );
 router.get("/documentos/:modulo/:filename", filesController.readFile);
+router.get("/documentos-disponiveis", filesController.readAllDocuments);
 router.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
