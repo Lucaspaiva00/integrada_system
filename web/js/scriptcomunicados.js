@@ -58,7 +58,7 @@ async function listarComunicados() {
   dados.forEach((c) => {
     const tr = document.createElement("tr");
     const linkDocumento = c.documento
-      ? `<a href="https://integrada-api.onrender.com/uploads/comunicados/${c.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
+      ? `<a href="https://integrada-api.onrender.com/documentos/comunicados/${c.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
       : "—";
 
     tr.innerHTML = `
