@@ -1,56 +1,41 @@
-import { Router } from "express";
-import multer, { diskStorage } from "multer";
-import { join } from "path";
-const router = Router();
+import express from "express";
+import multer from "multer";
+import path from "path";
+const router = express.Router();
 
-import { create, read } from "./controllers/clientescontroller";
-import {
-  create as _create,
-  read as _read,
-} from "./controllers/inquilinoscontroller";
-import {
-  create as __create,
-  read as __read,
-} from "./controllers/condominiocontrollers";
-import {
-  create as ___create,
-  read as ___read,
-} from "./controllers/assembleiascontroller";
-import {
-  create as ____create,
-  read as ____read,
-} from "./controllers/comunicadoscontroller";
-import {
-  read as _____read,
-  create as _____create,
-} from "./controllers/prestacaocontascontroller";
-import { loginProprietario } from "./controllers/logincontroller";
+const clientescontroller = require("./controllers/clientescontroller");
+const inquilinoscontroller = require("./controllers/inquilinoscontroller");
+const condominiocontroller = require("./controllers/condominiocontrollers");
+const assembleiascontroller = require("./controllers/assembleiascontroller");
+const comunicadoscontroller = require("./controllers/comunicadoscontroller");
+const prestacaocontascontroller = require("./controllers/prestacaocontascontroller");
+const logincontroller = require("./controllers/logincontroller");
 
-router.post("/login/proprietario", loginProprietario);
+router.post("/login/proprietario", logincontroller.loginProprietario);
 
 const __dirname = process.cwd();
 
-const storage = diskStorage({
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, join(__dirname, "uploads/prestacoes"));
+    cb(null, path.join(__dirname, "uploads/prestacoes"));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-const storageAssembleia = diskStorage({
+const storageAssembleia = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, join(__dirname, "uploads/assembleia")); // 📁 pasta já criada
+    cb(null, path.join(__dirname, "uploads/assembleia")); // 📁 pasta já criada
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-const storageComunicado = diskStorage({
+const storageComunicado = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, join(__dirname, "uploads/comunicados"));
+    cb(null, path.join(__dirname, "uploads/comunicados"));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -66,37 +51,37 @@ const upload = multer({ storage });
 router.get("/", (req, res) => {
   return res.json("API respondendo");
 });
-router.post("/clientescontroller", create);
-router.get("/clientescontroller", read);
+router.post("/clientescontroller", clientescontroller.create);
+router.get("/clientescontroller", clientescontroller.read);
 
-router.post("/inquilinoscontroller", _create);
-router.get("/inquilinoscontroller", _read);
+router.post("/inquilinoscontroller", inquilinoscontroller.create);
+router.get("/inquilinoscontroller", inquilinoscontroller.read);
 
-router.post("/condominiocontroller", __create);
-router.get("/condominiocontroller", __read);
+router.post("/condominiocontroller", condominiocontroller.create);
+router.get("/condominiocontroller", condominiocontroller.read);
 
 router.post(
   "/assembleiascontroller",
   uploadAssembleia.single("documento"),
-  ___create
+  assembleiascontroller.create
 );
-router.get("/assembleiascontroller", ___read);
+router.get("/assembleiascontroller", assembleiascontroller.read);
 
 router.post(
   "/comunicadoscontroller",
   uploadComunicado.single("documento"),
-  ____create
+  comunicadoscontroller.create
 );
-router.get("/comunicadoscontroller", ____read);
+router.get("/comunicadoscontroller", comunicadoscontroller.read);
 
-router.get("/prestacaocontascontroller", _____read);
+router.get("/prestacaocontascontroller", prestacaocontascontroller.read);
 router.post(
   "/prestacaocontascontroller",
   upload.single("documento"),
-  _____create
+  prestacaocontascontroller.create
 );
 router.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-export default router;
+module.exports = router;
