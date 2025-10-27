@@ -1,6 +1,6 @@
 import * as express from "express";
 import cors from "cors";
-import routes from "./src/routes";
+import routes from "./src/routes.js";
 import { join } from "path";
 
 const PORT = 3000;
