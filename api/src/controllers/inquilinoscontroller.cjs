@@ -77,4 +77,7 @@ const create = async (req, res) => {
   }
 };
 
-export { read, create };
+module.exports = {
+  read,
+  create,
+};

@@ -14,4 +14,7 @@ const create = async (req, res) => {
   return res.status(201).json(condominio).end();
 };
 
-export { read, create };
+module.exports = {
+  read,
+  create,
+};

@@ -51,4 +51,6 @@ const loginProprietario = async (req, res) => {
   }
 };
 
-export { loginProprietario };
+module.exports = {
+  loginProprietario,
+};
