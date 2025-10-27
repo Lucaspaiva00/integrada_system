@@ -38,11 +38,14 @@ const readAllDocuments = async (req, res) => {
     modules.forEach((modulo) => {
       const dirPath = path.resolve(`./uploads/${modulo}`);
       if (fs.existsSync(dirPath)) {
-        allFiles.push(
-          `${req.protocol}://${req.get(
+        const files = fs.readdirSync(dirPath).map((filename) => ({
+          modulo,
+          filename,
+          url: `${req.protocol}://${req.get(
             "host"
-          )}/documentos/${modulo}/${filename}`
-        );
+          )}/documentos/${modulo}/${filename}`,
+        }));
+        allFiles = allFiles.concat(files);
       }
     });
 
