@@ -6,7 +6,7 @@ import { join } from "path";
 const PORT = 3000;
 const __dirname = process.cwd();
 
-const app = express.express();
+const app = express();
 app.use("/uploads", express.static(join(__dirname, "src", "uploads")));
 app.use(cors());
 app.use(express.json());
