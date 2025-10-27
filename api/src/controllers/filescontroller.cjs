@@ -1,3 +1,4 @@
+const path = require("path");
 const readFile = async (req, res) => {
   try {
     const fileName = req.params.filename;

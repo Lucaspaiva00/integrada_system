@@ -81,7 +81,7 @@ router.post(
   upload.single("documento"),
   prestacaoContasController.create
 );
-router.get("/files/:modulo/:filename", filesController.readFile);
+router.get("/documentos/:modulo/:filename", filesController.readFile);
 router.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
