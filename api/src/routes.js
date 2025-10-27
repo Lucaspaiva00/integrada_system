@@ -13,6 +13,8 @@ const logincontroller = require("./controllers/logincontroller");
 
 router.post("/login/proprietario", logincontroller.loginProprietario);
 
+const __dirname = process.cwd();
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "uploads/prestacoes"));
