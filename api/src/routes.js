@@ -60,6 +60,8 @@ router.get("/inquilinoscontroller", inquilinosController.read);
 
 router.post("/condominiocontroller", condominioController.create);
 router.get("/condominiocontroller", condominioController.read);
+router.put("/condominiocontroller/:id", condominioController.update);
+
 
 router.post(
   "/assembleiascontroller",
