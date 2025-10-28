@@ -68,7 +68,6 @@ router.get("/condominiocontroller", condominioController.read);
 router.put("/condominiocontroller/:id", condominioController.update);
 router.get("/condominiocontroller/:id", condominioController.readById);
 
-
 router.post(
   "/assembleiascontroller",
   uploadAssembleia.single("documento"),
@@ -97,14 +96,14 @@ router.get("/health", (req, res) => {
 
 router.get("/teste", (req, res) => {
   try {
-    prisma.$transaction((p) => {
-      p.PrestacaoContas.deleteMany();
-      p.comunicados.deleteMany();
-      p.assembleia.deleteMany();
-      p.Inquilinos.deleteMany();
-      p.Clientes.deleteMany();
-      p.Condominio.deleteMany();
-    });
+    // prisma.$transaction((p) => {
+    //   p.PrestacaoContas.deleteMany();
+    //   p.comunicados.deleteMany();
+    //   p.assembleia.deleteMany();
+    //   p.Inquilinos.deleteMany();
+    //   p.Clientes.deleteMany();
+    //   p.Condominio.deleteMany();
+    // });
     res.status(200).json({ message: "Teste realizado com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: "Erro no teste." });
