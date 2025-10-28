@@ -194,14 +194,43 @@
                         </div>
 
                     </div>
-                    <div class="card shadow mb-4">
+                    <!-- <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Comunicados por Mês</h6>
                         </div>
                         <div class="card-body">
                             <canvas id="graficoComunicados"></canvas>
                         </div>
+                    </div> -->
+                    <!-- Lista de Condomínios -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-primary">Condomínios Cadastrados</h6>
+                            <small class="text-muted" style="font-size: .8rem;">Exibindo todos</small>
+                        </div>
+
+                        <div class="card-body" style="padding-top: 0;">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover" id="tabelaCondominiosDashboard">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th style="min-width: 200px;">Nome do Condomínio</th>
+                                            <th style="min-width: 200px;">Endereço</th>
+                                            <th style="min-width: 140px;">Telefone</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyCondominiosDashboard">
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted py-4">
+                                                Carregando condomínios...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
 
