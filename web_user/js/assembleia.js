@@ -31,7 +31,7 @@ async function listarAssembleias() {
       card.classList.add("card");
 
       const linkDocumento = item.documento
-        ? `<a href="https://integrada-api.onrender.com/documentos-disponiveis/assembleia/${item.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver Documento</a>`
+        ? `<a href="https://integrada-api.onrender.com/documentos/assembleia/${item.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver Documento</a>`
         : `<span class="sem-doc">Sem documento</span>`;
 
       card.innerHTML = `
