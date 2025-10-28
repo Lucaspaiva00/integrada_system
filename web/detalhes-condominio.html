@@ -2,36 +2,116 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detalhes do Condomínio</title>
-    <link rel="stylesheet" href="css2/sb-admin-2.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhes do Condomínio</title>
+
+  <!-- Estilos -->
+  <link href="vendor2/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+  <link href="css2/sb-admin-2.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
 </head>
 
-<body class="bg-light">
-    <div class="container py-4">
-        <a href="index.html" class="btn btn-secondary mb-3">← Voltar</a>
-
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 id="nomeCondominio" class="m-0">Carregando...</h4>
-            </div>
-            <div class="card-body">
-                <p><strong>Endereço:</strong> <span id="endereco"></span></p>
-                <p><strong>Telefone:</strong> <span id="telefone"></span></p>
-
-                <hr />
-                <h5>Proprietários</h5>
-                <ul id="listaProprietarios" class="list-group mb-3"></ul>
-
-                <h5>Inquilinos</h5>
-                <ul id="listaInquilinos" class="list-group"></ul>
-            </div>
+<body id="page-top">
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
         </div>
-    </div>
+        <div class="sidebar-brand-text mx-3">PAIVA TECH</div>
+      </a>
 
-    <script src="js/detalhes-condominio.js"></script>
+      <hr class="sidebar-divider my-0" />
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <hr class="sidebar-divider" />
+      <div class="sidebar-heading">Páginas</div>
+
+      <li class="nav-item">
+        <a class="nav-link" href="condominio.html"><i class="fa fa-university"></i> Condomínios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="condomino.html"><i class="fa fa-user"></i> Proprietários</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="inquilino.html"><i class="fa fa-users"></i> Inquilinos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="assembleias.html"><i class="fa fa-comments"></i> Assembleias</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="comunicados.html"><i class="fa fa-bullhorn"></i> Comunicados</a>
+      </li>
+
+      <hr class="sidebar-divider d-none d-md-block" />
+    </ul>
+    <!-- End Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-900">Opções</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="login.html">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Sair
+                </a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <!-- End Topbar -->
+
+        <!-- Page Content -->
+        <div class="container-fluid">
+          <a href="index.html" class="btn btn-secondary mb-3">← Voltar</a>
+
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+              <h4 id="nomeCondominio" class="m-0">Carregando...</h4>
+            </div>
+
+            <div class="card-body">
+              <p><strong>Endereço:</strong> <span id="endereco">...</span></p>
+              <p><strong>Telefone:</strong> <span id="telefone">...</span></p>
+
+              <hr />
+              <h5 class="text-primary mb-3"><i class="fa fa-user"></i> Proprietários</h5>
+              <ul id="listaProprietarios" class="list-group mb-4">
+                <li class="list-group-item text-muted">Carregando...</li>
+              </ul>
+
+              <h5 class="text-success mb-3"><i class="fa fa-users"></i> Inquilinos</h5>
+              <ul id="listaInquilinos" class="list-group">
+                <li class="list-group-item text-muted">Carregando...</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- End Container -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="vendor2/jquery/jquery.min.js"></script>
+  <script src="vendor2/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor2/jquery-easing/jquery.easing.min.js"></script>
+  <script src="js2/sb-admin-2.min.js"></script>
+  <script src="js/detalhes-condominio.js"></script>
 </body>
 
 </html>
