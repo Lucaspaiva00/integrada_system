@@ -36,7 +36,7 @@ async function listarPrestacoes() {
       });
 
       const linkDocumento = p.documento
-        ? `<a href="https://integrada-api.onrender.com/uploads/prestacoes/${p.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver PDF</a>`
+        ? `<a href="https://integrada-api.onrender.com/documentos/prestacoes/${p.documento}" target="_blank" class="btn-ver"><i class="fas fa-file-pdf"></i> Ver PDF</a>`
         : `<span class="sem-doc">Sem documento</span>`;
 
       card.innerHTML = `
