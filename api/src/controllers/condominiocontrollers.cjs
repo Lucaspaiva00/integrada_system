@@ -33,5 +33,5 @@ const update = async (req, res) => {
 module.exports = {
   read,
   create,
-  update, // adiciona aqui
+  update, 
 };
