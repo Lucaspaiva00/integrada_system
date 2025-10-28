@@ -12,6 +12,9 @@ import * as prestacaoContasController from "./controllers/prestacaocontascontrol
 import * as loginControllerfrom from "./controllers/logincontroller.cjs";
 import * as filesController from "./controllers/filescontroller.cjs";
 
+import prismaClient from "@prisma/client";
+const prisma = new prismaClient.PrismaClient();
+
 router.post("/login/proprietario", loginControllerfrom.loginProprietario);
 
 const __dirname = process.cwd();
@@ -90,6 +93,22 @@ router.get("/documentos/:modulo/:filename", filesController.readFile);
 router.get("/documentos-disponiveis", filesController.readAllDocuments);
 router.get("/health", (req, res) => {
   res.status(200).send("OK");
+});
+
+router.get("/teste", (req, res) => {
+  try {
+    prisma.$transaction((p) => {
+      p.PrestacaoContas.deleteMany();
+      p.comunicados.deleteMany();
+      p.assembleia.deleteMany();
+      p.Inquilinos.deleteMany();
+      p.Clientes.deleteMany();
+      p.Condominio.deleteMany();
+    });
+    res.status(200).json({ message: "Teste realizado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: "Erro no teste." });
+  }
 });
 
 export default router;
