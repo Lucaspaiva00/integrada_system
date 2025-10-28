@@ -30,8 +30,34 @@ const update = async (req, res) => {
   }
 };
 
+// 🔍 Busca os detalhes de um condomínio com seus proprietários e inquilinos
+const readById = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    const condominio = await prisma.condominio.findUnique({
+      where: { condominioid: id },
+      include: {
+        Clientes: true,   // Proprietários
+        Inquilinos: true, // Inquilinos
+      },
+    });
+
+    if (!condominio) {
+      return res.status(404).json({ error: "Condomínio não encontrado" });
+    }
+
+    res.json(condominio);
+  } catch (error) {
+    console.error("Erro ao buscar condomínio:", error);
+    res.status(500).json({ error: "Erro ao buscar condomínio" });
+  }
+};
+
+
 module.exports = {
   read,
   create,
   update, 
+  readById,
 };
