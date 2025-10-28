@@ -57,6 +57,7 @@ router.get("/clientescontroller", clientesController.read);
 
 router.post("/inquilinoscontroller", inquilinosController.create);
 router.get("/inquilinoscontroller", inquilinosController.read);
+router.put("/inquilinoscontroller/:id", inquilinosController.update);
 
 router.post("/condominiocontroller", condominioController.create);
 router.get("/condominiocontroller", condominioController.read);
