@@ -2,10 +2,8 @@ const caixaForms = document.querySelector("#caixaForms");
 const selectCondominio = document.querySelector("#condominioSelect");
 const tbodyAssembleia = document.querySelector("#assembleia");
 
-const uriCondominios =
-  "https://integrada-api.onrender.com/condominiocontroller";
-const uriAssembleias =
-  "https://integrada-api.onrender.com/assembleiascontroller";
+const uriCondominios = "https://integrada-api.onrender.com/condominiocontroller";
+const uriAssembleias = "https://integrada-api.onrender.com/assembleiascontroller";
 
 // 🏢 Carrega os condomínios no select
 async function carregarCondominios() {
@@ -36,19 +34,32 @@ async function listarAssembleias() {
     tbodyAssembleia.innerHTML = "";
 
     if (!dados.length) {
-      tbodyAssembleia.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Nenhuma assembleia cadastrada.</td></tr>`;
+      tbodyAssembleia.innerHTML = `
+        <tr>
+          <td colspan="3" class="text-center text-muted">
+            Nenhuma assembleia cadastrada.
+          </td>
+        </tr>`;
       return;
     }
 
     dados.forEach((item) => {
       const tr = document.createElement("tr");
-      const linkDocumento = item.documento
-        ? `<a href="https://integrada-api.onrender.com/documentos/assembleia/${item.documento}" target="_blank" class="btn btn-sm btn-primary">📄 Ver Documento</a>`
+
+      // agora usamos os campos padronizados do controller:
+      // - item.nomeCondominio
+      // - item.documentoUrl
+      const linkDocumento = item.documentoUrl
+        ? `<a href="${item.documentoUrl}"
+              target="_blank"
+              class="btn btn-sm btn-primary">
+              📄 Ver Documento
+           </a>`
         : "—";
 
       tr.innerHTML = `
-        <td>${item.descricao}</td>
-        <td>${item.Condominio?.nomecondominio || "—"}</td>
+        <td>${item.descricao || "—"}</td>
+        <td>${item.nomeCondominio || "—"}</td>
         <td>${linkDocumento}</td>
       `;
 
