@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalhes do Condomínio</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <h1 id="nomeCondominio">Carregando...</h1>
-  <p><strong>Endereço:</strong> <span id="endereco"></span></p>
-  <p><strong>Telefone:</strong> <span id="telefone"></span></p>
-  <h3>Proprietários</h3>
-  <ul id="listaProprietarios"></ul>
-  <h3>Inquilinos</h3>
-  <ul id="listaInquilinos"></ul>
 
-  <script src="js/detalhes-condominio.js"></script>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes do Condomínio</title>
+    <link rel="stylesheet" href="css2/sb-admin-2.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="bg-light">
+    <div class="container py-4">
+        <a href="index.html" class="btn btn-secondary mb-3">← Voltar</a>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 id="nomeCondominio" class="m-0">Carregando...</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>Endereço:</strong> <span id="endereco"></span></p>
+                <p><strong>Telefone:</strong> <span id="telefone"></span></p>
+
+                <hr />
+                <h5>Proprietários</h5>
+                <ul id="listaProprietarios" class="list-group mb-3"></ul>
+
+                <h5>Inquilinos</h5>
+                <ul id="listaInquilinos" class="list-group"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/detalhes-condominio.js"></script>
 </body>
+
 </html>
