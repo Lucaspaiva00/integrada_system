@@ -5,7 +5,7 @@ const id = urlParams.get("id");
 async function carregarDetalhes() {
   try {
     // 1️⃣ Buscar dados do condomínio
-    const resp = await fetch(`${baseURL}/condominiocontrollers/${id}`);
+    const resp = await fetch(`${baseURL}/condominiocontroller/${id}`);
     if (!resp.ok) throw new Error("Condomínio não encontrado.");
     const condominio = await resp.json();
 
@@ -13,8 +13,8 @@ async function carregarDetalhes() {
     document.getElementById("endereco").textContent = condominio.endereco || "Sem endereço";
     document.getElementById("telefone").textContent = condominio.telefone || "Sem telefone";
 
-    // 2️⃣ Buscar proprietários relacionados
-    const propResp = await fetch(`${baseURL}/condominiocontrollers`);
+    // 2️⃣ Buscar proprietários (clientes) relacionados
+    const propResp = await fetch(`${baseURL}/clientescontroller`);
     const proprietarios = await propResp.json();
     const listaProp = document.getElementById("listaProprietarios");
 
