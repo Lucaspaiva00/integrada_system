@@ -54,6 +54,7 @@ router.get("/", (req, res) => {
 });
 router.post("/clientescontroller", clientesController.create);
 router.get("/clientescontroller", clientesController.read);
+router.put("/clientescontroller/:id", clientesController.update);
 
 router.post("/inquilinoscontroller", inquilinosController.create);
 router.get("/inquilinoscontroller", inquilinosController.read);
