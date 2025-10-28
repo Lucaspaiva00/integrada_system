@@ -48,10 +48,9 @@ async function carregarDetalhes() {
         const inquilinos = await inqResp.json();
         const listaInq = document.getElementById("listaInquilinos");
 
-        // ⚙️ Novo filtro: compara o nome do condomínio
+        // 🔥 Corrigido: campo certo vindo do backend (condominioId)
         const inquilinosDoCondominio = inquilinos.filter(
-            (i) =>
-                i.condominio?.toLowerCase() === condominio.nomecondominio?.toLowerCase()
+            (i) => i.condominioId == id
         );
 
         if (inquilinosDoCondominio.length > 0) {
@@ -69,6 +68,7 @@ async function carregarDetalhes() {
         } else {
             listaInq.innerHTML = `<li class="list-group-item text-muted">Nenhum inquilino cadastrado.</li>`;
         }
+
 
     } catch (err) {
         console.error("Erro ao carregar detalhes:", err);
