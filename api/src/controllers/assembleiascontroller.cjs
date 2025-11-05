@@ -67,7 +67,33 @@ const create = async (req, res) => {
   }
 };
 
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("ID recebido para exclusão:", id);
+
+    if (!id) {
+      return res.status(400).json({ error: "ID não informado." });
+    }
+
+    const prestacao = await prisma.comunicados.delete({
+      where: { comunicadosid: Number(id) },
+    });
+
+    return res.status(200).json({
+      message: "Excluído com sucesso.",
+      prestacao,
+    });
+  } catch (err) {
+    console.error("Erro ao excluir:", err);
+    return res
+      .status(500)
+      .json({ message: "Erro ao excluir", prestacao: null });
+  }
+};
+
 module.exports = {
   read,
   create,
+  delete: remove,
 };

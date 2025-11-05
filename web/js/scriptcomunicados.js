@@ -1,9 +1,46 @@
 const caixaForms = document.querySelector("#caixaForms");
-const uri = "https://integrada-api.onrender.com/comunicadoscontroller";
+const uriComunicadosController =
+  "https://integrada-api.onrender.com/comunicadoscontroller";
 const uriDev = "http://localhost:3000/comunicadoscontroller";
 const uriCondominio = "https://integrada-api.onrender.com/condominiocontroller";
 const tbody = document.querySelector("#comunicado");
 const selectCondominio = document.querySelector("#CondominioID");
+const listarComunicados = async () => {
+  const res = await fetch(uri);
+  const dados = await res.json();
+
+  tbody.innerHTML = "";
+
+  if (!dados.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Nenhum comunicado cadastrado.</td></tr>`;
+    return;
+  }
+
+  dados.forEach((c) => {
+    const tr = document.createElement("tr");
+
+    // usa documentoUrl bonito se quiser botão, ou mantém como estava
+    const linkDocumento = c.documentoUrl
+      ? `<button onclick=onClickAbrirDocumento("${c.documentoUrl}") class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
+      : `<span class="text-muted">Sem documento</span>`;
+
+    tr.innerHTML = `
+      <td>${c.datacomunicado}</td>
+      <td>${c.descricao}</td>
+      <td>${c.nomeCondominio || "—"}</td>
+      <td>${linkDocumento}</td>
+      <td>
+        <button onclick="onClickExcluirDocumento(${
+          c.comunicadosid
+        })" class="btn btn-sm btn-danger">
+          🗑️
+        </button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+};
 
 const onClickAbrirDocumento = async (documentoUrl) => {
   const response = await fetch(documentoUrl);
@@ -11,8 +48,8 @@ const onClickAbrirDocumento = async (documentoUrl) => {
   const url = URL.createObjectURL(blob);
   window.open(url, "_blank");
 };
-// 🏢 Carregar condomínios no select
-async function carregarCondominios() {
+
+const carregarCondominios = async () => {
   const res = await fetch(uriCondominio);
   const dados = await res.json();
 
@@ -24,7 +61,8 @@ async function carregarCondominios() {
     option.textContent = cond.nomecondominio;
     selectCondominio.appendChild(option);
   });
-}
+};
+
 const cloudinaryUpload = async (file) => {
   const CLOUDINARY_API_KEY = "839478495457115";
   const CLOUDINARY_API_SECRET = "H00NjZ74G8NAOGL-MxhCAaVge9g";
@@ -63,8 +101,7 @@ const cloudinaryUpload = async (file) => {
   }
 };
 
-// 🧾 Cadastrar comunicado com arquivo
-caixaForms.addEventListener("submit", async (e) => {
+const onSubmitComunicado = async (e) => {
   e.preventDefault();
 
   const uploadResult = await cloudinaryUpload(caixaForms.documento.files[0]);
@@ -94,38 +131,33 @@ caixaForms.addEventListener("submit", async (e) => {
   } else {
     alert("❌ Erro ao cadastrar comunicado.");
   }
-});
+};
 
-// 📋 Listar comunicados na tabela
-async function listarComunicados() {
-  const res = await fetch(uri);
-  const dados = await res.json();
+const onClickExcluirDocumento = async (id) => {
+  const confirmar = confirm(
+    "Tem certeza que deseja excluir esta prestação de contas?"
+  );
+  if (!confirmar) return;
 
-  tbody.innerHTML = "";
+  try {
+    const res = await fetch(`${uriComunicadosController}/${id}`, {
+      method: "DELETE",
+    });
 
-  if (!dados.length) {
-    tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Nenhum comunicado cadastrado.</td></tr>`;
-    return;
+    if (res.status === 200) {
+      alert("✅ Excluído com sucesso!");
+      listarComunicados();
+    } else {
+      alert("❌ Erro ao excluir !");
+    }
+  } catch (error) {
+    console.error("Erro ao excluir prestação de contas:", error);
+    alert("❌ Erro ao excluir a prestação de contas!");
   }
+};
 
-  dados.forEach((c) => {
-    const tr = document.createElement("tr");
-
-    // usa documentoUrl bonito se quiser botão, ou mantém como estava
-    const linkDocumento = c.documentoUrl
-      ? `<button onclick=onClickAbrirDocumento("${c.documentoUrl}") class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
-      : `<span class="text-muted">Sem documento</span>`;
-
-    tr.innerHTML = `
-      <td>${c.datacomunicado}</td>
-      <td>${c.descricao}</td>
-      <td>${c.nomeCondominio || "—"}</td>
-      <td>${linkDocumento}</td>
-    `;
-
-    tbody.appendChild(tr);
-  });
-}
+// 🧾 Cadastrar comunicado com arquivo
+caixaForms.addEventListener("submit", onSubmitComunicado);
 
 // 🚀 Inicialização
 carregarCondominios();

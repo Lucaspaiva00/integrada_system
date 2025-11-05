@@ -37,9 +37,11 @@ router.get("/condominiocontroller/:id", condominioController.readById);
 
 router.post("/assembleiascontroller", assembleiasController.create);
 router.get("/assembleiascontroller", assembleiasController.read);
+router.get("/assembleiascontroller/:id", assembleiasController.delete);
 
 router.post("/comunicadoscontroller", comunicadosController.create);
 router.get("/comunicadoscontroller", comunicadosController.read);
+router.delete("/comunicadoscontroller/:id", comunicadosController.delete);
 
 router.get("/prestacaocontascontroller", prestacaoContasController.read);
 router.post("/prestacaocontascontroller", prestacaoContasController.create);

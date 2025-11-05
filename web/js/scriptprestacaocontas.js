@@ -72,7 +72,7 @@ const listarPrestacoes = async () => {
           <td>${linkDocumento}</td>
           <td><button class="btn btn-sm btn-danger" onclick=onClickExcluirDocumento("${
             e.prestacaoid
-          }")>X</button></td>
+          }")>🗑️</button></td>
         </tr>
       `;
     });

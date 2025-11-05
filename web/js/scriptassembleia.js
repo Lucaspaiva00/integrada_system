@@ -8,8 +8,30 @@ const uriAssembleias =
   "https://integrada-api.onrender.com/assembleiascontroller";
 const uriDevAssembleias = "http://localhost:3000/assembleiascontroller";
 
-// 🏢 Carrega os condomínios no select
-async function carregarCondominios() {
+const onClickExcluirDocumento = async (id) => {
+  const confirmar = confirm(
+    "Tem certeza que deseja excluir esta prestação de contas?"
+  );
+  if (!confirmar) return;
+
+  try {
+    const res = await fetch(`${uriAssembleias}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (res.status === 200) {
+      alert("✅ Excluído com sucesso!");
+      listarAssembleias();
+    } else {
+      alert("❌ Erro ao excluir !");
+    }
+  } catch (error) {
+    console.error("Erro ao excluir :", error);
+    alert("❌ Erro ao excluir !");
+  }
+};
+
+const carregarCondominios = async () => {
   try {
     const res = await fetch(uriCondominios);
     const dados = await res.json();
@@ -26,7 +48,8 @@ async function carregarCondominios() {
     console.error("Erro ao carregar condomínios:", error);
     alert("Erro ao carregar lista de condomínios.");
   }
-}
+};
+
 const cloudinaryUpload = async (file) => {
   const CLOUDINARY_API_KEY = "839478495457115";
   const CLOUDINARY_API_SECRET = "H00NjZ74G8NAOGL-MxhCAaVge9g";
@@ -64,6 +87,7 @@ const cloudinaryUpload = async (file) => {
     return { data: null, error: "erro ao fazer upload" };
   }
 };
+
 const onClickAbrirDocumento = async (documentoUrl) => {
   const response = await fetch(documentoUrl);
   const blob = await response.blob();
@@ -71,8 +95,7 @@ const onClickAbrirDocumento = async (documentoUrl) => {
   window.open(url, "_blank");
 };
 
-// 📋 Lista as assembleias existentes
-async function listarAssembleias() {
+const listarAssembleias = async () => {
   try {
     const res = await fetch(uriAssembleias);
     const dados = await res.json();
@@ -100,6 +123,13 @@ async function listarAssembleias() {
         <td>${item.descricao || "—"}</td>
         <td>${item.nomeCondominio || "—"}</td>
         <td>${linkDocumento}</td>
+        <td>
+        <button onclick="onClickExcluirDocumento(${
+          item.assembleiaid
+        })" class="btn btn-sm btn-danger">
+          🗑️
+        </button>
+      </td>
       `;
 
       tbodyAssembleia.appendChild(tr);
@@ -108,10 +138,9 @@ async function listarAssembleias() {
     console.error("Erro ao listar assembleias:", error);
     alert("Erro ao carregar assembleias.");
   }
-}
+};
 
-// 📤 Enviar formulário com arquivo
-caixaForms.addEventListener("submit", async (e) => {
+const onSubmitAssembleia = async (e) => {
   e.preventDefault();
 
   const uploadResult = await cloudinaryUpload(caixaForms.documento.files[0]);
@@ -145,8 +174,8 @@ caixaForms.addEventListener("submit", async (e) => {
     console.error("Erro ao enviar assembleia:", error);
     alert("Falha ao enviar assembleia.");
   }
-});
+};
 
-// 🚀 Inicializa tudo
+caixaForms.addEventListener("submit", onSubmitAssembleia);
 carregarCondominios();
 listarAssembleias();
