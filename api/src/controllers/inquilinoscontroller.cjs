@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../../prisma/connection.cjs");
 
 // 🔹 Lista todos os inquilinos com os nomes do condomínio e do proprietário
 const read = async (req, res) => {

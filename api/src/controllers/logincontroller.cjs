@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../../prisma/connection.cjs");
 
 // Login do proprietário (Clientes)
 const loginProprietario = async (req, res) => {

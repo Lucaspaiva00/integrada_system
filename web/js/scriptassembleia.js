@@ -2,8 +2,11 @@ const caixaForms = document.querySelector("#caixaForms");
 const selectCondominio = document.querySelector("#condominioSelect");
 const tbodyAssembleia = document.querySelector("#assembleia");
 
-const uriCondominios = "https://integrada-api.onrender.com/condominiocontroller";
-const uriAssembleias = "https://integrada-api.onrender.com/assembleiascontroller";
+const uriCondominios =
+  "https://integrada-api.onrender.com/condominiocontroller";
+const uriAssembleias =
+  "https://integrada-api.onrender.com/assembleiascontroller";
+const uriDevAssembleias = "http://localhost:3000/assembleiascontroller";
 
 // 🏢 Carrega os condomínios no select
 async function carregarCondominios() {
@@ -24,11 +27,54 @@ async function carregarCondominios() {
     alert("Erro ao carregar lista de condomínios.");
   }
 }
+const cloudinaryUpload = async (file) => {
+  const CLOUDINARY_API_KEY = "839478495457115";
+  const CLOUDINARY_API_SECRET = "H00NjZ74G8NAOGL-MxhCAaVge9g";
+  try {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "integrada");
+    data.append("cloud_name", "dfdinbti3");
+    data.append("folder", "integrada");
+    data.append("api_key", CLOUDINARY_API_KEY);
+    data.append("api_secret", CLOUDINARY_API_SECRET);
+
+    // const res = await api().post<{
+    //   secure_url: string;
+    // }>(`https://api.cloudinary.com/v1_1/dicogrlex/image/upload`, data);
+    // console.log(res);
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/integrada/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    ).then((res) => res.json());
+
+    if (res.error) {
+      throw new Error(res.error.message);
+    }
+    console.log(res);
+
+    return { data: res.secure_url, error: null };
+  } catch (error) {
+    console.log(error);
+
+    return { data: null, error: "erro ao fazer upload" };
+  }
+};
+const onClickAbrirDocumento = async (documentoUrl) => {
+  const response = await fetch(documentoUrl);
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+};
 
 // 📋 Lista as assembleias existentes
 async function listarAssembleias() {
   try {
-    const res = await fetch(uriAssembleias);
+    const res = await fetch(uriDevAssembleias);
     const dados = await res.json();
 
     tbodyAssembleia.innerHTML = "";
@@ -46,16 +92,9 @@ async function listarAssembleias() {
     dados.forEach((item) => {
       const tr = document.createElement("tr");
 
-      // agora usamos os campos padronizados do controller:
-      // - item.nomeCondominio
-      // - item.documentoUrl
       const linkDocumento = item.documentoUrl
-        ? `<a href="${item.documentoUrl}"
-              target="_blank"
-              class="btn btn-sm btn-primary">
-              📄 Ver Documento
-           </a>`
-        : "—";
+        ? `<button onclick=onClickAbrirDocumento("${item.documentoUrl}") class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
+        : `<span class="text-muted">Sem documento</span>`;
 
       tr.innerHTML = `
         <td>${item.descricao || "—"}</td>
@@ -75,15 +114,24 @@ async function listarAssembleias() {
 caixaForms.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("descricao", caixaForms.descricao.value);
-  formData.append("CondominioID", selectCondominio.value);
-  formData.append("documento", caixaForms.documento.files[0]);
+  const uploadResult = await cloudinaryUpload(caixaForms.documento.files[0]);
+
+  if (uploadResult.error) {
+    alert("❌ Erro ao fazer upload do documento!");
+    return;
+  }
 
   try {
-    const res = await fetch(uriAssembleias, {
+    const res = await fetch(uriDevAssembleias, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        descricao: caixaForms.descricao.value,
+        CondominioID: selectCondominio.value,
+        documentoUrl: uploadResult.data,
+      }),
     });
 
     if (res.status === 201) {

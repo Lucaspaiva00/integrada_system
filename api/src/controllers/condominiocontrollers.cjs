@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../../prisma/connection.cjs");
 
 const read = async (req, res) => {
   const condominio = await prisma.condominio.findMany();
@@ -38,7 +37,7 @@ const readById = async (req, res) => {
     const condominio = await prisma.condominio.findUnique({
       where: { condominioid: id },
       include: {
-        Clientes: true,   // Proprietários
+        Clientes: true, // Proprietários
         Inquilinos: true, // Inquilinos
       },
     });
@@ -54,10 +53,9 @@ const readById = async (req, res) => {
   }
 };
 
-
 module.exports = {
   read,
   create,
-  update, 
+  update,
   readById,
 };

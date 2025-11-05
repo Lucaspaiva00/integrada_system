@@ -1,7 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-
-const BASE_URL = "https://integrada-api.onrender.com/documentos";
+const prisma = require("../../prisma/connection.cjs");
 
 // 📋 Listar assembleias
 const read = async (req, res) => {
@@ -18,9 +15,7 @@ const read = async (req, res) => {
       assembleiaid: a.assembleiaid,
       descricao: a.descricao,
       documento: a.documento,
-      documentoUrl: a.documento
-        ? `${BASE_URL}/assembleia/${encodeURIComponent(a.documento)}`
-        : null,
+      documentoUrl: a.documento,
       CondominioID: Number(a.CondominioID),
       nomeCondominio: a.Condominio?.nomecondominio || null,
       status: a.status || "Ativa",
@@ -36,22 +31,18 @@ const read = async (req, res) => {
 // 📤 Criar assembleia com upload de documento
 const create = async (req, res) => {
   try {
-    const { descricao, CondominioID } = req.body;
+    const { descricao, CondominioID, documentoUrl } = req.body;
 
-    if (!descricao || !CondominioID) {
+    if (!descricao || !CondominioID || !documentoUrl) {
       return res
         .status(400)
         .json({ error: "Descrição e condomínio são obrigatórios." });
     }
 
-    if (!req.file) {
-      return res.status(400).json({ error: "Arquivo não enviado." });
-    }
-
     const novaAssembleia = await prisma.assembleia.create({
       data: {
         descricao,
-        documento: req.file.filename,
+        documento: documentoUrl,
         Condominio: { connect: { condominioid: Number(CondominioID) } },
       },
       include: {
@@ -63,11 +54,7 @@ const create = async (req, res) => {
       assembleiaid: novaAssembleia.assembleiaid,
       descricao: novaAssembleia.descricao,
       documento: novaAssembleia.documento,
-      documentoUrl: novaAssembleia.documento
-        ? `${BASE_URL}/assembleia/${encodeURIComponent(
-            novaAssembleia.documento
-          )}`
-        : null,
+      documentoUrl: novaAssembleia.documento,
       CondominioID: Number(novaAssembleia.CondominioID),
       nomeCondominio: novaAssembleia.Condominio?.nomecondominio || null,
       status: novaAssembleia.status || "Ativa",

@@ -1,6 +1,7 @@
 const caixaForms = document.querySelector("#caixaForms");
 const selectCondominio = document.querySelector("#condominioSelect");
 const uri = "https://integrada-api.onrender.com/prestacaocontascontroller";
+const uriDev = "http://localhost:3000/prestacaocontascontroller";
 const tabela = document.querySelector("#prestacao");
 
 // 1️⃣ Carregar os condomínios no <select>
@@ -20,30 +21,82 @@ fetch("https://integrada-api.onrender.com/condominiocontroller")
     alert("Erro ao carregar a lista de condomínios.");
   });
 
+const cloudinaryUpload = async (file) => {
+  const CLOUDINARY_API_KEY = "839478495457115";
+  const CLOUDINARY_API_SECRET = "H00NjZ74G8NAOGL-MxhCAaVge9g";
+  try {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "integrada");
+    data.append("cloud_name", "dfdinbti3");
+    data.append("folder", "integrada");
+    data.append("api_key", CLOUDINARY_API_KEY);
+    data.append("api_secret", CLOUDINARY_API_SECRET);
+
+    // const res = await api().post<{
+    //   secure_url: string;
+    // }>(`https://api.cloudinary.com/v1_1/dicogrlex/image/upload`, data);
+    // console.log(res);
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/integrada/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    ).then((res) => res.json());
+
+    if (res.error) {
+      throw new Error(res.error.message);
+    }
+    console.log(res);
+
+    return { data: res.secure_url, error: null };
+  } catch (error) {
+    console.log(error);
+
+    return { data: null, error: "erro ao fazer upload" };
+  }
+};
+
 // 2️⃣ Enviar o formulário (cadastrar prestação)
 caixaForms.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("documento", caixaForms.documento.files[0]);
-  formData.append("mes", caixaForms.mes.value);
-  formData.append("CondominioID", selectCondominio.value);
+  const uploadResult = await cloudinaryUpload(caixaForms.documento.files[0]);
 
-  const res = await fetch(uri, {
+  if (uploadResult.error) {
+    alert("❌ Erro ao fazer upload do documento!");
+    return;
+  }
+
+  const res = await fetch(uriDev, {
     method: "POST",
-    body: formData,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      documentoUrl: uploadResult.data,
+      mes: caixaForms.mes.value,
+      CondominioID: selectCondominio.value,
+    }),
   });
 
   if (res.status === 201) {
     alert("✅ Prestação cadastrada com sucesso!");
-    window.location.reload();
+    // window.location.reload();
   } else {
     alert("❌ Erro ao cadastrar a prestação de contas!");
   }
 });
-
+const onClickAbrirDocumento = async (documentoUrl) => {
+  const response = await fetch(documentoUrl);
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+};
 // 3️⃣ Listar todas as prestações para a tabela
-fetch(uri)
+fetch(uriDev)
   .then((res) => res.json())
   .then((lista) => {
     tabela.innerHTML = "";
@@ -58,16 +111,14 @@ fetch(uri)
       return;
     }
 
-    lista.forEach((e) => {
+    lista.forEach(async (e) => {
       const mesFormatado = new Date(e.mes).toLocaleDateString("pt-BR", {
         month: "long",
         year: "numeric",
       });
 
       const linkDocumento = e.documentoUrl
-        ? `<a href="${e.documentoUrl}" target="_blank" class="btn btn-sm btn-primary">
-             📄 Abrir PDF
-           </a>`
+        ? `<button onclick=onClickAbrirDocumento("${e.documentoUrl}") class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
         : `<span class="text-muted">Sem documento</span>`;
 
       tabela.innerHTML += `
