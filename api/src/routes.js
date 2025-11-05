@@ -44,24 +44,76 @@ router.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-router.get("/backup", async (req, res) => {
-  const condominios = await prisma.condominio.findMany({
-    include: {
-      Inquilinos: true,
-      Clientes: true,
-      assembleia: true,
-      comunicados: true,
-      PrestacaoContas: true,
-    },
-  });
+// router.get("/backup", async (req, res) => {
+//   const condominios = await prisma.condominio.findMany({
+//     include: {
+//       Inquilinos: true,
+//       Clientes: true,
+//       assembleia: true,
+//       comunicados: true,
+//       PrestacaoContas: true,
+//     },
+//   });
 
-  fs.writeFileSync(
-    "backup.json",
-    JSON.stringify({ data: condominios }, null, 2),
-    "utf-8"
-  );
+//   fs.writeFileSync(
+//     "backup.json",
+//     JSON.stringify({ data: condominios }, null, 2),
+//     "utf-8"
+//   );
 
-  res.download("backup.json");
-});
+//   res.download("backup.json");
+// });
+// router.get("/upload-backup", async (req, res) => {
+//   const jsonBackup = fs.readFileSync("backup.json", "utf-8");
+
+//   const backupData = JSON.parse(jsonBackup);
+
+//   for (const condominio of backupData.data) {
+//     const {
+//       Inquilinos,
+//       Clientes,
+//       assembleia,
+//       comunicados,
+//       PrestacaoContas,
+//       ...condominioData
+//     } = condominio;
+
+//     await prisma.condominio.create({
+//       data: {
+//         ...condominioData,
+//         Clientes: {
+//           createMany: {
+//             data: Clientes.map((c) => {
+//               delete c.CondominioID;
+//               return c;
+//             }),
+//           },
+//         },
+//         Inquilinos: {
+//           createMany: {
+//             data: Inquilinos,
+//           },
+//         },
+//         assembleia: {
+//           createMany: {
+//             data: assembleia,
+//           },
+//         },
+//         comunicados: {
+//           createMany: {
+//             data: comunicados,
+//           },
+//         },
+//         PrestacaoContas: {
+//           createMany: {
+//             data: PrestacaoContas,
+//           },
+//         },
+//       },
+//     });
+//   }
+
+//   res.send("Backup restaurado com sucesso!");
+// });
 
 export default router;
