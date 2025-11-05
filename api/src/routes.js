@@ -7,6 +7,8 @@ import * as comunicadosController from "./controllers/comunicadoscontroller.cjs"
 import * as prestacaoContasController from "./controllers/prestacaocontascontroller.cjs";
 import * as loginControllerfrom from "./controllers/logincontroller.cjs";
 import * as filesController from "./controllers/filescontroller.cjs";
+import fs from "fs";
+import prisma from "../prisma/connection.cjs";
 
 const router = Router();
 
@@ -40,6 +42,26 @@ router.get("/documentos/:modulo/:filename", filesController.readFile);
 router.get("/documentos-disponiveis", filesController.readAllDocuments);
 router.get("/health", (req, res) => {
   res.status(200).send("OK");
+});
+
+router.get("/backup", async (req, res) => {
+  const condominios = await prisma.condominio.findMany({
+    include: {
+      Inquilinos: true,
+      Clientes: true,
+      assembleia: true,
+      comunicados: true,
+      PrestacaoContas: true,
+    },
+  });
+
+  fs.writeFileSync(
+    "backup.json",
+    JSON.stringify({ data: condominios }, null, 2),
+    "utf-8"
+  );
+
+  res.download("backup.json");
 });
 
 export default router;

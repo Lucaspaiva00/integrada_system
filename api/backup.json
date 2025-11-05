@@ -1,0 +1,509 @@
+{
+  "data": [
+    {
+      "condominioid": 17,
+      "nomecondominio": "CONDOMÍNIO RESIDENCIAL DONA IRMA",
+      "endereco": "RUA LUIZ PELEGRINI, 391",
+      "telefone": "19991947628",
+      "Inquilinos": [],
+      "Clientes": [
+        {
+          "clienteid": 29,
+          "apartamento": "Apto 01",
+          "nome": "Bruna Aparecida Zanelato Passadori",
+          "cpf": "40918266874",
+          "telefone": "19996898363",
+          "email": "brunazanel@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 30,
+          "apartamento": "Apto 02",
+          "nome": "Caio Henrique de Paula",
+          "cpf": "23476935817",
+          "telefone": "19996206181",
+          "email": "pjadmdecondominios@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 31,
+          "apartamento": "Apto 03",
+          "nome": "Micaela Gonçalez Bovi",
+          "cpf": "45556756813",
+          "telefone": "19996399352",
+          "email": "pjadmdecondominios@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 32,
+          "apartamento": "Apto 04",
+          "nome": "Eduardo Dal Bo",
+          "cpf": "03078679861",
+          "telefone": "19992942802",
+          "email": "eduardo@holamgrow.com.br",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 33,
+          "apartamento": "Apto 05",
+          "nome": "Leandro Jorge",
+          "cpf": "41264656858",
+          "telefone": "19971622276",
+          "email": "leandroreal237@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 34,
+          "apartamento": "Apto 06",
+          "nome": "Maria Divina De Castro Barboza",
+          "cpf": "27957184804",
+          "telefone": "19996649012",
+          "email": "robertomjg36@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 35,
+          "apartamento": "Apto 07",
+          "nome": "Denis Winder Gomes",
+          "cpf": "16490469871",
+          "telefone": "19976244997",
+          "email": "pjadmdecondominios@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 36,
+          "apartamento": "Apto 08",
+          "nome": "Edvaldo Antonio da Silva",
+          "cpf": "75417375691",
+          "telefone": "19996857402",
+          "email": "pjadmdecondominios@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 37,
+          "apartamento": "Apto 09",
+          "nome": "Maria Rosa Crispim Pinto",
+          "cpf": "07866974829",
+          "telefone": "19992100919",
+          "email": "pjadmdecondominios@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 38,
+          "apartamento": "Apto 10",
+          "nome": "Laura Gabriele da Silva",
+          "cpf": "46806238882",
+          "telefone": "19997050987",
+          "email": "gabrielelala@hotmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 39,
+          "apartamento": "Apto 11",
+          "nome": "Jonas Henrique Camargo dos Santos",
+          "cpf": "45288039844",
+          "telefone": "19994569601",
+          "email": "henriquejonas59@gmail.com",
+          "CondominioID": 17
+        },
+        {
+          "clienteid": 40,
+          "apartamento": "Apto 12",
+          "nome": "Franciane Mathias de Oliveira",
+          "cpf": "35049329884",
+          "telefone": "19997019185",
+          "email": "francianemathias@gmail.com",
+          "CondominioID": 17
+        }
+      ],
+      "assembleia": [],
+      "comunicados": [],
+      "PrestacaoContas": []
+    },
+    {
+      "condominioid": 18,
+      "nomecondominio": "CONDOMINIO RESIDENCIAL DI CAPRI",
+      "endereco": "RUA JULIA BUENO, 668 ",
+      "telefone": "19996781517",
+      "Inquilinos": [],
+      "Clientes": [],
+      "assembleia": [],
+      "comunicados": [],
+      "PrestacaoContas": []
+    },
+    {
+      "condominioid": 15,
+      "nomecondominio": "ASSOCIAÇÃO DOS MORADORES DO JARDIM PRIMAVERA ",
+      "endereco": "RUA VICENZO GRANGHELLI, 186  ",
+      "telefone": "19971152341",
+      "Inquilinos": [],
+      "Clientes": [],
+      "assembleia": [],
+      "comunicados": [],
+      "PrestacaoContas": []
+    },
+    {
+      "condominioid": 16,
+      "nomecondominio": "CONDOMINIO RESIDENCIAL VILA ROSEIRA II",
+      "endereco": "RUA VIDEIRA, 260 ",
+      "telefone": "19996781517",
+      "Inquilinos": [],
+      "Clientes": [
+        {
+          "clienteid": 13,
+          "apartamento": "Casa 01",
+          "nome": "BETANIA R. DE MELO DOS SANTOS",
+          "cpf": "84388153249",
+          "telefone": "19989720099",
+          "email": "valdemar.asantos@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 14,
+          "apartamento": "Casa 02",
+          "nome": "ROSA MARIA BARALDI DA SILVA",
+          "cpf": "05836156867",
+          "telefone": "19997919562",
+          "email": "rosambaraldi@hotmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 15,
+          "apartamento": "Casa 03",
+          "nome": "ROAN OLIVEIRA ARRAES",
+          "cpf": "40527465895",
+          "telefone": "11955579444",
+          "email": "roan.arraes@hotmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 17,
+          "apartamento": "Casa 04",
+          "nome": "MARIA RENATA VENTURINI",
+          "cpf": "26637556807",
+          "telefone": "19974030735",
+          "email": "mariare23@hotmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 18,
+          "apartamento": "Casa 05",
+          "nome": "ADRIANA DE CASSIA PEREIRA",
+          "cpf": "29083105890",
+          "telefone": "19984222324",
+          "email": "adriana.cassia.pereira@hotmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 12,
+          "apartamento": "Casa 06",
+          "nome": "KAREN CRISTINA MOLINA",
+          "cpf": "35012545800",
+          "telefone": "19992937958",
+          "email": "acmolina.56@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 19,
+          "apartamento": "Casa 07",
+          "nome": "JOSE CARLOS ALVES DE SANTANA",
+          "cpf": "25435088801",
+          "telefone": "19998959754",
+          "email": "josesanttana6@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 20,
+          "apartamento": "Casa 08",
+          "nome": "APARECIDO FERNANDES",
+          "cpf": "62098594887",
+          "telefone": "19992258004",
+          "email": "zecafernandes456@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 21,
+          "apartamento": "Casa 09",
+          "nome": "CELSO ELECIR VARGAS",
+          "cpf": "59534214191",
+          "telefone": "19974085438",
+          "email": "elecir_celso@hotmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 22,
+          "apartamento": "Casa 10",
+          "nome": "ERICA DE CASSIA P. CHRISPIM",
+          "cpf": "28009552879",
+          "telefone": "19997945391",
+          "email": "ecpvet@hotmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 23,
+          "apartamento": "Casa 11",
+          "nome": "ALEX SANTHIAGO RIBEIRO",
+          "cpf": "27424956817",
+          "telefone": "19997570133",
+          "email": "alexsanthiago.vivo@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 24,
+          "apartamento": "Casa 12",
+          "nome": "ANTONIO VALDECIR DA SILVA",
+          "cpf": "10792911806",
+          "telefone": "19992571733",
+          "email": "antoniovaldecidasilva17@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 25,
+          "apartamento": "Casa 13",
+          "nome": "ANTONIO MARCOS TREVISAN",
+          "cpf": "10463827805",
+          "telefone": "11954801220",
+          "email": "antonio_29101970@hotmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 26,
+          "apartamento": "Casa 14",
+          "nome": "CLAUDIO RENAN DA SILVA",
+          "cpf": "34447240807",
+          "telefone": "1154678936",
+          "email": "claudior.dasilva88@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 27,
+          "apartamento": "Casa 15",
+          "nome": "WILIANS RUBENS PEZZO",
+          "cpf": "76360938804",
+          "telefone": "19994110052",
+          "email": "lagunaposto@bol.com.br",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 28,
+          "apartamento": "Casa 16",
+          "nome": "ROBERTO PAVANI FILHO",
+          "cpf": "37764966819",
+          "telefone": "19998371451",
+          "email": "robertomjg36@gmail.com",
+          "CondominioID": 16
+        },
+        {
+          "clienteid": 62,
+          "apartamento": "teste",
+          "nome": "Juliana M P Fanti",
+          "cpf": "47801159810",
+          "telefone": "19997890847",
+          "email": "jupaiva.15@gmail.com",
+          "CondominioID": 16
+        }
+      ],
+      "assembleia": [],
+      "comunicados": [],
+      "PrestacaoContas": []
+    },
+    {
+      "condominioid": 19,
+      "nomecondominio": "CONDOMINIO EDIFICIO HUMBERTO MANTOVANI",
+      "endereco": "RUA CANDIDO BUENO, 954",
+      "telefone": "3867-4144",
+      "Inquilinos": [],
+      "Clientes": [
+        {
+          "clienteid": 41,
+          "apartamento": "Apto 11",
+          "nome": "MAURICIO A. FERRARI",
+          "cpf": "12739073887",
+          "telefone": "19996781517",
+          "email": "valeriaganzarollicarlos@gmail.com",
+          "CondominioID": 19
+        }
+      ],
+      "assembleia": [],
+      "comunicados": [],
+      "PrestacaoContas": []
+    },
+    {
+      "condominioid": 20,
+      "nomecondominio": "EDIFICIO FIORINDO GRANGHELLI",
+      "endereco": "RUA CANDIDO BUENO, 1179",
+      "telefone": "19996781517",
+      "Inquilinos": [],
+      "Clientes": [
+        {
+          "clienteid": 42,
+          "apartamento": "Apto 01",
+          "nome": "LUIZ CARLOS LEME",
+          "cpf": "71756558868",
+          "telefone": "19997251910",
+          "email": "fesouzaleme@gmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 43,
+          "apartamento": "Apto 02",
+          "nome": "SUELI THEREZINHA G DE SOUZA",
+          "cpf": "19561352869",
+          "telefone": "19997103519",
+          "email": "renatosoterra@terra.com.br",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 44,
+          "apartamento": "Apto 03",
+          "nome": "V GRANGHELLI NETO ADM",
+          "cpf": "33039428000105",
+          "telefone": "19997744707",
+          "email": "f.granghelli@hotmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 45,
+          "apartamento": "Apto 04",
+          "nome": "THEREZA MARCO GRANGHELLI",
+          "cpf": "10792866835",
+          "telefone": "19992756448",
+          "email": "edna.granghelli@hotmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 46,
+          "apartamento": "Apto 05",
+          "nome": "ANA CRISTINA GRANGHELLI SISTI",
+          "cpf": "10249130823",
+          "telefone": "19996646955",
+          "email": "anagranghelli@gmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 47,
+          "apartamento": "Apto 06",
+          "nome": "ORLANDO GRANGHELLI",
+          "cpf": "96869500878",
+          "telefone": "19997737684",
+          "email": "granghelli@gmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 48,
+          "apartamento": "Apto 07",
+          "nome": "LOURDES VIGATO GRANGHELLI",
+          "cpf": "19549893855",
+          "telefone": "19996014344",
+          "email": "andreiafinanceiro2001@gmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 49,
+          "apartamento": "Apto 08",
+          "nome": "DERCI GRANGHELLI PANINI",
+          "cpf": "21416861807",
+          "telefone": "19998402169",
+          "email": "panini.antonio@gmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 53,
+          "apartamento": "Apto 11",
+          "nome": "RAMON GRANGHELLI BRANCALHONE",
+          "cpf": "27532261808",
+          "telefone": "19997632277",
+          "email": "ramon@tradicaonline.com.br",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 54,
+          "apartamento": "Apto 15",
+          "nome": "MARIA DE FATIMA GRANGHELLI FAVERO",
+          "cpf": "18810524861",
+          "telefone": "19988549793",
+          "email": "fatima.gfavero@gmail.com",
+          "CondominioID": 20
+        },
+        {
+          "clienteid": 55,
+          "apartamento": "Apto 16",
+          "nome": "FRANCISCO GRANGHELLI",
+          "cpf": "16412940863",
+          "telefone": "19999062962",
+          "email": "integradaadm@gmail.com",
+          "CondominioID": 20
+        }
+      ],
+      "assembleia": [],
+      "comunicados": [],
+      "PrestacaoContas": []
+    },
+    {
+      "condominioid": 21,
+      "nomecondominio": "EDIFICIO BELA VISTA",
+      "endereco": "RUA CARLOS GOBBI, 425",
+      "telefone": "19996781517",
+      "Inquilinos": [],
+      "Clientes": [
+        {
+          "clienteid": 59,
+          "apartamento": "Apto 04",
+          "nome": "MARIA CLAUDIA T B PASCHOIN",
+          "cpf": "19218009842",
+          "telefone": "19996750044",
+          "email": "junior_vendasjaguar@hotmail.com",
+          "CondominioID": 21
+        },
+        {
+          "clienteid": 60,
+          "apartamento": "Apto 05",
+          "nome": "GUSTAVO BIANCHINI DE MORAIS",
+          "cpf": "43058666845",
+          "telefone": "19996997438",
+          "email": "gb.morais@hotmail.com",
+          "CondominioID": 21
+        },
+        {
+          "clienteid": 56,
+          "apartamento": "APTO 01",
+          "nome": "ADRIANO JORGE NOGUEIRA",
+          "cpf": "02543544674",
+          "telefone": "1981012790",
+          "email": "adriano-jorge@hotmail.com",
+          "CondominioID": 21
+        },
+        {
+          "clienteid": 57,
+          "apartamento": "APTO 02",
+          "nome": "APARECIDA CALEFFI LOPES",
+          "cpf": "36351644615",
+          "telefone": "19981012791",
+          "email": "adriano-jorge@hotmail.com",
+          "CondominioID": 21
+        },
+        {
+          "clienteid": 58,
+          "apartamento": "Apto 03",
+          "nome": "OLAVO XAVIER",
+          "cpf": "02470962889",
+          "telefone": "19998116508",
+          "email": "claudetemontini@hotmail.com",
+          "CondominioID": 21
+        },
+        {
+          "clienteid": 61,
+          "apartamento": "Apto 06",
+          "nome": "JANICI MELO",
+          "cpf": "26858997822",
+          "telefone": "19998166530",
+          "email": "telaglass2020@gmail.com",
+          "CondominioID": 21
+        }
+      ],
+      "assembleia": [],
+      "comunicados": [],
+      "PrestacaoContas": []
+    }
+  ]
+}
