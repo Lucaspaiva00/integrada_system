@@ -4,22 +4,90 @@ const uri = "https://integrada-api.onrender.com/prestacaocontascontroller";
 const uriDev = "http://localhost:3000/prestacaocontascontroller";
 const tabela = document.querySelector("#prestacao");
 
-// 1️⃣ Carregar os condomínios no <select>
-fetch("https://integrada-api.onrender.com/condominiocontroller")
-  .then((res) => res.json())
-  .then((lista) => {
+const carregarCondominios = async () => {
+  // 1️⃣ Carregar os condomínios no <select>
+  try {
+    // fetch("https://integrada-api.onrender.com/condominiocontroller")
+    //   .then((res) => res.json())
+    //   .then((lista) => {
+    //     selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
+    //     lista.forEach((c) => {
+    //       selectCondominio.innerHTML += `
+    //   <option value="${c.condominioid}">
+    //     ${c.nomecondominio}
+    //   </option>`;
+    //     });
+    //   })
+
+    const response = await fetch(
+      "https://integrada-api.onrender.com/condominiocontroller"
+    );
+    const condominios = await response.json();
     selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
-    lista.forEach((c) => {
+    condominios.forEach((c) => {
       selectCondominio.innerHTML += `
-        <option value="${c.condominioid}">
-          ${c.nomecondominio}
-        </option>`;
+    <option value="${c.condominioid}">
+      ${c.nomecondominio}
+    </option>`;
     });
-  })
-  .catch((err) => {
-    console.error("Erro ao carregar condomínios:", err);
+  } catch (error) {
+    console.error("Erro ao carregar condomínios:", error);
     alert("Erro ao carregar a lista de condomínios.");
-  });
+  }
+};
+
+const listarPrestacoes = async () => {
+  // 3️⃣ Listar todas as prestações para a tabela
+
+  try {
+    const response = await fetch(uri);
+    const prestacoes = await response.json();
+
+    tabela.innerHTML = "";
+
+    if (!prestacoes.length) {
+      tabela.innerHTML = `
+        <tr>
+          <td colspan="3" class="text-center text-muted">
+            Nenhuma prestação cadastrada ainda.
+          </td>
+        </tr>`;
+      return;
+    }
+
+    prestacoes.forEach(async (e) => {
+      const mesFormatado = new Date(e.mes).toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
+
+      const linkDocumento = e.documentoUrl
+        ? `<button onclick=onClickAbrirDocumento("${e.documentoUrl}") class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
+        : `<span class="text-muted">Sem documento</span>`;
+
+      tabela.innerHTML += `
+        <tr>
+          <td>${e.nomeCondominio || "—"}</td>
+          <td style="text-transform: capitalize;">${mesFormatado}</td>
+          <td>${linkDocumento}</td>
+          <td><button class="btn btn-sm btn-danger" onclick=onClickExcluirDocumento("${
+            e.prestacaoid
+          }")>X</button></td>
+        </tr>
+      `;
+    });
+  } catch (error) {
+    console.error("Erro ao carregar prestações:", err);
+    tabela.innerHTML = `
+      <tr>
+        <td colspan="3" class="text-center text-danger">
+          Erro ao carregar prestações.
+        </td>
+      </tr>`;
+  }
+};
+
+Promise.all([carregarCondominios(), listarPrestacoes()]);
 
 const cloudinaryUpload = async (file) => {
   const CLOUDINARY_API_KEY = "839478495457115";
@@ -60,7 +128,7 @@ const cloudinaryUpload = async (file) => {
 };
 
 // 2️⃣ Enviar o formulário (cadastrar prestação)
-caixaForms.addEventListener("submit", async (e) => {
+const onSubmitCadastrarPrestacao = async (e) => {
   e.preventDefault();
 
   const uploadResult = await cloudinaryUpload(caixaForms.documento.files[0]);
@@ -88,54 +156,35 @@ caixaForms.addEventListener("submit", async (e) => {
   } else {
     alert("❌ Erro ao cadastrar a prestação de contas!");
   }
-});
+};
+caixaForms.addEventListener("submit", onSubmitCadastrarPrestacao);
+
 const onClickAbrirDocumento = async (documentoUrl) => {
   const response = await fetch(documentoUrl);
   const blob = await response.blob();
   const url = URL.createObjectURL(blob);
   window.open(url, "_blank");
 };
-// 3️⃣ Listar todas as prestações para a tabela
-fetch(uri)
-  .then((res) => res.json())
-  .then((lista) => {
-    tabela.innerHTML = "";
 
-    if (!lista.length) {
-      tabela.innerHTML = `
-        <tr>
-          <td colspan="3" class="text-center text-muted">
-            Nenhuma prestação cadastrada ainda.
-          </td>
-        </tr>`;
-      return;
-    }
+const onClickExcluirDocumento = async (id) => {
+  const confirmar = confirm(
+    "Tem certeza que deseja excluir esta prestação de contas?"
+  );
+  if (!confirmar) return;
 
-    lista.forEach(async (e) => {
-      const mesFormatado = new Date(e.mes).toLocaleDateString("pt-BR", {
-        month: "long",
-        year: "numeric",
-      });
-
-      const linkDocumento = e.documentoUrl
-        ? `<button onclick=onClickAbrirDocumento("${e.documentoUrl}") class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
-        : `<span class="text-muted">Sem documento</span>`;
-
-      tabela.innerHTML += `
-        <tr>
-          <td>${e.nomeCondominio || "—"}</td>
-          <td style="text-transform: capitalize;">${mesFormatado}</td>
-          <td>${linkDocumento}</td>
-        </tr>
-      `;
+  try {
+    const res = await fetch(`${uri}/${id}`, {
+      method: "DELETE",
     });
-  })
-  .catch((err) => {
-    console.error("Erro ao carregar prestações:", err);
-    tabela.innerHTML = `
-      <tr>
-        <td colspan="3" class="text-center text-danger">
-          Erro ao carregar prestações.
-        </td>
-      </tr>`;
-  });
+
+    if (res.status === 200) {
+      alert("✅ Prestação de contas excluída com sucesso!");
+      listarPrestacoes();
+    } else {
+      alert("❌ Erro ao excluir a prestação de contas!");
+    }
+  } catch (error) {
+    console.error("Erro ao excluir prestação de contas:", error);
+    alert("❌ Erro ao excluir a prestação de contas!");
+  }
+};

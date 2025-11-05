@@ -12,6 +12,11 @@ import prisma from "../prisma/connection.cjs";
 
 const router = Router();
 
+router.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 router.post("/login/proprietario", loginControllerfrom.loginProprietario);
 
 router.get("/", (req, res) => {
@@ -38,6 +43,10 @@ router.get("/comunicadoscontroller", comunicadosController.read);
 
 router.get("/prestacaocontascontroller", prestacaoContasController.read);
 router.post("/prestacaocontascontroller", prestacaoContasController.create);
+router.delete(
+  "/prestacaocontascontroller/:id",
+  prestacaoContasController.delete
+);
 router.get("/documentos/:modulo/:filename", filesController.readFile);
 router.get("/documentos-disponiveis", filesController.readAllDocuments);
 router.get("/health", (req, res) => {

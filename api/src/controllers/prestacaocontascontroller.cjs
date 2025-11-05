@@ -76,8 +76,34 @@ const create = async (req, res) => {
     return res.status(500).json({ error: "Erro ao criar prestação de contas" });
   }
 };
+// Delete /prestacaocontascontroller
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("ID recebido para exclusão:", id);
+
+    if (!id) {
+      return res.status(400).json({ error: "ID da prestação não informado." });
+    }
+
+    const prestacao = await prisma.prestacaoContas.delete({
+      where: { prestacaoid: Number(id) },
+    });
+
+    return res.status(200).json({
+      message: "Prestação de contas excluída com sucesso.",
+      prestacao,
+    });
+  } catch (err) {
+    console.error("Erro ao criar prestação:", err);
+    return res
+      .status(500)
+      .json({ message: "Erro ao criar prestação de contas", prestacao: null });
+  }
+};
 
 module.exports = {
   read,
   create,
+  delete: remove,
 };
