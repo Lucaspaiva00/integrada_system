@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../../prisma/connection.cjs");
 
 const read = async (req, res) => {
   try {
@@ -92,7 +91,6 @@ const update = async (req, res) => {
     res.status(500).json({ error: "Erro ao atualizar cliente" });
   }
 };
-
 
 module.exports = {
   read,

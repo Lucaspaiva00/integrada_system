@@ -1,7 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-
-const BASE_URL = "https://integrada-api.onrender.com/documentos";
+const prisma = require("../../prisma/connection.cjs");
 
 // GET /prestacaocontascontroller
 const read = async (req, res) => {
@@ -21,9 +18,7 @@ const read = async (req, res) => {
         // nome do arquivo físico
         documento: p.documento,
         // URL pronta pra abrir
-        documentoUrl: p.documento
-          ? `${BASE_URL}/prestacoes/${encodeURIComponent(p.documento)}`
-          : null,
+        documentoUrl: p.documento,
         // ID numérico do condomínio dono dessa prestação
         CondominioID: Number(p.CondominioID),
         // nome bonitinho do condomínio (pra listar no admin)
@@ -34,29 +29,30 @@ const read = async (req, res) => {
     return res.json(prestacoes);
   } catch (err) {
     console.error("Erro ao listar prestações:", err);
-    return res.status(500).json({ error: "Erro ao listar prestações de contas" });
+    return res
+      .status(500)
+      .json({ error: "Erro ao listar prestações de contas" });
   }
 };
 
 // POST /prestacaocontascontroller
 const create = async (req, res) => {
   try {
-    const { mes, CondominioID } = req.body;
-    const documento = req.file ? req.file.filename : null;
+    const { mes, CondominioID, documentoUrl } = req.body;
 
-    if (!documento) {
-      return res.status(400).json({ error: "Nenhum arquivo enviado." });
-    }
     if (!CondominioID) {
       return res.status(400).json({ error: "Condomínio não informado." });
     }
     if (!mes) {
       return res.status(400).json({ error: "Mês não informado." });
     }
+    if (!documentoUrl) {
+      return res.status(400).json({ error: "Mês não informado." });
+    }
 
     const prestacao = await prisma.prestacaoContas.create({
       data: {
-        documento,
+        documento: documentoUrl,
         mes: new Date(mes), // ex: "2025-10-01"
         CondominioID: Number(CondominioID),
       },
@@ -69,9 +65,7 @@ const create = async (req, res) => {
       prestacaoid: prestacao.prestacaoid,
       mes: prestacao.mes,
       documento: prestacao.documento,
-      documentoUrl: prestacao.documento
-        ? `${BASE_URL}/prestacoes/${encodeURIComponent(prestacao.documento)}`
-        : null,
+      documentoUrl: prestacao.documento,
       CondominioID: Number(prestacao.CondominioID),
       nomeCondominio: prestacao.Condominio?.nomecondominio || null,
     };
