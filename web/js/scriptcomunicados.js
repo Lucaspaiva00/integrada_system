@@ -74,7 +74,7 @@ caixaForms.addEventListener("submit", async (e) => {
     return;
   }
 
-  const res = await fetch(uriDev, {
+  const res = await fetch(uri, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -98,7 +98,7 @@ caixaForms.addEventListener("submit", async (e) => {
 
 // 📋 Listar comunicados na tabela
 async function listarComunicados() {
-  const res = await fetch(uriDev);
+  const res = await fetch(uri);
   const dados = await res.json();
 
   tbody.innerHTML = "";

@@ -70,7 +70,7 @@ caixaForms.addEventListener("submit", async (e) => {
     return;
   }
 
-  const res = await fetch(uriDev, {
+  const res = await fetch(uri, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -96,7 +96,7 @@ const onClickAbrirDocumento = async (documentoUrl) => {
   window.open(url, "_blank");
 };
 // 3️⃣ Listar todas as prestações para a tabela
-fetch(uriDev)
+fetch(uri)
   .then((res) => res.json())
   .then((lista) => {
     tabela.innerHTML = "";

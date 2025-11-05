@@ -74,7 +74,7 @@ const onClickAbrirDocumento = async (documentoUrl) => {
 // 📋 Lista as assembleias existentes
 async function listarAssembleias() {
   try {
-    const res = await fetch(uriDevAssembleias);
+    const res = await fetch(uri);
     const dados = await res.json();
 
     tbodyAssembleia.innerHTML = "";
@@ -122,7 +122,7 @@ caixaForms.addEventListener("submit", async (e) => {
   }
 
   try {
-    const res = await fetch(uriDevAssembleias, {
+    const res = await fetch(uri, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
