@@ -14,6 +14,9 @@ const uriDev = "http://localhost:3000/prestacaocontascontroller";
 const tabs = document.querySelector("#tabsCondominios");
 const tabsContent = document.querySelector("#tabsCondominiosContent");
 
+// ✅ NOVO: chave para guardar aba ativa
+const LS_TAB_KEY = "prestacao_tab_ativa";
+
 /* =========================
    1) Carregar condomínios no select
 ========================= */
@@ -88,12 +91,33 @@ function renderTabelaPorCondominio(tbodyEl, lista) {
 }
 
 /* =========================
+   ✅ NOVO: salvar a aba ativa
+   (Bootstrap dispara esse evento quando troca de aba)
+========================= */
+if (tabs) {
+  tabs.addEventListener("shown.bs.tab", (ev) => {
+    // ev.target pode ser <button> (bs5) ou <a> (bs4); aqui usamos data-target
+    const target = ev.target.getAttribute("data-target");
+    if (target) {
+      // "#pane-..." -> "pane-..."
+      localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
+    }
+  });
+}
+
+/* =========================
    2) Listar prestações em abas
 ========================= */
 const listarPrestacoes = async () => {
   try {
     const response = await fetch(uri);
     const prestacoes = await response.json();
+
+    // ✅ NOVO: aplicar estilo premium/scroll horizontal só via classes
+    // (você coloca o CSS depois)
+    if (tabs) {
+      tabs.classList.add("nav", "nav-pills", "tabs-premium__nav");
+    }
 
     tabs.innerHTML = "";
     tabsContent.innerHTML = "";
@@ -107,6 +131,9 @@ const listarPrestacoes = async () => {
         <div class="alert alert-warning">Nenhuma prestação cadastrada ainda.</div>`;
       return;
     }
+
+    // ✅ NOVO: recuperar aba salva (se não existir, vai para Todos)
+    const abaSalva = localStorage.getItem(LS_TAB_KEY) || "pane-todos";
 
     // Agrupar por condomínio (ID + Nome)
     const grupos = new Map();
@@ -127,11 +154,13 @@ const listarPrestacoes = async () => {
     const tabIdAll = "tab-todos";
     const paneIdAll = "pane-todos";
 
+    const isActiveAll = abaSalva === paneIdAll;
+
     tabs.innerHTML += `
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="${tabIdAll}"
+        <button class="nav-link ${isActiveAll ? "active" : ""}" id="${tabIdAll}"
           data-toggle="tab" data-target="#${paneIdAll}"
-          type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="true">
+          type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="${isActiveAll ? "true" : "false"}">
           Todos
           <span class="badge badge-light ml-2">${prestacoes.length}</span>
         </button>
@@ -139,7 +168,7 @@ const listarPrestacoes = async () => {
     `;
 
     tabsContent.innerHTML += `
-      <div class="tab-pane fade show active" id="${paneIdAll}" role="tabpanel" aria-labelledby="${tabIdAll}">
+      <div class="tab-pane fade ${isActiveAll ? "show active" : ""}" id="${paneIdAll}" role="tabpanel" aria-labelledby="${tabIdAll}">
         <table class="table table-dark table-hover">
           <thead>
             <tr>
@@ -185,11 +214,13 @@ const listarPrestacoes = async () => {
       const tabId = `tab-${safeId}`;
       const paneId = `pane-${safeId}`;
 
+      const isActive = abaSalva === paneId;
+
       tabs.innerHTML += `
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="${tabId}"
+          <button class="nav-link ${isActive ? "active" : ""}" id="${tabId}"
             data-toggle="tab" data-target="#${paneId}"
-            type="button" role="tab" aria-controls="${paneId}" aria-selected="false">
+            type="button" role="tab" aria-controls="${paneId}" aria-selected="${isActive ? "true" : "false"}">
             ${nomeCondominio}
             <span class="badge badge-light ml-2">${lista.length}</span>
           </button>
@@ -197,7 +228,7 @@ const listarPrestacoes = async () => {
       `;
 
       tabsContent.innerHTML += `
-        <div class="tab-pane fade" id="${paneId}" role="tabpanel" aria-labelledby="${tabId}">
+        <div class="tab-pane fade ${isActive ? "show active" : ""}" id="${paneId}" role="tabpanel" aria-labelledby="${tabId}">
           <table class="table table-dark table-hover">
             <thead>
               <tr>
@@ -214,6 +245,12 @@ const listarPrestacoes = async () => {
       const tbody = document.querySelector(`#tbody-${safeId}`);
       renderTabelaPorCondominio(tbody, lista);
     });
+
+    // ✅ NOVO: se a aba salva não existir mais (condomínio removido), volta pro Todos
+    const existePaneSalva = document.querySelector(`#${abaSalva}`);
+    if (!existePaneSalva) {
+      localStorage.setItem(LS_TAB_KEY, "pane-todos");
+    }
   } catch (error) {
     console.error("Erro ao carregar prestações:", error);
     tabs.innerHTML = "";
@@ -284,7 +321,7 @@ const onSubmitCadastrarPrestacao = async (e) => {
   if (res.status === 201) {
     alert("✅ Prestação cadastrada com sucesso!");
     caixaForms.reset();
-    await listarPrestacoes(); // ✅ atualiza a tela
+    await listarPrestacoes(); // ✅ atualiza a tela (mantém a aba ativa)
   } else {
     alert("❌ Erro ao cadastrar a prestação de contas!");
   }
@@ -306,7 +343,9 @@ const onClickAbrirDocumento = async (documentoUrl) => {
    6) Excluir
 ========================= */
 const onClickExcluirDocumento = async (id) => {
-  const confirmar = confirm("Tem certeza que deseja excluir esta prestação de contas?");
+  const confirmar = confirm(
+    "Tem certeza que deseja excluir esta prestação de contas?"
+  );
   if (!confirmar) return;
 
   try {
@@ -314,7 +353,7 @@ const onClickExcluirDocumento = async (id) => {
 
     if (res.status === 200) {
       alert("✅ Prestação de contas excluída com sucesso!");
-      await listarPrestacoes();
+      await listarPrestacoes(); // ✅ atualiza a tela (mantém a aba ativa)
     } else {
       alert("❌ Erro ao excluir a prestação de contas!");
     }
