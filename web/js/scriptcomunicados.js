@@ -20,8 +20,10 @@ const toastIcon = document.querySelector("#toastIcon");
 const toastClose = document.querySelector("#toastClose");
 
 // ✅ URLs
-const uriComunicadosController = "https://integrada-api.onrender.com/comunicadoscontroller";
-const uriCondominio = "https://integrada-api.onrender.com/condominiocontroller";
+const uriComunicadosController =
+  "https://integrada-api.onrender.com/comunicadoscontroller";
+const uriCondominio =
+  "https://integrada-api.onrender.com/condominiocontroller";
 
 // cache
 let comunicadosCache = [];
@@ -32,7 +34,6 @@ let comunicadosCache = [];
 let toastTimer = null;
 
 function showToast(type, title, msg) {
-  // type: success | error | info
   toastEl.classList.remove("show", "success", "error", "info");
   toastEl.classList.add("show", type);
 
@@ -40,9 +41,11 @@ function showToast(type, title, msg) {
   toastMsg.textContent = msg || "";
 
   toastIcon.innerHTML =
-    type === "success" ? `<i class="fas fa-check"></i>` :
-      type === "error" ? `<i class="fas fa-times"></i>` :
-        `<i class="fas fa-info"></i>`;
+    type === "success"
+      ? `<i class="fas fa-check"></i>`
+      : type === "error"
+        ? `<i class="fas fa-times"></i>`
+        : `<i class="fas fa-info"></i>`;
 
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => {
@@ -50,7 +53,9 @@ function showToast(type, title, msg) {
   }, 3500);
 }
 
-toastClose?.addEventListener("click", () => toastEl.classList.remove("show"));
+toastClose?.addEventListener("click", () =>
+  toastEl.classList.remove("show")
+);
 
 // ---------------------------
 // MODAL helpers
@@ -69,12 +74,14 @@ function closeModal() {
 
 modalEdit.addEventListener("click", (e) => {
   const el = e.target;
-  if (el && el.getAttribute && el.getAttribute("data-close") === "true") closeModal();
+  if (el && el.getAttribute && el.getAttribute("data-close") === "true")
+    closeModal();
 });
 
 // ESC fecha modal
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !modalEdit.classList.contains("d-none")) closeModal();
+  if (e.key === "Escape" && !modalEdit.classList.contains("d-none"))
+    closeModal();
 });
 
 // ---------------------------
@@ -82,12 +89,16 @@ document.addEventListener("keydown", (e) => {
 // ---------------------------
 document.querySelector("#documento")?.addEventListener("change", (e) => {
   const f = e.target.files?.[0];
-  fileHint.textContent = f ? `Selecionado: ${f.name}` : "Nenhum arquivo selecionado.";
+  fileHint.textContent = f
+    ? `Selecionado: ${f.name}`
+    : "Nenhum arquivo selecionado.";
 });
 
 document.querySelector("#documentoEdit")?.addEventListener("change", (e) => {
   const f = e.target.files?.[0];
-  fileHintEdit.textContent = f ? `Selecionado: ${f.name}` : "Mantendo o documento atual.";
+  fileHintEdit.textContent = f
+    ? `Selecionado: ${f.name}`
+    : "Mantendo o documento atual.";
 });
 
 // ---------------------------
@@ -106,10 +117,13 @@ const cloudinaryUpload = async (file) => {
     data.append("api_key", CLOUDINARY_API_KEY);
     data.append("api_secret", CLOUDINARY_API_SECRET);
 
-    const res = await fetch("https://api.cloudinary.com/v1_1/integrada/image/upload", {
-      method: "POST",
-      body: data,
-    }).then((r) => r.json());
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/integrada/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    ).then((r) => r.json());
 
     if (res.error) throw new Error(res.error.message);
 
@@ -123,14 +137,25 @@ const cloudinaryUpload = async (file) => {
 // ---------------------------
 // Helpers
 // ---------------------------
-function formatDateISOToBR(iso) {
-  if (!iso) return "—";
+function toDateInputValue(value) {
+  if (!value) return "";
   // se vier yyyy-mm-dd
-  if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
-    const [y, m, d] = iso.split("-");
-    return `${d}/${m}/${y}`;
-  }
-  return iso; // fallback
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+
+  // se vier ISO com hora
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return "";
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function formatDateISOToBR(iso) {
+  const v = toDateInputValue(iso);
+  if (!v) return "—";
+  const [y, m, d] = v.split("-");
+  return `${d}/${m}/${y}`;
 }
 
 const onClickAbrirDocumento = async (documentoUrl) => {
@@ -152,9 +177,7 @@ async function carregarCondominios() {
     const res = await fetch(uriCondominio);
     const dados = await res.json();
 
-    // novo
     selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
-    // edição
     selectCondominioEdit.innerHTML = `<option value="">Selecione o condomínio</option>`;
 
     dados.forEach((cond) => {
@@ -188,7 +211,7 @@ function renderCards(lista) {
   emptyState.classList.add("d-none");
 
   lista.forEach((c) => {
-    const id = c.comunicadosid ?? c.id; // compat
+    const id = c.comunicadosid ?? c.id;
     const descricao = c.descricao || "—";
     const data = c.datacomunicado || c.data || "—";
     const nomeCondominio = c.nomeCondominio || c.condominioNome || "—";
@@ -203,10 +226,10 @@ function renderCards(lista) {
       : `<div class="mt-2"><strong>Documento:</strong> <span class="text-muted">Sem anexo</span></div>`;
 
     const btnAbrir = documentoUrl
-      ? `<button class="btn btn-sm btn-primary paiva-btn-primary" data-abrir="${id}">
+      ? `<button type="button" class="btn btn-sm btn-primary paiva-btn-primary" data-abrir="${id}">
            <i class="fas fa-file-alt mr-1"></i> Abrir
          </button>`
-      : `<button class="btn btn-sm btn-secondary" disabled>
+      : `<button type="button" class="btn btn-sm btn-secondary" disabled>
            <i class="fas fa-file-alt mr-1"></i> Abrir
          </button>`;
 
@@ -229,11 +252,11 @@ function renderCards(lista) {
           <div class="d-flex align-items-center mt-3" style="gap:10px;">
             ${btnAbrir}
 
-            <button class="btn btn-sm btn-warning" data-editar="${id}">
+            <button type="button" class="btn btn-sm btn-warning" data-editar="${id}">
               <i class="fas fa-pen mr-1"></i> Editar
             </button>
 
-            <button class="btn btn-sm btn-danger" data-excluir="${id}">
+            <button type="button" class="btn btn-sm btn-danger" data-excluir="${id}">
               <i class="fas fa-trash"></i>
             </button>
           </div>
@@ -245,10 +268,20 @@ function renderCards(lista) {
 
     // listeners
     const btnOpen = col.querySelector(`[data-abrir="${id}"]`);
-    btnOpen?.addEventListener("click", () => onClickAbrirDocumento(documentoUrl));
+    btnOpen?.addEventListener("click", () =>
+      onClickAbrirDocumento(documentoUrl)
+    );
 
-    col.querySelector(`[data-editar="${id}"]`)?.addEventListener("click", async () => {
-      await abrirEdicaoPorId(id); // ✅ agora busca do backend pra evitar 404/obj desatualizado
+    col.querySelector(`[data-editar="${id}"]`)?.addEventListener("click", () => {
+      // ✅ ABRE MODAL DIRETO DO CACHE (sem bater no backend)
+      const item = comunicadosCache.find(
+        (x) => (x.comunicadosid ?? x.id) === id
+      );
+      if (!item) {
+        showToast("error", "Erro", "Não foi possível localizar este comunicado.");
+        return;
+      }
+      abrirEdicao(item);
     });
 
     col.querySelector(`[data-excluir="${id}"]`)?.addEventListener("click", () => {
@@ -352,7 +385,9 @@ async function onClickExcluirDocumento(id) {
   if (!confirmar) return;
 
   try {
-    const res = await fetch(`${uriComunicadosController}/${id}`, { method: "DELETE" });
+    const res = await fetch(`${uriComunicadosController}/${id}`, {
+      method: "DELETE",
+    });
 
     if (res.status === 200 || res.ok) {
       showToast("success", "Excluído", "Comunicado excluído com sucesso!");
@@ -367,32 +402,17 @@ async function onClickExcluirDocumento(id) {
 }
 
 // ---------------------------
-// EDIT (busca por id no back + abre modal)
+// EDIT (abre modal com dados do cache)
 // ---------------------------
-async function abrirEdicaoPorId(id) {
-  try {
-    const res = await fetch(`${uriComunicadosController}/${id}`); // ✅ precisa existir no backend
-    if (!res.ok) {
-      showToast("error", "Erro", "Não foi possível carregar os dados para edição.");
-      return;
-    }
-    const item = await res.json();
-    abrirEdicao(item);
-  } catch (e) {
-    console.error(e);
-    showToast("error", "Erro", "Falha ao carregar comunicado para edição.");
-  }
-}
-
 function abrirEdicao(item) {
   const id = item.comunicadosid ?? item.id;
 
   formEditar.id.value = id;
   formEditar.documentoUrlAtual.value = item.documentoUrl || item.documento || "";
-  formEditar.datacomunicado.value = item.datacomunicado || item.data || "";
+  formEditar.datacomunicado.value = toDateInputValue(item.datacomunicado || item.data);
   formEditar.descricao.value = item.descricao || "";
 
-  // ✅ aqui era o bug: agora setamos no SELECT correto do modal
+  // ✅ select correto do modal
   const condId = item.CondominioID || item.condominioId || "";
   selectCondominioEdit.value = condId ? String(condId) : "";
 
@@ -428,8 +448,8 @@ formEditar.addEventListener("submit", async (e) => {
       body: JSON.stringify({
         datacomunicado: formEditar.datacomunicado.value,
         descricao: formEditar.descricao.value,
-        CondominioID: selectCondominioEdit.value, // ✅ select correto
-        documentoUrl: documentoUrlFinal, // pode ser vazio -> back mantém atual se você fez daquele jeito
+        CondominioID: selectCondominioEdit.value,
+        documentoUrl: documentoUrlFinal,
       }),
     });
 
