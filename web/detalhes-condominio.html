@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Detalhes do Condomínio</title>
+  <title>Detalhes do Condomínio | Integrada</title>
 
   <!-- Estilos -->
   <link href="vendor2/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
@@ -14,61 +14,66 @@
 
 <body id="page-top">
   <div id="wrapper">
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- SIDEBAR -->
+    <ul class="navbar-nav sidebar sidebar-dark accordion paiva-sidebar" id="accordionSidebar">
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
         <div class="sidebar-brand-text mx-3">PAIVA TECH</div>
       </a>
+
       <hr class="sidebar-divider my-0">
-      <li class="nav-item active">
+
+      <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <span>Dashboard</span>
+        </a>
       </li>
+
       <hr class="sidebar-divider">
-      <div class="sidebar-heading">
-        Páginas
-      </div>
-      <li class="nav-item">
+      <div class="sidebar-heading">Páginas</div>
+
+      <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
           aria-controls="collapseTwo">
           <i class="fa fa-university" aria-hidden="true"></i>
-          <span style="color: white;">Condomínios</span>
+          <span>Condomínios</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
+        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="py-2 collapse-inner rounded paiva-collapse-inner">
             <h6 class="collapse-header">Páginas similares</h6>
-            <a class="collapse-item" href="condominio.html">Cadastre um Condomínio</a>
+            <a class="collapse-item" href="condominio.html">Cadastro de Condomínio</a>
+            <a class="collapse-item active" href="#">Detalhes do Condomínio</a>
           </div>
         </div>
       </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow" aria-expanded="true"
-          aria-controls="collapseTwo">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          <span style="color: white;">Condominos</span>
+          aria-controls="collapseTwow">
+          <i class="fa fa-users" aria-hidden="true"></i>
+          <span>Condominos</span>
         </a>
-        <div id="collapseTwow" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
+        <div id="collapseTwow" class="collapse" aria-labelledby="headingTwow" data-parent="#accordionSidebar">
+          <div class="py-2 collapse-inner rounded paiva-collapse-inner">
             <h6 class="collapse-header">Páginas similares</h6>
-            <a class="collapse-item" href="condomino.html">Cadastre um Proprietário</a>
-            <a class="collapse-item" href="inquilino.html">Cadastre um Inquilino</a>
+            <a class="collapse-item" href="condomino.html">Cadastro de Proprietário</a>
+            <a class="collapse-item" href="inquilino.html">Cadastro de Inquilino</a>
           </div>
         </div>
       </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow2" aria-expanded="true"
-          aria-controls="collapseTwo">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          <span style="color: white;">Assembléias</span>
+          aria-controls="collapseTwow2">
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+          <span>Assembléias</span>
         </a>
-        <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
+        <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwow2" data-parent="#accordionSidebar">
+          <div class="py-2 collapse-inner rounded paiva-collapse-inner">
             <h6 class="collapse-header">Páginas similares</h6>
             <a class="collapse-item" href="assembleias.html">Convoque uma assembleia</a>
           </div>
@@ -77,45 +82,52 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow3" aria-expanded="true"
-          aria-controls="collapseTwo">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          <span style="color: white;">Comunicado</span>
+          aria-controls="collapseTwow3">
+          <i class="fa fa-bullhorn" aria-hidden="true"></i>
+          <span>Comunicados</span>
         </a>
-        <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
+        <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwow3" data-parent="#accordionSidebar">
+          <div class="py-2 collapse-inner rounded paiva-collapse-inner">
             <h6 class="collapse-header">Páginas similares</h6>
-            <a class="collapse-item" href="comunicados.html">Encaminhe um comunicado</a>
+            <a class="collapse-item" href="comunicados.html">Cadastro de comunicados</a>
           </div>
         </div>
       </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow4" aria-expanded="true"
-          aria-controls="collapseTwo">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          <span style="color: white;">Prestação de contas</span>
+          aria-controls="collapseTwow4">
+          <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i>
+          <span>Prestação de contas</span>
         </a>
-        <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
+        <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwow4" data-parent="#accordionSidebar">
+          <div class="py-2 collapse-inner rounded paiva-collapse-inner">
             <h6 class="collapse-header">Páginas similares</h6>
             <a class="collapse-item" href="prestacaocontas.html">Envie a Prestação de contas</a>
           </div>
         </div>
       </li>
+
       <hr class="sidebar-divider d-none d-md-block">
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div>
-
     </ul>
-    <!-- End Sidebar -->
+    <!-- END SIDEBAR -->
 
-    <!-- Content Wrapper -->
+    <!-- CONTENT -->
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
-        <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+        <!-- TOPBAR -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow paiva-topbar">
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
           <ul class="navbar-nav ml-auto">
+            <div class="topbar-divider d-none d-sm-block"></div>
+
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -130,35 +142,120 @@
             </li>
           </ul>
         </nav>
-        <!-- End Topbar -->
+        <!-- END TOPBAR -->
 
-        <!-- Page Content -->
         <div class="container-fluid">
-          <a href="index.html" class="btn btn-secondary mb-3">← Voltar</a>
 
-          <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-              <h4 id="nomeCondominio" class="m-0">Carregando...</h4>
+          <!-- PAGE HEAD (PADRÃO PAIVA) -->
+          <div class="paiva-pagehead mb-4">
+            <div class="d-flex align-items-start justify-content-between flex-wrap">
+              <div>
+                <div class="paiva-breadcrumb">
+                  <a href="index.html"><i class="fas fa-home mr-1"></i> Dashboard</a>
+                  <span class="mx-2">/</span>
+                  <a href="condominio.html">Condomínios</a>
+                  <span class="mx-2">/</span>
+                  <span>Detalhes</span>
+                </div>
+
+                <h1 class="paiva-title">Detalhes do Condomínio</h1>
+                <p class="paiva-subtitle">Visualize dados do condomínio, proprietários e inquilinos vinculados.</p>
+              </div>
+
+              <div class="d-flex align-items-center gap-2">
+                <a href="condominio.html" class="btn btn-light paiva-btn-light">
+                  <i class="fas fa-arrow-left mr-2"></i> Voltar
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD PRINCIPAL -->
+          <div class="card shadow mb-4 paiva-table-card">
+            <div class="card-header d-flex align-items-center justify-content-between flex-wrap">
+              <div>
+                <h6 class="m-0 font-weight-bold">
+                  <i class="fas fa-university mr-2"></i>
+                  <span id="nomeCondominio">Carregando...</span>
+                </h6>
+                <small class="text-muted">Informações gerais do condomínio.</small>
+              </div>
+
+              <div class="paiva-mini">
+                <span class="text-muted mr-2">ID:</span>
+                <span id="condominioIdBadge" class="font-weight-bold">—</span>
+              </div>
             </div>
 
             <div class="card-body">
-              <p><strong>Endereço:</strong> <span id="endereco">...</span></p>
-              <p><strong>Telefone:</strong> <span id="telefone">...</span></p>
+
+              <!-- INFO -->
+              <div class="row">
+                <div class="col-lg-6 mb-3">
+                  <div class="card shadow-sm h-100 paiva-card-list">
+                    <div class="card-body">
+                      <div class="paiva-card-kicker">Endereço</div>
+                      <div class="paiva-card-title" style="font-size: 16px; margin-bottom: 0;">
+                        <span id="endereco">—</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6 mb-3">
+                  <div class="card shadow-sm h-100 paiva-card-list">
+                    <div class="card-body">
+                      <div class="paiva-card-kicker">Telefone</div>
+                      <div class="paiva-card-title" style="font-size: 16px; margin-bottom: 0;">
+                        <span id="telefone">—</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <hr />
-              <h5 class="text-primary mb-3"><i class="fa fa-user"></i> Proprietários</h5>
-              <ul id="listaProprietarios" class="list-group mb-4">
-                <li class="list-group-item text-muted">Carregando...</li>
-              </ul>
 
-              <h5 class="text-success mb-3"><i class="fa fa-users"></i> Inquilinos</h5>
-              <ul id="listaInquilinos" class="list-group">
-                <li class="list-group-item text-muted">Carregando...</li>
-              </ul>
+              <!-- PROPRIETÁRIOS -->
+              <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                <h5 class="mb-0" style="color:#111;">
+                  <i class="fa fa-user mr-2"></i> Proprietários
+                </h5>
+                <small class="text-muted">Lista de clientes/proprietários vinculados ao condomínio.</small>
+              </div>
+
+              <div class="card shadow-sm mb-4 paiva-form-card">
+                <div class="card-body p-0">
+                  <ul id="listaProprietarios" class="list-group list-group-flush">
+                    <li class="list-group-item text-muted">Carregando...</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- INQUILINOS -->
+              <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                <h5 class="mb-0" style="color:#111;">
+                  <i class="fa fa-users mr-2"></i> Inquilinos
+                </h5>
+                <small class="text-muted">Lista de inquilinos vinculados ao condomínio.</small>
+              </div>
+
+              <div class="card shadow-sm paiva-form-card">
+                <div class="card-body p-0">
+                  <ul id="listaInquilinos" class="list-group list-group-flush">
+                    <li class="list-group-item text-muted">Carregando...</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- ERRO (injetado via JS se necessário) -->
+              <div id="erroBox" class="mt-3 d-none"></div>
+
             </div>
           </div>
+
         </div>
-        <!-- End Container -->
+        <!-- /container-fluid -->
       </div>
     </div>
   </div>
