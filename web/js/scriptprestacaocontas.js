@@ -2,7 +2,7 @@
    PRESTAÇÃO DE CONTAS (ADM) - PADRÃO PAIVA (igual Comunicados)
    - Cards + Abas por condomínio + Todos
    - Busca (filtro decente)
-   - Sem edição (removido)
+   - Sem edição
    - Toast
    - Cloudinary mantido
 ========================= */
@@ -40,6 +40,10 @@ const LS_TAB_KEY = "prestacao_tab_ativa";
 // cache
 let prestacoesCache = [];
 let condominiosCache = [];
+
+// controle de carregamento (✅ resolve o “precisa dar F5”)
+let isLoading = false;
+let filtroDigitadoDuranteLoading = "";
 
 // =========================
 // TOAST
@@ -108,7 +112,7 @@ function formatMesLabel(iso) {
   return dt.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
 }
 
-// vários formatos pra busca ficar BOA
+// tokens pro filtro ser “bom”
 function buildMesSearchTokens(iso) {
   const dt = parseISODateLocal(iso);
   if (!dt) return [];
@@ -246,7 +250,7 @@ function renderAbasEConteudo(lista) {
     <button class="paiva-chip ${isActiveAll ? "active" : ""}" id="${tabIdAll}"
       data-toggle="tab" data-target="#${paneIdAll}"
       type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="${isActiveAll ? "true" : "false"}">
-      Todos <span class="paiva-chip__badge" data-badge="${paneIdAll}">${lista.length}</span>
+      Todos <span class="paiva-chip__badge">${lista.length}</span>
     </button>
   `;
 
@@ -272,7 +276,7 @@ function renderAbasEConteudo(lista) {
         data-toggle="tab" data-target="#${paneId}"
         type="button" role="tab" aria-controls="${paneId}" aria-selected="${isActive ? "true" : "false"}">
         ${nomeCondominio}
-        <span class="paiva-chip__badge" data-badge="${paneId}">${items.length}</span>
+        <span class="paiva-chip__badge">${items.length}</span>
       </button>
     `;
 
@@ -285,7 +289,7 @@ function renderAbasEConteudo(lista) {
     renderCardsNoContainer(document.querySelector(`#cards-${safeId}`), items);
   });
 
-  // mantém active premium (bootstrap nem sempre reflete no nosso botão)
+  // ativa visual do chip
   tabs.querySelectorAll(".paiva-chip").forEach((b) => {
     b.addEventListener("click", () => {
       tabs.querySelectorAll(".paiva-chip").forEach((x) => x.classList.remove("active"));
@@ -293,7 +297,6 @@ function renderAbasEConteudo(lista) {
     });
   });
 
-  // se a aba salva não existir no filtro atual, volta pro Todos
   const paneFinal = document.querySelector(`#${abaSalva}`) ? abaSalva : "pane-todos";
   localStorage.setItem(LS_TAB_KEY, paneFinal);
   setActiveTab(paneFinal);
@@ -372,24 +375,45 @@ function renderCardsNoContainer(container, lista) {
 }
 
 // =========================
-// LISTAR
+// LISTAR (✅ AGORA APLICA FILTRO DEPOIS QUE CARREGA)
 // =========================
 async function listarPrestacoes() {
   try {
+    isLoading = true;
+    if (filtroPrestacao) {
+      filtroPrestacao.disabled = true;
+      filtroPrestacao.placeholder = "Carregando prestações...";
+    }
+
     const res = await fetch(uri);
     const dados = await res.json();
     prestacoesCache = Array.isArray(dados) ? dados : [];
+
+    // ✅ se a pessoa digitou enquanto carregava, preserva
+    if (filtroPrestacao && filtroDigitadoDuranteLoading) {
+      filtroPrestacao.value = filtroDigitadoDuranteLoading;
+    }
+
+    // ✅ aplica o filtro APÓS preencher o cache
     aplicarFiltro();
   } catch (e) {
     console.error(e);
     showToast("error", "Erro", "Falha ao carregar prestações.");
+  } finally {
+    isLoading = false;
+    if (filtroPrestacao) {
+      filtroPrestacao.disabled = false;
+      filtroPrestacao.placeholder = "Buscar por condomínio ou mês...";
+    }
   }
 }
 
 // =========================
-// FILTRO (BOM)
+// FILTRO (✅ agora não roda “vazio”)
 // =========================
 function aplicarFiltro() {
+  if (isLoading) return;
+
   const q = (filtroPrestacao?.value || "").trim().toLowerCase();
 
   if (!q) {
@@ -418,7 +442,7 @@ function aplicarFiltro() {
 
   renderAbasEConteudo(filtrado);
 
-  // se a aba ativa ficou vazia, volta pra Todos
+  // se aba ativa ficou vazia volta pra Todos
   const paneAtiva = localStorage.getItem(LS_TAB_KEY) || "pane-todos";
   const paneEl = document.querySelector(`#${paneAtiva}`);
   const cardsDentro = paneEl?.querySelectorAll?.(".paiva-card-list")?.length || 0;
@@ -432,7 +456,13 @@ function aplicarFiltro() {
   }
 }
 
-filtroPrestacao?.addEventListener("input", aplicarFiltro);
+filtroPrestacao?.addEventListener("input", () => {
+  if (isLoading) {
+    filtroDigitadoDuranteLoading = filtroPrestacao.value || "";
+    return;
+  }
+  aplicarFiltro();
+});
 
 // =========================
 // SALVAR ABA ATIVA
@@ -529,5 +559,5 @@ async function onClickExcluirDocumento(id) {
 document.addEventListener("DOMContentLoaded", async () => {
   bindSalvarAbaAtiva();
   await carregarCondominios();
-  await listarPrestacoes();
+  await listarPrestacoes(); // ✅ agora sempre carrega e aplica filtro certo sem precisar F5
 });
