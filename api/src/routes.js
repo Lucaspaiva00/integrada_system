@@ -42,6 +42,8 @@ router.delete("/assembleiascontroller/:id", assembleiasController.delete);
 router.post("/comunicadoscontroller", comunicadosController.create);
 router.get("/comunicadoscontroller", comunicadosController.read);
 router.delete("/comunicadoscontroller/:id", comunicadosController.delete);
+router.put("/comunicadoscontroller/:id", comunicadosController.update);
+
 
 router.get("/prestacaocontascontroller", prestacaoContasController.read);
 router.post("/prestacaocontascontroller", prestacaoContasController.create);

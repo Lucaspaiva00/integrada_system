@@ -78,6 +78,64 @@ const create = async (req, res) => {
   }
 };
 
+// ✏️ Atualizar comunicado (PUT)
+const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { datacomunicado, descricao, CondominioID, documentoUrl } = req.body;
+
+    if (!id) return res.status(400).json({ error: "ID não informado." });
+
+    // valida obrigatórios (documentoUrl pode vir vazio se quiser manter? aqui eu exijo)
+    if (!datacomunicado || !descricao || !CondominioID) {
+      return res.status(400).json({
+        error: "Campos obrigatórios ausentes (data, descrição ou condomínio).",
+      });
+    }
+
+    // Se não mandar documentoUrl, mantém o atual
+    // (isso é importante pro front: se editar sem trocar arquivo, não precisa re-upar)
+    const atual = await prisma.comunicados.findUnique({
+      where: { comunicadosid: Number(id) },
+    });
+
+    if (!atual) {
+      return res.status(404).json({ error: "Comunicado não encontrado." });
+    }
+
+    const documentoFinal = documentoUrl ? documentoUrl : atual.documento;
+
+    const comunicadoAtualizado = await prisma.comunicados.update({
+      where: { comunicadosid: Number(id) },
+      data: {
+        datacomunicado,
+        descricao,
+        documento: documentoFinal,
+        Condominio: { connect: { condominioid: Number(CondominioID) } },
+      },
+      include: {
+        Condominio: { select: { nomecondominio: true } },
+      },
+    });
+
+    const responseObj = {
+      comunicadosid: comunicadoAtualizado.comunicadosid,
+      datacomunicado: comunicadoAtualizado.datacomunicado,
+      descricao: comunicadoAtualizado.descricao,
+      documento: comunicadoAtualizado.documento,
+      documentoUrl: comunicadoAtualizado.documento,
+      CondominioID: Number(comunicadoAtualizado.CondominioID),
+      nomeCondominio: comunicadoAtualizado.Condominio?.nomecondominio || null,
+    };
+
+    return res.status(200).json(responseObj);
+  } catch (error) {
+    console.error("Erro ao atualizar comunicado:", error);
+    return res.status(500).json({ error: "Erro ao atualizar comunicado" });
+  }
+};
+
+// 🗑️ Excluir comunicado
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
@@ -106,5 +164,6 @@ const remove = async (req, res) => {
 module.exports = {
   read,
   create,
+  update,
   delete: remove,
 };
