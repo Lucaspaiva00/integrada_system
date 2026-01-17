@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Central</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prestação de Contas | Integrada</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link href="vendor2/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -13,7 +13,9 @@
 
 <body>
     <div id="wrapper">
-        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- SIDEBAR -->
+        <ul class="navbar-nav sidebar sidebar-dark accordion paiva-sidebar" id="accordionSidebar">
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
@@ -23,7 +25,7 @@
 
             <hr class="sidebar-divider my-0">
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
@@ -31,46 +33,45 @@
             </li>
 
             <hr class="sidebar-divider">
-
             <div class="sidebar-heading">Páginas</div>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Condomínios</span>
+                    <span>Condomínios</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
-                        <a class="collapse-item" href="condominio.html">Cadastre um Condomínio</a>
+                        <a class="collapse-item" href="condominio.html">Cadastro de Condomínio</a>
                     </div>
                 </div>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Condominos</span>
+                    aria-expanded="true" aria-controls="collapseTwow">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                    <span>Condominos</span>
                 </a>
-                <div id="collapseTwow" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow" class="collapse" aria-labelledby="headingTwow" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
-                        <a class="collapse-item" href="condomino.html">Cadastre um Proprietário</a>
-                        <a class="collapse-item" href="inquilino.html">Cadastre um Inquilino</a>
+                        <a class="collapse-item" href="condomino.html">Cadastro de Proprietário</a>
+                        <a class="collapse-item" href="inquilino.html">Cadastro de Inquilino</a>
                     </div>
                 </div>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow2"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Assembléias</span>
+                    aria-expanded="true" aria-controls="collapseTwow2">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span>Assembléias</span>
                 </a>
-                <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwow2" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="assembleias.html">Convoque uma assembleia</a>
                     </div>
@@ -79,50 +80,45 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow3"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Comunicado</span>
+                    aria-expanded="true" aria-controls="collapseTwow3">
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <span>Comunicados</span>
                 </a>
-                <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwow3" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
-                        <a class="collapse-item" href="comunicados.html">Encaminhe um comunicado</a>
+                        <a class="collapse-item" href="comunicados.html">Cadastro de comunicados</a>
                     </div>
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow4"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Prestação de contas</span>
+                    aria-expanded="true" aria-controls="collapseTwow4">
+                    <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i>
+                    <span>Prestação de contas</span>
                 </a>
-                <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow4" class="collapse show" aria-labelledby="headingTwow4"
+                    data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
-                        <a class="collapse-item" href="prestacaocontas.html">Envie a Prestação de contas</a>
+                        <a class="collapse-item active" href="prestacaocontas.html">Envie a Prestação de contas</a>
                     </div>
                 </div>
             </li>
 
             <hr class="sidebar-divider d-none d-md-block">
-
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
         </ul>
 
+        <!-- CONTENT -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <div class="input-group">
-                        <div class="input-group-append" hidden>
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
 
+                <!-- TOPBAR -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow paiva-topbar">
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -138,7 +134,6 @@
 
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="login.html">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Sair
@@ -149,69 +144,179 @@
                 </nav>
 
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="container-fluid">
 
-                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">CADASTRO DE PRESTAÇÃO DE CONTAS</h1>
-                            </div>
-
-                            <div class="card card-body">
-                                <form id="caixaForms" enctype="multipart/form-data">
-                                    <div class="mb-3">
-                                        <label for="condominioSelect">Selecione o Condomínio:</label>
-                                        <select id="condominioSelect" name="CondominioID"
-                                            class="form-select form-control" required>
-                                            <option value="">Selecione...</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="documento">Selecione o PDF:</label>
-                                        <input type="file" name="documento" id="documento" class="form-control"
-                                            accept="application/pdf" required>
-                                        <small id="filePrestacaoHint" class="text-muted d-block mt-1">
-                                            Nenhum arquivo selecionado.
-                                        </small>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="mes">Data referente:</label>
-                                        <input type="date" name="mes" id="mes" class="form-control" required>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-success">Cadastrar</button>
-                                </form>
-
-                                <br>
-
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <h5 class="mb-0">Prestação de contas</h5>
-
-                                    <div class="input-group" style="max-width: 320px;">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                        </div>
-                                        <input id="filtroPrestacao" class="form-control"
-                                            placeholder="Buscar condomínio..." />
-                                    </div>
+                    <!-- PAGE HEAD -->
+                    <div class="paiva-pagehead mb-4">
+                        <div class="d-flex align-items-start justify-content-between flex-wrap">
+                            <div>
+                                <div class="paiva-breadcrumb">
+                                    <a href="index.html"><i class="fas fa-home mr-1"></i> Dashboard</a>
+                                    <span class="mx-2">/</span>
+                                    <span>Prestação de contas</span>
                                 </div>
 
-                                <div class="tabs-premium mb-3">
-                                    <div class="nav nav-pills tabs-premium__nav" id="tabsCondominios" role="tablist">
-                                    </div>
-                                </div>
-
-                                <div class="tab-content" id="tabsCondominiosContent"></div>
-
+                                <h1 class="paiva-title">Prestação de Contas</h1>
+                                <p class="paiva-subtitle">Envie o PDF por condomínio e mês. Edite ou remova quando
+                                    precisar.</p>
                             </div>
 
-                            <br>
+                            <div class="d-flex align-items-center gap-2">
+                                <a href="index.html" class="btn btn-light paiva-btn-light">
+                                    <i class="fas fa-arrow-left mr-2"></i> Voltar
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- FORM NOVO -->
+                    <div class="card shadow mb-4 paiva-form-card">
+                        <div class="card-header">
+                            <h6 class="m-0 font-weight-bold">Nova prestação</h6>
+                            <small class="text-muted">Selecione o condomínio, o mês e anexe o PDF.</small>
+                        </div>
+
+                        <div class="card-body">
+                            <form id="caixaForms" enctype="multipart/form-data" class="paiva-form-grid-com">
+                                <div class="form-group mb-0">
+                                    <label>Condomínio</label>
+                                    <select id="condominioSelect" name="CondominioID" class="form-select" required>
+                                        <option value="">Selecione o condomínio</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label>Mês referente</label>
+                                    <input type="date" name="mes" id="mes" class="form-control" required>
+                                </div>
+
+                                <div class="form-group mb-0 paiva-col-span-2">
+                                    <label>PDF</label>
+                                    <input type="file" name="documento" id="documento" class="form-control"
+                                        accept="application/pdf" required>
+                                    <small id="filePrestacaoHint" class="text-muted d-block mt-1">Nenhum arquivo
+                                        selecionado.</small>
+                                </div>
+
+                                <div class="paiva-form-actions">
+                                    <button type="submit" class="btn btn-primary paiva-btn-primary">
+                                        <i class="fas fa-plus mr-2"></i> Cadastrar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- LISTAGEM -->
+                    <div class="card shadow mb-4 paiva-table-card">
+                        <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold">Prestações cadastradas</h6>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="paiva-mini">
+                                    <span class="text-muted mr-2">Total:</span>
+                                    <span id="qtdPrestacoes" class="font-weight-bold">0</span>
+                                </div>
+
+                                <div class="paiva-search">
+                                    <i class="fas fa-search"></i>
+                                    <input id="filtroPrestacao" type="text"
+                                        placeholder="Buscar por condomínio ou mês...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body pt-0">
+                            <!-- Abas estilo comunicados (simples) -->
+                            <div class="tabs-premium mb-3">
+                                <div class="nav nav-pills tabs-premium__nav" id="tabsCondominios" role="tablist"></div>
+                            </div>
+
+                            <!-- Conteúdo (cards) -->
+                            <div class="tab-content" id="tabsCondominiosContent"></div>
+
+                            <div id="emptyStatePrestacao" class="paiva-empty d-none">
+                                <div class="paiva-empty__icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                                <div class="paiva-empty__text">
+                                    <strong>Nenhuma prestação cadastrada.</strong>
+                                    <span>Use o formulário acima para criar a primeira.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL EDIÇÃO (CARD) -->
+    <div id="modalEditPrestacao" class="paiva-modal d-none" aria-hidden="true">
+        <div class="paiva-modal__backdrop" data-close="true"></div>
+
+        <div class="paiva-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalPrestTitle">
+            <div class="paiva-modal__header">
+                <div>
+                    <h6 id="modalPrestTitle" class="m-0 font-weight-bold">Editar prestação</h6>
+                    <small class="text-muted">Atualize mês/condomínio e (opcional) substitua o PDF.</small>
                 </div>
 
+                <button class="paiva-modal__x" type="button" data-close="true" aria-label="Fechar">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
+
+            <div class="paiva-modal__body">
+                <form id="formEditarPrestacao" class="paiva-modal__grid-com" enctype="multipart/form-data">
+                    <input type="hidden" name="id">
+                    <input type="hidden" name="documentoUrlAtual">
+
+                    <div class="form-group mb-0">
+                        <label>Condomínio</label>
+                        <select name="CondominioID" id="CondominioIDEditPrest" class="form-select" required>
+                            <option value="">Selecione o condomínio</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Mês referente</label>
+                        <input type="date" name="mes" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-0 paiva-col-span-2">
+                        <label>Substituir PDF (opcional)</label>
+                        <input type="file" name="documento" id="documentoEditPrest" class="form-control"
+                            accept="application/pdf">
+                        <small id="fileHintEditPrest" class="text-muted d-block mt-1">Mantendo o documento
+                            atual.</small>
+                    </div>
+
+                    <div class="paiva-modal__actions">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save mr-2"></i> Salvar alterações
+                        </button>
+
+                        <button type="button" class="btn btn-light paiva-btn-light" data-close="true">
+                            <i class="fas fa-times mr-2"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="paiva-toast" id="toastPrest" aria-live="polite" aria-atomic="true">
+        <div class="paiva-toast__bar"></div>
+        <div class="paiva-toast__content">
+            <div class="paiva-toast__icon" id="toastIconPrest"><i class="fas fa-check"></i></div>
+            <div class="paiva-toast__text">
+                <div class="paiva-toast__title" id="toastTitlePrest">Tudo certo</div>
+                <div class="paiva-toast__msg" id="toastMsgPrest">Ação realizada.</div>
+            </div>
+            <button class="paiva-toast__close" id="toastClosePrest" aria-label="Fechar">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
 
@@ -220,7 +325,6 @@
     <script src="vendor2/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor2/jquery-easing/jquery.easing.min.js"></script>
     <script src="js2/sb-admin-2.min.js"></script>
-
 </body>
 
 </html>
