@@ -23,7 +23,6 @@ const emptyStatePrestacao = document.querySelector("#emptyStatePrestacao");
 
 // Modal
 const modalEdit = document.querySelector("#modalEditPrestacao");
-const formEditar = document.querySelector("#formEditarPrestacao");
 const selectCondominioEdit = document.querySelector("#CondominioIDEditPrest");
 const fileHintEdit = document.querySelector("#fileHintEditPrest");
 
@@ -330,10 +329,6 @@ function renderCardsNoContainer(container, lista) {
           <div class="d-flex align-items-center mt-3" style="gap:10px;">
             ${btnAbrir}
 
-            <button class="btn btn-sm btn-warning" data-editar="${id}">
-              <i class="fas fa-pen mr-1"></i> Editar
-            </button>
-
             <button class="btn btn-sm btn-danger" data-excluir="${id}">
               <i class="fas fa-trash"></i>
             </button>
@@ -348,9 +343,6 @@ function renderCardsNoContainer(container, lista) {
       if (documentoUrl) onClickAbrirDocumento(documentoUrl);
     });
 
-    col.querySelector(`[data-editar="${id}"]`)?.addEventListener("click", () => {
-      abrirEdicaoPorCache(id); // não depende do backend ter GET /:id
-    });
 
     col.querySelector(`[data-excluir="${id}"]`)?.addEventListener("click", () => {
       onClickExcluirDocumento(id);
@@ -475,78 +467,8 @@ async function onClickExcluirDocumento(id) {
   }
 }
 
-// =========================
-// EDIT (abre modal usando cache)
-// =========================
-function abrirEdicaoPorCache(id) {
-  const item = prestacoesCache.find((p) => String(p.prestacaoid ?? p.id) === String(id));
-  if (!item) {
-    showToast("error", "Erro", "Prestação não encontrada no cache.");
-    return;
-  }
-  abrirEdicao(item);
-}
 
-function abrirEdicao(item) {
-  const id = item.prestacaoid ?? item.id;
 
-  formEditar.id.value = id;
-  formEditar.documentoUrlAtual.value = item.documentoUrl || "";
-
-  // mês
-  formEditar.mes.value = (item.mes || "").slice(0, 10);
-
-  // condomínio
-  const condId = item.CondominioID || "";
-  selectCondominioEdit.value = condId ? String(condId) : "";
-
-  fileHintEdit.textContent = "Mantendo o documento atual.";
-  openModal();
-}
-
-// =========================
-// UPDATE (PUT)
-// =========================
-formEditar?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const id = formEditar.id.value;
-  const file = formEditar.documento?.files?.[0];
-
-  let documentoUrlFinal = formEditar.documentoUrlAtual.value || "";
-
-  if (file) {
-    const up = await cloudinaryUpload(file);
-    if (up.error) {
-      showToast("error", "Erro", "Erro ao fazer upload do novo PDF!");
-      return;
-    }
-    documentoUrlFinal = up.data;
-  }
-
-  try {
-    const res = await fetch(`${uri}/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        documentoUrl: documentoUrlFinal,
-        mes: formEditar.mes.value,
-        CondominioID: selectCondominioEdit.value,
-      }),
-    });
-
-    if (res.status === 200 || res.ok) {
-      closeModal();
-      showToast("success", "Atualizado", "Prestação atualizada com sucesso!");
-      await listarPrestacoes();
-    } else {
-      showToast("error", "Erro", "Não foi possível salvar a edição (verifique o PUT no backend).");
-    }
-  } catch (err) {
-    console.error(err);
-    showToast("error", "Erro", "Falha ao salvar edição.");
-  }
-});
 
 // =========================
 // INIT
