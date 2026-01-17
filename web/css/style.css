@@ -1,78 +1,78 @@
+/* =========================
+   PAIVA TECH - GLOBAL PREMIUM THEME
+   Cores: Preto + Branco + Vermelho (acento)
+========================= */
+
+/* Reset básico */
 * {
     margin: 0;
-    position: 0;
+    padding: 0;
+    /* você tinha "position: 0" (inválido) */
+    box-sizing: border-box;
 }
 
-/* #chartDiv {
-    width: 100%;
-    height: auto;
-    margin: auto;
-    opacity: 1.0;
-} */
+/* Variáveis de tema (Paiva Tech) */
+:root {
+    --bg: #0b0c10;
+    /* preto profundo */
+    --surface: #11131a;
+    /* cards / blocos escuros */
+    --surface-2: #161a23;
+    /* variação */
+    --text: #e8e8ea;
+    /* texto claro */
+    --muted: #a7a7b0;
+    /* texto secundário */
+    --border: rgba(255, 255, 255, 0.08);
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 
+    --accent: #e11d2e;
+    /* vermelho Paiva Tech */
+    --accent-2: #ff3b3b;
+    /* brilho vermelho */
+    --accent-soft: rgba(225, 29, 46, 0.16);
 
+    --white: #ffffff;
+    --black: #000000;
 
-#caixaForm {
-    height: 300px;
-    width: 400px;
-    padding: 20px 0px 50px 0px;
+    --radius: 16px;
+    --radius-sm: 12px;
+    --radius-pill: 999px;
+
+    --focus: 0 0 0 0.25rem rgba(225, 29, 46, 0.25);
+    --transition: 180ms ease;
 }
 
-#cardsContainer {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  gap: 20px !important;
-  margin-top: 20px !important;
-}
-
-#cardsContainer .card {
-  width: 380px !important;  /* ajuste aqui se quiser mais largo */
-  border-radius: 10px !important;
-  border: none !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-#cardsContainer .card:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
-}
-
-
-#caixaForm input {
-    width: 300px;
-    padding: 8px;
-    margin-top: 5px;
-}
-
-
-#caixaForms {
-    width: 50%;
-    padding: 20px 0px 50px 0px;
-    padding: 10px;
-}
-
-#caixaForms input {
-    width: 300px;
-    padding: 8px;
-    margin-top: 5px;
-}
-
+/* Tipografia global */
 body {
-    background: rgb(255, 255, 255);
+    background: #f6f7fb;
+    /* mantém clara no conteúdo para combinar com SB Admin */
+    color: #111827;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue", sans-serif;
+    line-height: 1.45;
 }
 
+/* Links */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* =========================
+   HEADER (se você ainda usa)
+========================= */
 header {
     width: 100%;
-    background: black;
-
+    background: linear-gradient(135deg, #0b0c10, #121420);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .container_header {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 18px;
+    padding: 12px 16px;
 }
 
 .div_logo {
@@ -81,20 +81,37 @@ header {
 
 .div_logo img {
     width: 120px;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .2));
 }
 
 .div_nav {
     width: 33%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 .div_nav a {
-    text-decoration: none;
-    color: white;
-    margin: 10px;
-    font-size: 18px;
-    font-family: 'Courier New', Courier, monospace;
+    color: rgba(255, 255, 255, .9);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    padding: 10px 14px;
+    border-radius: var(--radius-pill);
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .03);
 }
 
+.div_nav a:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .06);
+}
+
+/* =========================
+   CONTAINERS (login/legacy)
+========================= */
 .container {
     width: 100%;
     margin-top: 10%;
@@ -104,60 +121,267 @@ header {
 }
 
 .container_formulario {
-    width: 300px;
-    border: 1px solid white;
-    padding: 25px;
-    border-radius: 15px;
+    width: 340px;
+    padding: 26px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(17, 24, 39, 0.08);
 }
 
 .container_formulario input {
-    padding: 10px;
-    margin: 5px;
-    width: 250px;
-    border-radius: 15px;
-    border: 1px solid white;
+    padding: 12px 14px;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(17, 24, 39, .10);
+    outline: none;
+    transition: var(--transition);
+    background: #fff;
 }
 
-#btn_login {
-    background: black;
-    color: white;
-}
-
-.div_img img {
-    width: 50px;
-}
-
-.div_img {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
+.container_formulario input:focus {
+    border-color: rgba(225, 29, 46, 0.50);
+    box-shadow: var(--focus);
 }
 
 #legend {
-    font-size: 26px;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.2px;
+    margin-bottom: 10px;
 }
 
-.tabs-premium__nav{
-  display:flex;
-  flex-wrap:nowrap;
-  overflow-x:auto;
-  gap:8px;
-  -webkit-overflow-scrolling:touch;
+/* Botão login */
+#btn_login {
+    background: linear-gradient(135deg, var(--accent), #b51222);
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 12px 26px rgba(225, 29, 46, 0.22);
 }
 
-.tabs-premium__nav .nav-link{
-  white-space:nowrap;
-  border-radius:999px;
-  padding:8px 12px;
-  font-weight:600;
-  border:1px solid #eaecf4;
-  background:#fff;
+#btn_login:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 34px rgba(225, 29, 46, 0.26);
 }
 
-.tabs-premium__nav .nav-link.active{
-  background:#4e73df;
-  border-color:#4e73df;
-  color:#fff;
-  box-shadow:0 10px 22px rgba(78,115,223,.25);
+#btn_login:active {
+    transform: translateY(0);
+}
+
+/* =========================
+   FORM PRESTAÇÃO DE CONTAS
+========================= */
+#caixaForm {
+    height: auto;
+    width: 420px;
+    padding: 20px 0px 50px 0px;
+}
+
+#caixaForms {
+    width: 100%;
+    max-width: 720px;
+    padding: 12px;
+    margin: 0 auto;
+}
+
+/* Inputs globais (form) */
+#caixaForms input,
+#caixaForms select,
+.form-control,
+.form-select {
+    width: 100%;
+    max-width: 420px;
+    padding: 11px 12px;
+    margin-top: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(17, 24, 39, .12);
+    background: #ffffff;
+    outline: none;
+    transition: var(--transition);
+}
+
+#caixaForms input:focus,
+#caixaForms select:focus,
+.form-control:focus,
+.form-select:focus {
+    border-color: rgba(225, 29, 46, 0.55);
+    box-shadow: var(--focus);
+}
+
+/* Labels mais fortes */
+label {
+    font-weight: 800;
+    color: #111827;
+    margin-top: 8px;
+}
+
+/* Botões: deixa todos premium (bootstrap + custom) */
+.btn {
+    border-radius: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.2px;
+    transition: var(--transition) !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #16a34a, #0f7a36) !important;
+    border: none !important;
+    box-shadow: 0 10px 22px rgba(22, 163, 74, .22) !important;
+}
+
+.btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(22, 163, 74, .26) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    border: none !important;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, .22) !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(37, 99, 235, .24) !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--accent), #b51222) !important;
+    border: none !important;
+    box-shadow: 0 10px 22px rgba(225, 29, 46, 0.20) !important;
+}
+
+.btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(225, 29, 46, 0.24) !important;
+}
+
+/* =========================
+   CARDS (você usa #cardsContainer)
+========================= */
+#cardsContainer {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 18px !important;
+    margin-top: 20px !important;
+}
+
+#cardsContainer .card {
+    width: 380px !important;
+    border-radius: var(--radius) !important;
+    border: 1px solid rgba(17, 24, 39, .08) !important;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, .10) !important;
+    overflow: hidden;
+    transition: var(--transition) !important;
+}
+
+#cardsContainer .card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 18px 38px rgba(17, 24, 39, .14) !important;
+}
+
+/* =========================
+   TABELAS (premium)
+========================= */
+.table {
+    border-radius: var(--radius) !important;
+    overflow: hidden;
+}
+
+.table-dark {
+    background: linear-gradient(180deg, #20232e, #1a1d26) !important;
+}
+
+.table-dark thead th {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    font-weight: 900;
+    letter-spacing: .2px;
+}
+
+.table-dark td,
+.table-dark th {
+    border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.table-hover tbody tr:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* =========================
+   ABAS PREMIUM (pra seu JS novo)
+   Use no HTML: class="tabs-premium__nav"
+========================= */
+.tabs-premium__nav {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid rgba(17, 24, 39, .08);
+    box-shadow: 0 10px 28px rgba(17, 24, 39, .06);
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabs-premium__nav::-webkit-scrollbar {
+    height: 8px;
+}
+
+.tabs-premium__nav::-webkit-scrollbar-thumb {
+    background: rgba(17, 24, 39, .15);
+    border-radius: 999px;
+}
+
+.tabs-premium__nav .nav-link {
+    white-space: nowrap;
+    border-radius: var(--radius-pill) !important;
+    padding: 10px 14px !important;
+    font-weight: 900 !important;
+    border: 1px solid rgba(17, 24, 39, .10) !important;
+    background: #fff !important;
+    color: #111827 !important;
+}
+
+.tabs-premium__nav .nav-link.active {
+    background: linear-gradient(135deg, var(--accent), #b51222) !important;
+    border-color: rgba(225, 29, 46, 0.55) !important;
+    color: #fff !important;
+    box-shadow: 0 14px 30px rgba(225, 29, 46, 0.22) !important;
+}
+
+/* Badge bonito */
+.badge {
+    border-radius: var(--radius-pill) !important;
+    font-weight: 900 !important;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+@media (max-width: 768px) {
+    #caixaForms {
+        width: 100%;
+        padding: 10px;
+    }
+
+    #caixaForms input,
+    #caixaForms select,
+    .form-control,
+    .form-select {
+        max-width: 100%;
+    }
+
+    #cardsContainer .card {
+        width: 100% !important;
+    }
 }
