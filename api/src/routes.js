@@ -7,8 +7,6 @@ import * as comunicadosController from "./controllers/comunicadoscontroller.cjs"
 import * as prestacaoContasController from "./controllers/prestacaocontascontroller.cjs";
 import * as loginControllerfrom from "./controllers/logincontroller.cjs";
 import * as filesController from "./controllers/filescontroller.cjs";
-import fs from "fs";
-import prisma from "../prisma/connection.cjs";
 
 const router = Router();
 
@@ -19,42 +17,45 @@ router.use((req, res, next) => {
 
 router.post("/login/proprietario", loginControllerfrom.loginProprietario);
 
-router.get("/", (req, res) => {
-  return res.json("API respondendo");
-});
+router.get("/", (req, res) => res.json("API respondendo"));
+
+// CLIENTES
 router.post("/clientescontroller", clientesController.create);
 router.get("/clientescontroller", clientesController.read);
 router.put("/clientescontroller/:id", clientesController.update);
 
+// INQUILINOS
 router.post("/inquilinoscontroller", inquilinosController.create);
 router.get("/inquilinoscontroller", inquilinosController.read);
 router.put("/inquilinoscontroller/:id", inquilinosController.update);
 
+// CONDOMINIOS
 router.post("/condominiocontroller", condominioController.create);
 router.get("/condominiocontroller", condominioController.read);
-router.put("/condominiocontroller/:id", condominioController.update);
 router.get("/condominiocontroller/:id", condominioController.readById);
+router.put("/condominiocontroller/:id", condominioController.update);
 
+// ASSEMBLEIAS
 router.post("/assembleiascontroller", assembleiasController.create);
 router.get("/assembleiascontroller", assembleiasController.read);
 router.delete("/assembleiascontroller/:id", assembleiasController.delete);
 
+// COMUNICADOS ✅ (com GET por id + PUT + DELETE)
 router.post("/comunicadoscontroller", comunicadosController.create);
 router.get("/comunicadoscontroller", comunicadosController.read);
-router.delete("/comunicadoscontroller/:id", comunicadosController.delete);
+router.get("/comunicadoscontroller/:id", comunicadosController.readById); // ✅ importante p/ modal
 router.put("/comunicadoscontroller/:id", comunicadosController.update);
+router.delete("/comunicadoscontroller/:id", comunicadosController.delete);
 
-
+// PRESTACAO CONTAS
 router.get("/prestacaocontascontroller", prestacaoContasController.read);
 router.post("/prestacaocontascontroller", prestacaoContasController.create);
-router.delete(
-  "/prestacaocontascontroller/:id",
-  prestacaoContasController.delete
-);
+router.delete("/prestacaocontascontroller/:id", prestacaoContasController.delete);
+
+// FILES
 router.get("/documentos/:modulo/:filename", filesController.readFile);
 router.get("/documentos-disponiveis", filesController.readAllDocuments);
-router.get("/health", (req, res) => {
-  res.status(200).send("OK");
-});
+
+router.get("/health", (req, res) => res.status(200).send("OK"));
 
 export default router;

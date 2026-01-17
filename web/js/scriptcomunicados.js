@@ -247,9 +247,8 @@ function renderCards(lista) {
     const btnOpen = col.querySelector(`[data-abrir="${id}"]`);
     btnOpen?.addEventListener("click", () => onClickAbrirDocumento(documentoUrl));
 
-    col.querySelector(`[data-editar="${id}"]`)?.addEventListener("click", () => {
-      const item = comunicadosCache.find((x) => (x.comunicadosid ?? x.id) === id);
-      if (item) abrirEdicao(item);
+    col.querySelector(`[data-editar="${id}"]`)?.addEventListener("click", async () => {
+      await abrirEdicaoPorId(id); // ✅ agora busca do backend pra evitar 404/obj desatualizado
     });
 
     col.querySelector(`[data-excluir="${id}"]`)?.addEventListener("click", () => {
@@ -368,8 +367,23 @@ async function onClickExcluirDocumento(id) {
 }
 
 // ---------------------------
-// EDIT (abre modal)
+// EDIT (busca por id no back + abre modal)
 // ---------------------------
+async function abrirEdicaoPorId(id) {
+  try {
+    const res = await fetch(`${uriComunicadosController}/${id}`); // ✅ precisa existir no backend
+    if (!res.ok) {
+      showToast("error", "Erro", "Não foi possível carregar os dados para edição.");
+      return;
+    }
+    const item = await res.json();
+    abrirEdicao(item);
+  } catch (e) {
+    console.error(e);
+    showToast("error", "Erro", "Falha ao carregar comunicado para edição.");
+  }
+}
+
 function abrirEdicao(item) {
   const id = item.comunicadosid ?? item.id;
 
@@ -377,7 +391,10 @@ function abrirEdicao(item) {
   formEditar.documentoUrlAtual.value = item.documentoUrl || item.documento || "";
   formEditar.datacomunicado.value = item.datacomunicado || item.data || "";
   formEditar.descricao.value = item.descricao || "";
-  formEditar.CondominioID.value = String(item.CondominioID || item.condominioId || "");
+
+  // ✅ aqui era o bug: agora setamos no SELECT correto do modal
+  const condId = item.CondominioID || item.condominioId || "";
+  selectCondominioEdit.value = condId ? String(condId) : "";
 
   fileHintEdit.textContent = "Mantendo o documento atual.";
   openModal();
@@ -404,7 +421,6 @@ formEditar.addEventListener("submit", async (e) => {
     documentoUrlFinal = up.data;
   }
 
-  // ⚠️ Precisa existir PUT no back
   try {
     const res = await fetch(`${uriComunicadosController}/${id}`, {
       method: "PUT",
@@ -412,8 +428,8 @@ formEditar.addEventListener("submit", async (e) => {
       body: JSON.stringify({
         datacomunicado: formEditar.datacomunicado.value,
         descricao: formEditar.descricao.value,
-        CondominioID: formEditar.CondominioID.value,
-        documentoUrl: documentoUrlFinal,
+        CondominioID: selectCondominioEdit.value, // ✅ select correto
+        documentoUrl: documentoUrlFinal, // pode ser vazio -> back mantém atual se você fez daquele jeito
       }),
     });
 
@@ -422,8 +438,7 @@ formEditar.addEventListener("submit", async (e) => {
       showToast("success", "Atualizado", "Comunicado atualizado com sucesso!");
       await listarComunicados();
     } else {
-      // se não existir rota PUT, vai cair aqui
-      showToast("error", "Erro", "Não foi possível salvar. Verifique se existe PUT no backend.");
+      showToast("error", "Erro", "Não foi possível salvar. Verifique PUT/validações do backend.");
     }
   } catch (err) {
     console.error(err);
