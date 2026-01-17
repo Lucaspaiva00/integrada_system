@@ -1,387 +1,172 @@
 /* =========================
-   PAIVA TECH - GLOBAL PREMIUM THEME
-   Cores: Preto + Branco + Vermelho (acento)
+   css/style.css (GLOBAL) - ADICIONE/COLE NO FINAL
+   PAIVA TECH - Preto + Branco + Vermelho
 ========================= */
-
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    /* você tinha "position: 0" (inválido) */
-    box-sizing: border-box;
-}
 
 /* Variáveis de tema (Paiva Tech) */
 :root {
-    --bg: #0b0c10;
-    /* preto profundo */
-    --surface: #11131a;
-    /* cards / blocos escuros */
-    --surface-2: #161a23;
-    /* variação */
-    --text: #e8e8ea;
-    /* texto claro */
-    --muted: #a7a7b0;
-    /* texto secundário */
-    --border: rgba(255, 255, 255, 0.08);
-    --shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-
-    --accent: #e11d2e;
-    /* vermelho Paiva Tech */
-    --accent-2: #ff3b3b;
-    /* brilho vermelho */
-    --accent-soft: rgba(225, 29, 46, 0.16);
-
-    --white: #ffffff;
-    --black: #000000;
-
-    --radius: 16px;
-    --radius-sm: 12px;
-    --radius-pill: 999px;
-
-    --focus: 0 0 0 0.25rem rgba(225, 29, 46, 0.25);
-    --transition: 180ms ease;
+    --paiva-accent: #e11d2e;
+    --paiva-accent-dark: #b51222;
+    --paiva-black: #0b0c10;
+    --paiva-surface: #11131a;
+    --paiva-surface-2: #161a23;
+    --paiva-border: rgba(255, 255, 255, .10);
+    --paiva-text: #e8e8ea;
+    --paiva-muted: #a7a7b0;
+    --paiva-focus: 0 0 0 .25rem rgba(225, 29, 46, .25);
+    --paiva-radius: 16px;
+    --paiva-radius-sm: 12px;
+    --paiva-pill: 999px;
+    --paiva-transition: 180ms ease;
 }
 
-/* Tipografia global */
-body {
-    background: #f6f7fb;
-    /* mantém clara no conteúdo para combinar com SB Admin */
-    color: #111827;
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue", sans-serif;
-    line-height: 1.45;
-}
-
-/* Links */
-a {
-    color: inherit;
-    text-decoration: none;
+/* Helper: texto vermelho Paiva */
+.text-paiva {
+    color: var(--paiva-accent) !important;
 }
 
 /* =========================
-   HEADER (se você ainda usa)
+   SIDEBAR (SB Admin override)
 ========================= */
-header {
-    width: 100%;
-    background: linear-gradient(135deg, #0b0c10, #121420);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+.paiva-sidebar {
+    background: linear-gradient(180deg, var(--paiva-black), #11131a) !important;
+    border-right: 1px solid rgba(255, 255, 255, .06) !important;
 }
 
-.container_header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    padding: 12px 16px;
+.paiva-sidebar .sidebar-brand {
+    background: transparent !important;
 }
 
-.div_logo {
-    width: 33%;
-}
-
-.div_logo img {
-    width: 120px;
-    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .2));
-}
-
-.div_nav {
-    width: 33%;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.div_nav a {
-    color: rgba(255, 255, 255, .9);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    padding: 10px 14px;
-    border-radius: var(--radius-pill);
-    transition: var(--transition);
-    border: 1px solid rgba(255, 255, 255, .08);
-    background: rgba(255, 255, 255, .03);
-}
-
-.div_nav a:hover {
-    transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, .14);
-    background: rgba(255, 255, 255, .06);
-}
-
-/* =========================
-   CONTAINERS (login/legacy)
-========================= */
-.container {
-    width: 100%;
-    margin-top: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.container_formulario {
-    width: 340px;
-    padding: 26px;
-    border-radius: var(--radius);
-    border: 1px solid rgba(17, 24, 39, 0.08);
-    background: #ffffff;
-    box-shadow: 0 18px 40px rgba(17, 24, 39, 0.08);
-}
-
-.container_formulario input {
-    padding: 12px 14px;
-    margin: 8px 0;
-    width: 100%;
-    border-radius: 12px;
-    border: 1px solid rgba(17, 24, 39, .10);
-    outline: none;
-    transition: var(--transition);
-    background: #fff;
-}
-
-.container_formulario input:focus {
-    border-color: rgba(225, 29, 46, 0.50);
-    box-shadow: var(--focus);
-}
-
-#legend {
-    font-size: 22px;
+.paiva-sidebar .sidebar-brand-text {
+    letter-spacing: .6px;
     font-weight: 900;
-    letter-spacing: 0.2px;
-    margin-bottom: 10px;
 }
 
-/* Botão login */
-#btn_login {
-    background: linear-gradient(135deg, var(--accent), #b51222);
-    color: #fff;
-    border: none;
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 12px 26px rgba(225, 29, 46, 0.22);
+.paiva-sidebar .nav-item .nav-link {
+    color: rgba(255, 255, 255, .92) !important;
+    transition: var(--paiva-transition);
 }
 
-#btn_login:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 18px 34px rgba(225, 29, 46, 0.26);
+.paiva-sidebar .nav-item .nav-link i {
+    color: rgba(255, 255, 255, .70) !important;
 }
 
-#btn_login:active {
-    transform: translateY(0);
+.paiva-sidebar .nav-item .nav-link:hover {
+    background: rgba(225, 29, 46, .10) !important;
+    color: #fff !important;
 }
 
-/* =========================
-   FORM PRESTAÇÃO DE CONTAS
-========================= */
-#caixaForm {
-    height: auto;
-    width: 420px;
-    padding: 20px 0px 50px 0px;
+.paiva-sidebar .nav-item.active .nav-link {
+    background: rgba(225, 29, 46, .14) !important;
+    box-shadow: inset 3px 0 0 var(--paiva-accent);
 }
 
-#caixaForms {
-    width: 100%;
-    max-width: 720px;
-    padding: 12px;
-    margin: 0 auto;
+.paiva-sidebar .sidebar-divider {
+    border-top: 1px solid rgba(255, 255, 255, .08) !important;
 }
 
-/* Inputs globais (form) */
-#caixaForms input,
-#caixaForms select,
-.form-control,
-.form-select {
-    width: 100%;
-    max-width: 420px;
-    padding: 11px 12px;
-    margin-top: 6px;
-    border-radius: 12px;
-    border: 1px solid rgba(17, 24, 39, .12);
-    background: #ffffff;
-    outline: none;
-    transition: var(--transition);
-}
-
-#caixaForms input:focus,
-#caixaForms select:focus,
-.form-control:focus,
-.form-select:focus {
-    border-color: rgba(225, 29, 46, 0.55);
-    box-shadow: var(--focus);
-}
-
-/* Labels mais fortes */
-label {
-    font-weight: 800;
-    color: #111827;
-    margin-top: 8px;
-}
-
-/* Botões: deixa todos premium (bootstrap + custom) */
-.btn {
-    border-radius: 12px !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.2px;
-    transition: var(--transition) !important;
-}
-
-.btn-success {
-    background: linear-gradient(135deg, #16a34a, #0f7a36) !important;
-    border: none !important;
-    box-shadow: 0 10px 22px rgba(22, 163, 74, .22) !important;
-}
-
-.btn-success:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 16px 30px rgba(22, 163, 74, .26) !important;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
-    border: none !important;
-    box-shadow: 0 10px 22px rgba(37, 99, 235, .22) !important;
-}
-
-.btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 16px 30px rgba(37, 99, 235, .24) !important;
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, var(--accent), #b51222) !important;
-    border: none !important;
-    box-shadow: 0 10px 22px rgba(225, 29, 46, 0.20) !important;
-}
-
-.btn-danger:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 16px 30px rgba(225, 29, 46, 0.24) !important;
-}
-
-/* =========================
-   CARDS (você usa #cardsContainer)
-========================= */
-#cardsContainer {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 18px !important;
-    margin-top: 20px !important;
-}
-
-#cardsContainer .card {
-    width: 380px !important;
-    border-radius: var(--radius) !important;
+/* collapse inner (menu aberto) */
+.paiva-collapse-inner {
+    background: #ffffff !important;
     border: 1px solid rgba(17, 24, 39, .08) !important;
-    box-shadow: 0 12px 28px rgba(17, 24, 39, .10) !important;
-    overflow: hidden;
-    transition: var(--transition) !important;
+    box-shadow: 0 10px 26px rgba(17, 24, 39, .10);
 }
 
-#cardsContainer .card:hover {
-    transform: translateY(-3px) !important;
+/* =========================
+   TOPBAR
+========================= */
+.paiva-topbar {
+    border-bottom: 1px solid rgba(17, 24, 39, .08) !important;
+}
+
+/* =========================
+   CARDS (dashboard)
+========================= */
+.paiva-card {
+    border-left: 4px solid var(--paiva-accent) !important;
+    border-radius: var(--paiva-radius) !important;
+    overflow: hidden;
+    transition: var(--paiva-transition);
+}
+
+.paiva-card:hover {
+    transform: translateY(-2px);
     box-shadow: 0 18px 38px rgba(17, 24, 39, .14) !important;
 }
 
 /* =========================
-   TABELAS (premium)
+   CARD DA TABELA
 ========================= */
-.table {
-    border-radius: var(--radius) !important;
+.paiva-table-card {
+    border-radius: var(--paiva-radius) !important;
     overflow: hidden;
 }
 
-.table-dark {
-    background: linear-gradient(180deg, #20232e, #1a1d26) !important;
-}
-
-.table-dark thead th {
-    background: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    font-weight: 900;
-    letter-spacing: .2px;
-}
-
-.table-dark td,
-.table-dark th {
-    border-color: rgba(255, 255, 255, 0.06) !important;
-}
-
-.table-hover tbody tr:hover {
-    background: rgba(255, 255, 255, 0.06) !important;
-}
-
-/* =========================
-   ABAS PREMIUM (pra seu JS novo)
-   Use no HTML: class="tabs-premium__nav"
-========================= */
-.tabs-premium__nav {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 10px;
-    border-radius: var(--radius);
-    background: #fff;
-    border: 1px solid rgba(17, 24, 39, .08);
-    box-shadow: 0 10px 28px rgba(17, 24, 39, .06);
-    -webkit-overflow-scrolling: touch;
-}
-
-.tabs-premium__nav::-webkit-scrollbar {
-    height: 8px;
-}
-
-.tabs-premium__nav::-webkit-scrollbar-thumb {
-    background: rgba(17, 24, 39, .15);
-    border-radius: 999px;
-}
-
-.tabs-premium__nav .nav-link {
-    white-space: nowrap;
-    border-radius: var(--radius-pill) !important;
-    padding: 10px 14px !important;
-    font-weight: 900 !important;
-    border: 1px solid rgba(17, 24, 39, .10) !important;
-    background: #fff !important;
-    color: #111827 !important;
-}
-
-.tabs-premium__nav .nav-link.active {
-    background: linear-gradient(135deg, var(--accent), #b51222) !important;
-    border-color: rgba(225, 29, 46, 0.55) !important;
+.paiva-table-card .card-header {
+    background: linear-gradient(135deg, #0b0c10, #141827) !important;
     color: #fff !important;
-    box-shadow: 0 14px 30px rgba(225, 29, 46, 0.22) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .10) !important;
 }
 
-/* Badge bonito */
-.badge {
-    border-radius: var(--radius-pill) !important;
-    font-weight: 900 !important;
+.paiva-table-card .card-header .text-paiva {
+    color: #fff !important;
 }
 
 /* =========================
-   RESPONSIVO
+   THEAD (tabela)
 ========================= */
-@media (max-width: 768px) {
-    #caixaForms {
-        width: 100%;
-        padding: 10px;
-    }
+.paiva-thead th {
+    background: rgba(225, 29, 46, .08) !important;
+    color: #111827 !important;
+    font-weight: 900 !important;
+    border-bottom: 1px solid rgba(17, 24, 39, .10) !important;
+}
 
-    #caixaForms input,
-    #caixaForms select,
-    .form-control,
-    .form-select {
-        max-width: 100%;
-    }
+/* hover da linha */
+.table-hover tbody tr:hover {
+    background: rgba(225, 29, 46, .06) !important;
+}
 
-    #cardsContainer .card {
-        width: 100% !important;
-    }
+/* =========================
+   LINK (nome do condomínio)
+========================= */
+.paiva-link {
+    color: var(--paiva-accent) !important;
+    text-decoration: none !important;
+    font-weight: 900;
+    transition: var(--paiva-transition);
+}
+
+.paiva-link:hover {
+    color: var(--paiva-accent-dark) !important;
+    text-decoration: underline !important;
+}
+
+/* =========================
+   BOTÕES (opcional, mas deixa padrão)
+========================= */
+.btn {
+    border-radius: 12px !important;
+    font-weight: 800 !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--paiva-accent), var(--paiva-accent-dark)) !important;
+    border: none !important;
+    box-shadow: 0 10px 22px rgba(225, 29, 46, .20) !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(225, 29, 46, .24) !important;
+}
+
+/* foco bonito */
+.form-control:focus,
+.form-select:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: rgba(225, 29, 46, .55) !important;
+    box-shadow: var(--paiva-focus) !important;
 }

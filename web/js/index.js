@@ -1,3 +1,7 @@
+// =========================
+// index.js (COMPLETO)
+// =========================
+
 // URL base da sua API
 const baseURL = "https://integrada-api.onrender.com";
 
@@ -31,11 +35,8 @@ contarRegistros("assembleiascontroller", "qtdAssembleias");
    2. Carregar tabela de condomínios no dashboard
 ============================================================ */
 async function carregarTabelaCondominios() {
-  const tbodyCondominios = document.getElementById(
-    "tbodyCondominiosDashboard"
-  );
-
-  if (!tbodyCondominios) return; // segurança
+  const tbodyCondominios = document.getElementById("tbodyCondominiosDashboard");
+  if (!tbodyCondominios) return;
 
   // mostra "carregando..." inicial
   tbodyCondominios.innerHTML = `
@@ -47,11 +48,9 @@ async function carregarTabelaCondominios() {
   `;
 
   try {
-    // pega os condomínios
     const res = await fetch(`${baseURL}/condominiocontroller`);
     const condominios = await res.json();
 
-    // se não tem condomínio
     if (!condominios || !condominios.length) {
       tbodyCondominios.innerHTML = `
         <tr>
@@ -63,29 +62,18 @@ async function carregarTabelaCondominios() {
       return;
     }
 
-    // limpa tbody e preenche linha por linha
     tbodyCondominios.innerHTML = "";
 
     condominios.forEach((cond) => {
-      // segurança pra não quebrar se algo vier null
       const id = cond.condominioid;
       const nome = cond.nomecondominio || "—";
       const endereco = cond.endereco || "SEM ENDEREÇO";
       const telefone = cond.telefone || "SEM TELEFONE";
 
-      // muito importante: esse link aqui embaixo
-      // vai mandar pra sua página nova passando o ID
-      // Exemplo final: detalhes-condominio.html?id=3
       const linhaHTML = `
         <tr>
           <td class="font-weight-bold">
-            <a 
-              href="detalhes-condominio.html?id=${id}"
-              style="
-                text-decoration:none;
-                color:#1a56db;
-              "
-            >
+            <a href="detalhes-condominio.html?id=${id}" class="paiva-link">
               ${nome}
             </a>
           </td>
@@ -112,6 +100,5 @@ async function carregarTabelaCondominios() {
    3. Inicialização da tela
 ============================================================ */
 document.addEventListener("DOMContentLoaded", async () => {
-  // carrega tabela dos condomínios no dashboard
   await carregarTabelaCondominios();
 });

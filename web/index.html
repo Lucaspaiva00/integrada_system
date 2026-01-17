@@ -1,3 +1,6 @@
+<!-- =========================
+     index.html (COMPLETO)
+========================= -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,39 +8,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Central</title>
+
     <link rel="stylesheet" href="css/style.css">
     <link href="vendor2/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-
     <link href="css2/sb-admin-2.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div id="wrapper">
-        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- SIDEBAR -->
+        <ul class="navbar-nav sidebar sidebar-dark accordion paiva-sidebar" id="accordionSidebar">
+
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">PAIVA TECH</div>
             </a>
+
             <hr class="sidebar-divider my-0">
+
             <li class="nav-item active">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
+
             <hr class="sidebar-divider">
+
             <div class="sidebar-heading">
                 Páginas
             </div>
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Condomínios</span>
+                    <span>Condomínios</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="condominio.html">Cadastre um Condomínio</a>
                     </div>
@@ -46,12 +57,12 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                    aria-expanded="true" aria-controls="collapseTwow">
                     <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Condominos</span>
+                    <span>Condominos</span>
                 </a>
-                <div id="collapseTwow" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow" class="collapse" aria-labelledby="headingTwow" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="condomino.html">Cadastre um Proprietário</a>
                         <a class="collapse-item" href="inquilino.html">Cadastre um Inquilino</a>
@@ -61,12 +72,12 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow2"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                    aria-expanded="true" aria-controls="collapseTwow2">
                     <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Assembléias</span>
+                    <span>Assembléias</span>
                 </a>
-                <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwow2" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="assembleias.html">Convoque uma assembleia</a>
                     </div>
@@ -75,12 +86,12 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow3"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                    aria-expanded="true" aria-controls="collapseTwow3">
                     <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Comunicado</span>
+                    <span>Comunicado</span>
                 </a>
-                <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwow3" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="comunicados.html">Encaminhe um comunicado</a>
                     </div>
@@ -89,26 +100,31 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow4"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                    aria-expanded="true" aria-controls="collapseTwow4">
                     <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Prestação de contas</span>
+                    <span>Prestação de contas</span>
                 </a>
-                <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwow4" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="prestacaocontas.html">Envie a Prestação de contas</a>
                     </div>
                 </div>
             </li>
+
             <hr class="sidebar-divider d-none d-md-block">
+
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-
         </ul>
+
+        <!-- CONTENT WRAPPER -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- TOPBAR -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow paiva-topbar">
                     <div class="input-group">
                         <div class="input-group-append" hidden>
                             <button class="btn btn-primary" type="button">
@@ -116,23 +132,22 @@
                             </button>
                         </div>
                     </div>
+
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <ul class="navbar-nav ml-auto">
 
+                    <ul class="navbar-nav ml-auto">
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <li class="nav-item dropdown no-arrow">
-
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-900">Opções</span>
-
                             </a>
+
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="login.html">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -140,20 +155,18 @@
                                 </a>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
 
+                <!-- CONTEÚDO -->
                 <div class="container-fluid">
 
                     <div class="row">
-
                         <!-- Total de Condomínios -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total de
+                                    <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Total de
                                         Condomínios</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdCondominios">0</div>
                                 </div>
@@ -162,9 +175,9 @@
 
                         <!-- Total de Inquilinos -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total de
+                                    <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Total de
                                         Inquilinos</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdInquilinos">0</div>
                                 </div>
@@ -173,9 +186,9 @@
 
                         <!-- Total de Comunicados -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
-                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Comunicados
+                                    <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Comunicados
                                         Enviados</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdComunicados">0</div>
                                 </div>
@@ -184,35 +197,27 @@
 
                         <!-- Total de Assembleias -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
-                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Assembleias
+                                    <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Assembleias
                                         Cadastradas</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdAssembleias">0</div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <!-- <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Comunicados por Mês</h6>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="graficoComunicados"></canvas>
-                        </div>
-                    </div> -->
-                    <!-- Lista de Condomínios -->
-                    <div class="card shadow mb-4">
+
+                    <!-- TABELA -->
+                    <div class="card shadow mb-4 paiva-table-card">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 font-weight-bold text-primary">Condomínios Cadastrados</h6>
+                            <h6 class="m-0 font-weight-bold text-paiva">Condomínios Cadastrados</h6>
                             <small class="text-muted" style="font-size: .8rem;">Exibindo todos</small>
                         </div>
 
                         <div class="card-body" style="padding-top: 0;">
                             <div class="table-responsive">
                                 <table class="table table-sm table-hover" id="tabelaCondominiosDashboard">
-                                    <thead class="thead-light">
+                                    <thead class="paiva-thead">
                                         <tr>
                                             <th style="min-width: 200px;">Nome do Condomínio</th>
                                             <th style="min-width: 200px;">Endereço</th>
@@ -231,12 +236,9 @@
                         </div>
                     </div>
 
-                </div>
-
-
+                </div><!-- /.container-fluid -->
             </div>
         </div>
-    </div>
     </div>
 </body>
 
