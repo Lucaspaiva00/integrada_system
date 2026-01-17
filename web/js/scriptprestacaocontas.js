@@ -1,8 +1,8 @@
 /* =========================
-   PRESTAÇÃO DE CONTAS (ADM) - PADRÃO PAIVA (igual Comunicados)
-   - Cards + Abas por condomínio + Todos
-   - Busca (filtro decente)
-   - Sem edição
+   PRESTAÇÃO DE CONTAS (ADM) - PADRÃO PAIVA
+   - Chips premium (tabs feitas na mão, sem bootstrap tab)
+   - Cards
+   - Busca boa
    - Toast
    - Cloudinary mantido
 ========================= */
@@ -41,7 +41,7 @@ const LS_TAB_KEY = "prestacao_tab_ativa";
 let prestacoesCache = [];
 let condominiosCache = [];
 
-// controle de carregamento (✅ resolve o “precisa dar F5”)
+// loading (pra filtro não rodar vazio)
 let isLoading = false;
 let filtroDigitadoDuranteLoading = "";
 
@@ -49,7 +49,6 @@ let filtroDigitadoDuranteLoading = "";
 // TOAST
 // =========================
 let toastTimer = null;
-
 function showToast(type, title, msg) {
   if (!toastEl) return;
 
@@ -72,7 +71,7 @@ function showToast(type, title, msg) {
 toastClose?.addEventListener("click", () => toastEl.classList.remove("show"));
 
 // =========================
-// HINTS FILE
+// HINT FILE
 // =========================
 document.querySelector("#documento")?.addEventListener("change", (e) => {
   const f = e.target.files?.[0];
@@ -112,7 +111,6 @@ function formatMesLabel(iso) {
   return dt.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
 }
 
-// tokens pro filtro ser “bom”
 function buildMesSearchTokens(iso) {
   const dt = parseISODateLocal(iso);
   if (!dt) return [];
@@ -130,15 +128,25 @@ function buildMesSearchTokens(iso) {
   ];
 }
 
-function setActiveTab(paneId) {
-  const btn = tabs?.querySelector(`[data-target="#${paneId}"]`);
-  if (!btn) return;
+// tabs na mão (sem bootstrap)
+function showPane(paneId) {
+  // esconde tudo
+  document.querySelectorAll("#tabsCondominiosContent .tab-pane").forEach(p => {
+    p.classList.remove("show", "active");
+  });
 
-  if (window.$ && typeof window.$ === "function") {
-    window.$(btn).tab("show");
-  } else {
-    btn.click();
+  // mostra alvo
+  const pane = document.getElementById(paneId);
+  if (pane) {
+    pane.classList.add("show", "active");
   }
+
+  // ativa chip
+  tabs?.querySelectorAll(".paiva-chip").forEach(b => b.classList.remove("active"));
+  const chip = tabs?.querySelector(`[data-pane="${paneId}"]`);
+  chip?.classList.add("active");
+
+  localStorage.setItem(LS_TAB_KEY, paneId);
 }
 
 async function onClickAbrirDocumento(documentoUrl) {
@@ -153,7 +161,7 @@ async function onClickAbrirDocumento(documentoUrl) {
 }
 
 // =========================
-// CLOUDINARY UPLOAD (mantido)
+// CLOUDINARY (mantido)
 // =========================
 const cloudinaryUpload = async (file) => {
   const CLOUDINARY_API_KEY = "839478495457115";
@@ -208,7 +216,7 @@ async function carregarCondominios() {
 }
 
 // =========================
-// RENDER: ABAS + CARDS
+// RENDER: CHIPS + PANES + CARDS
 // =========================
 function renderAbasEConteudo(lista) {
   if (!tabs || !tabsContent) return;
@@ -241,65 +249,54 @@ function renderAbasEConteudo(lista) {
     return nomeA.localeCompare(nomeB);
   });
 
-  // ===== ABA TODOS =====
-  const tabIdAll = "tab-todos";
-  const paneIdAll = "pane-todos";
-  const isActiveAll = abaSalva === paneIdAll || !abaSalva;
-
-  tabs.innerHTML += `
-    <button class="paiva-chip ${isActiveAll ? "active" : ""}" id="${tabIdAll}"
-      data-toggle="tab" data-target="#${paneIdAll}"
-      type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="${isActiveAll ? "true" : "false"}">
+  // ===== TODOS =====
+  tabs.insertAdjacentHTML("beforeend", `
+    <button type="button" class="paiva-chip" data-pane="pane-todos">
       Todos <span class="paiva-chip__badge">${lista.length}</span>
     </button>
-  `;
+  `);
 
-  tabsContent.innerHTML += `
-    <div class="tab-pane fade ${isActiveAll ? "show active" : ""}" id="${paneIdAll}" role="tabpanel" aria-labelledby="${tabIdAll}">
+  tabsContent.insertAdjacentHTML("beforeend", `
+    <div class="tab-pane fade" id="pane-todos">
       <div class="row" id="cards-todos"></div>
     </div>
-  `;
+  `);
 
   renderCardsNoContainer(document.querySelector("#cards-todos"), lista);
 
-  // ===== ABAS POR CONDOMÍNIO =====
+  // ===== POR CONDOMINIO =====
   gruposOrdenados.forEach(([key, items]) => {
     const [condominioId, nomeCondominio] = key.split("|||");
     const safeId = slugId(condominioId);
-
-    const tabId = `tab-${safeId}`;
     const paneId = `pane-${safeId}`;
-    const isActive = abaSalva === paneId;
 
-    tabs.innerHTML += `
-      <button class="paiva-chip ${isActive ? "active" : ""}" id="${tabId}"
-        data-toggle="tab" data-target="#${paneId}"
-        type="button" role="tab" aria-controls="${paneId}" aria-selected="${isActive ? "true" : "false"}">
+    tabs.insertAdjacentHTML("beforeend", `
+      <button type="button" class="paiva-chip" data-pane="${paneId}">
         ${nomeCondominio}
         <span class="paiva-chip__badge">${items.length}</span>
       </button>
-    `;
+    `);
 
-    tabsContent.innerHTML += `
-      <div class="tab-pane fade ${isActive ? "show active" : ""}" id="${paneId}" role="tabpanel" aria-labelledby="${tabId}">
+    tabsContent.insertAdjacentHTML("beforeend", `
+      <div class="tab-pane fade" id="${paneId}">
         <div class="row" id="cards-${safeId}"></div>
       </div>
-    `;
+    `);
 
     renderCardsNoContainer(document.querySelector(`#cards-${safeId}`), items);
   });
 
-  // ativa visual do chip
-  tabs.querySelectorAll(".paiva-chip").forEach((b) => {
-    b.addEventListener("click", () => {
-      tabs.querySelectorAll(".paiva-chip").forEach((x) => x.classList.remove("active"));
-      b.classList.add("active");
+  // click chips
+  tabs.querySelectorAll(".paiva-chip").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const paneId = btn.getAttribute("data-pane");
+      if (paneId) showPane(paneId);
     });
   });
 
-  const paneFinal = document.querySelector(`#${abaSalva}`) ? abaSalva : "pane-todos";
-  localStorage.setItem(LS_TAB_KEY, paneFinal);
-  setActiveTab(paneFinal);
+  // abrir aba salva se existir, senão Todos
+  const alvo = document.getElementById(abaSalva) ? abaSalva : "pane-todos";
+  showPane(alvo);
 }
 
 function renderCardsNoContainer(container, lista) {
@@ -375,11 +372,12 @@ function renderCardsNoContainer(container, lista) {
 }
 
 // =========================
-// LISTAR (✅ AGORA APLICA FILTRO DEPOIS QUE CARREGA)
+// LISTAR (sempre renderiza ao carregar)
 // =========================
 async function listarPrestacoes() {
   try {
     isLoading = true;
+
     if (filtroPrestacao) {
       filtroPrestacao.disabled = true;
       filtroPrestacao.placeholder = "Carregando prestações...";
@@ -389,18 +387,18 @@ async function listarPrestacoes() {
     const dados = await res.json();
     prestacoesCache = Array.isArray(dados) ? dados : [];
 
-    // ✅ se a pessoa digitou enquanto carregava, preserva
+    // se digitou durante loading, preserva
     if (filtroPrestacao && filtroDigitadoDuranteLoading) {
       filtroPrestacao.value = filtroDigitadoDuranteLoading;
     }
 
-    // ✅ aplica o filtro APÓS preencher o cache
-    aplicarFiltro();
+    aplicarFiltro(); // ✅ renderiza sempre
   } catch (e) {
     console.error(e);
     showToast("error", "Erro", "Falha ao carregar prestações.");
   } finally {
     isLoading = false;
+
     if (filtroPrestacao) {
       filtroPrestacao.disabled = false;
       filtroPrestacao.placeholder = "Buscar por condomínio ou mês...";
@@ -409,7 +407,7 @@ async function listarPrestacoes() {
 }
 
 // =========================
-// FILTRO (✅ agora não roda “vazio”)
+// FILTRO (bom)
 // =========================
 function aplicarFiltro() {
   if (isLoading) return;
@@ -422,14 +420,14 @@ function aplicarFiltro() {
   }
 
   const filtrado = prestacoesCache.filter((p) => {
-    const id = String(p.prestacaoid ?? p.id ?? "");
+    const id = String(p.prestacaoid ?? p.id ?? "").toLowerCase();
     const nome = String(p.nomeCondominio || "").toLowerCase();
 
     const tokensMes = buildMesSearchTokens(p.mes).map((t) => String(t).toLowerCase());
     const mesLabel = formatMesLabel(p.mes).toLowerCase();
 
     const base = [
-      id.toLowerCase(),
+      id,
       nome,
       mesLabel,
       ...tokensMes,
@@ -442,17 +440,13 @@ function aplicarFiltro() {
 
   renderAbasEConteudo(filtrado);
 
-  // se aba ativa ficou vazia volta pra Todos
+  // se aba ativa ficou vazia, volta pro Todos
   const paneAtiva = localStorage.getItem(LS_TAB_KEY) || "pane-todos";
-  const paneEl = document.querySelector(`#${paneAtiva}`);
+  const paneEl = document.getElementById(paneAtiva);
   const cardsDentro = paneEl?.querySelectorAll?.(".paiva-card-list")?.length || 0;
 
   if (paneAtiva !== "pane-todos" && cardsDentro === 0) {
-    localStorage.setItem(LS_TAB_KEY, "pane-todos");
-    setActiveTab("pane-todos");
-
-    tabs?.querySelectorAll(".paiva-chip")?.forEach((x) => x.classList.remove("active"));
-    tabs?.querySelector(`[data-target="#pane-todos"]`)?.classList.add("active");
+    showPane("pane-todos");
   }
 }
 
@@ -463,25 +457,6 @@ filtroPrestacao?.addEventListener("input", () => {
   }
   aplicarFiltro();
 });
-
-// =========================
-// SALVAR ABA ATIVA
-// =========================
-function bindSalvarAbaAtiva() {
-  if (!tabs) return;
-
-  tabs.addEventListener("shown.bs.tab", (ev) => {
-    const target = ev.target?.getAttribute?.("data-target");
-    if (target) localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
-  });
-
-  tabs.addEventListener("click", (ev) => {
-    const btn = ev.target?.closest?.("[data-toggle='tab']");
-    if (!btn) return;
-    const target = btn.getAttribute("data-target");
-    if (target) localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
-  });
-}
 
 // =========================
 // CREATE
@@ -557,7 +532,6 @@ async function onClickExcluirDocumento(id) {
 // INIT
 // =========================
 document.addEventListener("DOMContentLoaded", async () => {
-  bindSalvarAbaAtiva();
   await carregarCondominios();
-  await listarPrestacoes(); // ✅ agora sempre carrega e aplica filtro certo sem precisar F5
+  await listarPrestacoes();
 });
