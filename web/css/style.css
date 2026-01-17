@@ -472,3 +472,128 @@ textarea:focus {
     background: rgba(245, 158, 11, .16);
     color: #b45309;
 }
+
+/* =========================
+   MODAL / CARD EDIÇÃO (PRO)
+   cole no FINAL do css/style.css
+========================= */
+
+.paiva-modal-open {
+    overflow: hidden;
+}
+
+.paiva-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+}
+
+.paiva-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(4px);
+}
+
+.paiva-modal__dialog {
+    position: relative;
+    width: 720px;
+    max-width: calc(100% - 24px);
+    margin: 6vh auto;
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid rgba(17, 24, 39, .10);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
+    overflow: hidden;
+    z-index: 9999;
+    animation: paivaPop 180ms ease;
+}
+
+@keyframes paivaPop {
+    from {
+        transform: translateY(10px);
+        opacity: .6;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.paiva-modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #0b0c10, #141827);
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, .10);
+}
+
+.paiva-modal__header small {
+    color: rgba(255, 255, 255, .70) !important;
+}
+
+.paiva-modal__x {
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .14);
+    color: #fff;
+    border-radius: 12px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: 180ms ease;
+}
+
+.paiva-modal__x:hover {
+    background: rgba(255, 255, 255, .14);
+}
+
+.paiva-modal__body {
+    padding: 16px;
+}
+
+.paiva-modal__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 12px;
+}
+
+.paiva-modal__grid .form-group:nth-child(2) {
+    grid-column: 1 / -1;
+    /* endereço ocupa a linha toda (mais profissional) */
+}
+
+.paiva-modal__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 8px;
+}
+
+@media (max-width: 768px) {
+    .paiva-modal__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .paiva-modal__actions {
+        justify-content: stretch;
+        flex-direction: column;
+    }
+}
+
+/* deixa botão warning mais premium */
+.btn-warning {
+    border: none !important;
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    box-shadow: 0 12px 24px rgba(245, 158, 11, .20) !important;
+    font-weight: 900 !important;
+    border-radius: 12px !important;
+}
+
+.btn-warning:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(245, 158, 11, .24) !important;
+}
