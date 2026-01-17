@@ -597,3 +597,61 @@ textarea:focus {
     transform: translateY(-1px);
     box-shadow: 0 16px 30px rgba(245, 158, 11, .24) !important;
 }
+
+/* =========================
+   PROPRIETARIOS - CARDS PREMIUM
+========================= */
+
+.paiva-form-grid-prop {
+    display: grid;
+    grid-template-columns: 0.7fr 1.2fr 0.8fr;
+    gap: 12px;
+    align-items: end;
+}
+
+.paiva-form-grid-prop .form-group:nth-child(4),
+.paiva-form-grid-prop .form-group:nth-child(5),
+.paiva-form-grid-prop .form-group:nth-child(6) {
+    grid-column: 1 / -1;
+    /* telefone/email/condomínio em linha cheia pra ficar clean */
+}
+
+@media (max-width: 992px) {
+    .paiva-form-grid-prop {
+        grid-template-columns: 1fr;
+    }
+}
+
+.paiva-prop-card {
+    border-radius: 18px !important;
+    border: 1px solid rgba(17, 24, 39, .08) !important;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, .10) !important;
+    overflow: hidden;
+    position: relative;
+}
+
+.paiva-prop-card:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--paiva-accent), var(--paiva-accent-dark));
+    opacity: .95;
+}
+
+.paiva-prop-card .card-body {
+    padding-left: 18px;
+}
+
+.paiva-prop-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: rgba(17, 24, 39, .82);
+}
+
+.paiva-prop-meta strong {
+    color: rgba(17, 24, 39, .72);
+}
