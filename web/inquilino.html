@@ -2,71 +2,77 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Central - Inquilinos</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Inquilinos | Integrada</title>
+
     <link rel="stylesheet" href="css/style.css">
     <link href="vendor2/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css2/sb-admin-2.min.css" rel="stylesheet">
-
 </head>
 
 <body>
     <div id="wrapper">
-        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- SIDEBAR -->
+        <ul class="navbar-nav sidebar sidebar-dark accordion paiva-sidebar" id="accordionSidebar">
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">PAIVA TECH</div>
             </a>
+
             <hr class="sidebar-divider my-0">
-            <li class="nav-item active">
+
+            <li class="nav-item">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
+
             <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-                Páginas
-            </div>
+            <div class="sidebar-heading">Páginas</div>
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Condomínios</span>
+                    <span>Condomínios</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
-                        <a class="collapse-item" href="condominio.html">Cadastre um Condomínio</a>
+                        <a class="collapse-item" href="condominio.html">Cadastro de Condomínio</a>
                     </div>
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Condominos</span>
+                    aria-expanded="true" aria-controls="collapseTwow">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                    <span>Condominos</span>
                 </a>
-                <div id="collapseTwow" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow" class="collapse show" aria-labelledby="headingTwow"
+                    data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
-                        <a class="collapse-item" href="condomino.html">Cadastre um Proprietário</a>
-                        <a class="collapse-item" href="inquilino.html">Cadastre um Inquilino</a>
+                        <a class="collapse-item" href="condomino.html">Cadastro de Proprietário</a>
+                        <a class="collapse-item active" href="inquilino.html">Cadastro de Inquilino</a>
                     </div>
                 </div>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow2"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Assembléias</span>
+                    aria-expanded="true" aria-controls="collapseTwow2">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span>Assembléias</span>
                 </a>
-                <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwow2" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="assembleias.html">Convoque uma assembleia</a>
                     </div>
@@ -75,12 +81,12 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow3"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Comunicado</span>
+                    aria-expanded="true" aria-controls="collapseTwow3">
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <span>Comunicado</span>
                 </a>
-                <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwow3" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="comunicados.html">Encaminhe um comunicado</a>
                     </div>
@@ -89,28 +95,36 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow4"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span style="color: white;">Prestação de contas</span>
+                    aria-expanded="true" aria-controls="collapseTwow4">
+                    <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i>
+                    <span>Prestação de contas</span>
                 </a>
-                <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwow4" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
                         <h6 class="collapse-header">Páginas similares</h6>
                         <a class="collapse-item" href="prestacaocontas.html">Envie a Prestação de contas</a>
                     </div>
                 </div>
             </li>
+
             <hr class="sidebar-divider d-none d-md-block">
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-
         </ul>
 
+        <!-- CONTENT -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- TOPBAR -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow paiva-topbar">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
                     <ul class="navbar-nav ml-auto">
+                        <div class="topbar-divider d-none d-sm-block"></div>
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -128,75 +142,227 @@
                 </nav>
 
                 <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Cadastro de Inquilinos</h1>
 
-                    <div class="card card-body mb-4">
-                        <form id="caixaForms">
-                            <div class="mb-3">
-                                <label for="apartamento">Apartamento</label>
-                                <input type="text" name="apartamento" id="apartamento" class="form-control"
-                                    placeholder="Ex: 12B" required>
+                    <!-- PAGE HEAD -->
+                    <div class="paiva-pagehead mb-4">
+                        <div class="d-flex align-items-start justify-content-between flex-wrap">
+                            <div>
+                                <div class="paiva-breadcrumb">
+                                    <a href="index.html"><i class="fas fa-home mr-1"></i> Dashboard</a>
+                                    <span class="mx-2">/</span>
+                                    <span>Condominos</span>
+                                    <span class="mx-2">/</span>
+                                    <span>Inquilinos</span>
+                                </div>
+
+                                <h1 class="paiva-title">Cadastro de Inquilinos</h1>
+                                <p class="paiva-subtitle">Cadastre inquilinos e vincule condomínio + proprietário.</p>
                             </div>
-                            <div class="mb-3">
-                                <label for="nome">Nome do Inquilino</label>
-                                <input type="text" name="nome" id="nome" class="form-control" required>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <a href="index.html" class="btn btn-light paiva-btn-light">
+                                    <i class="fas fa-arrow-left mr-2"></i> Voltar
+                                </a>
                             </div>
-                            <div class="mb-3">
-                                <label for="cpf">CPF</label>
-                                <input type="text" name="cpf" id="cpf" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- FORM NOVO (SÓ CRIAR) -->
+                    <div class="card shadow mb-4 paiva-form-card">
+                        <div class="card-header">
+                            <h6 class="m-0 font-weight-bold">Novo inquilino</h6>
+                            <small class="text-muted">Preencha os dados para cadastrar.</small>
+                        </div>
+
+                        <div class="card-body">
+                            <form id="formNovoInquilino" class="paiva-form-grid-inq">
+                                <div class="form-group mb-0">
+                                    <label>Apartamento</label>
+                                    <input type="text" name="apartamento" class="form-control"
+                                        placeholder="Ex: Apto 12B" required>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label>Nome do inquilino</label>
+                                    <input type="text" name="nome" class="form-control"
+                                        placeholder="Digite o nome completo" required>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label>CPF</label>
+                                    <input type="text" name="cpf" class="form-control" placeholder="Somente números"
+                                        required>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label>Telefone</label>
+                                    <input type="text" name="telefone" class="form-control"
+                                        placeholder="(00) 00000-0000" required>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label>E-mail</label>
+                                    <input type="email" name="email" class="form-control"
+                                        placeholder="exemplo@email.com" required>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label>Condomínio</label>
+                                    <select name="CondominioID" id="CondominioID" class="form-select" required>
+                                        <option value="">Selecione o Condomínio</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label>Proprietário</label>
+                                    <select name="ClienteID" id="ClienteID" class="form-select" required>
+                                        <option value="">Selecione o proprietário</option>
+                                    </select>
+                                    <small class="text-muted">Dica: selecione um condomínio para filtrar
+                                        proprietários.</small>
+                                </div>
+
+                                <div class="paiva-form-actions">
+                                    <button id="btnNovoSubmit" type="submit" class="btn btn-primary paiva-btn-primary">
+                                        <i class="fas fa-plus mr-2"></i> Cadastrar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- LISTAGEM -->
+                    <div class="card shadow mb-4 paiva-table-card">
+                        <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold">Inquilinos cadastrados</h6>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="paiva-mini">
+                                    <span class="text-muted mr-2">Total:</span>
+                                    <span id="qtdLista" class="font-weight-bold">0</span>
+                                </div>
+
+                                <div class="paiva-search">
+                                    <i class="fas fa-search"></i>
+                                    <input id="inputBusca" type="text"
+                                        placeholder="Buscar por nome, cpf, email, apto, condomínio...">
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="telefone">Telefone</label>
-                                <input type="text" name="telefone" id="telefone" class="form-control" required>
+                        </div>
+
+                        <div class="card-body pt-0">
+                            <div class="row" id="cardsContainer"></div>
+
+                            <div id="emptyState" class="paiva-empty d-none">
+                                <div class="paiva-empty__icon"><i class="fas fa-user-tag"></i></div>
+                                <div class="paiva-empty__text">
+                                    <strong>Nenhum inquilino cadastrado.</strong>
+                                    <span>Use o formulário acima para criar o primeiro.</span>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="email">E-mail</label>
-                                <input type="email" name="email" id="email" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="CondominioID">Condomínio</label>
-                                <select name="CondominioID" id="CondominioID" class="form-select form-control" required>
-                                    <option value="">Selecione o condomínio</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="ClienteID">Proprietário</label>
-                                <select name="ClienteID" id="ClienteID" class="form-select form-control" required>
-                                    <option value="">Selecione o proprietário</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-success w-100">Cadastrar Inquilino</button>
-                        </form>
+                        </div>
                     </div>
 
                 </div>
-                <div class="tabela-container">
-                    <table class="table table-dark table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Nome</th>
-                                <th>Apartamento</th>
-                                <th>CPF</th>
-                                <th>Telefone</th>
-                                <th>Email</th>
-                                <th>Condomínio</th>
-                                <th>Proprietário</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyInquilinos"></tbody>
-                    </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL EDIÇÃO (CARD) -->
+    <div id="modalEdit" class="paiva-modal d-none" aria-hidden="true">
+        <div class="paiva-modal__backdrop" data-close="true"></div>
+
+        <div class="paiva-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalEditTitle">
+            <div class="paiva-modal__header">
+                <div>
+                    <h6 id="modalEditTitle" class="m-0 font-weight-bold">Editar inquilino</h6>
+                    <small class="text-muted">Altere os dados e salve.</small>
                 </div>
 
+                <button class="paiva-modal__x" type="button" data-close="true" aria-label="Fechar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="paiva-modal__body">
+                <form id="formEditarInquilino" class="paiva-modal__grid-inq">
+                    <input type="hidden" name="id">
+
+                    <div class="form-group mb-0">
+                        <label>Apartamento</label>
+                        <input type="text" class="form-control" name="apartamento" required>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Nome do inquilino</label>
+                        <input type="text" class="form-control" name="nome" required>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>CPF</label>
+                        <input type="text" class="form-control" name="cpf" required>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Telefone</label>
+                        <input type="text" class="form-control" name="telefone" required>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>E-mail</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Condomínio</label>
+                        <select name="CondominioID" id="CondominioIDEdit" class="form-select" required>
+                            <option value="">Selecione o Condomínio</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Proprietário</label>
+                        <select name="ClienteID" id="ClienteIDEdit" class="form-select" required>
+                            <option value="">Selecione o proprietário</option>
+                        </select>
+                    </div>
+
+                    <div class="paiva-modal__actions">
+                        <button id="btnSalvarEdicao" type="submit" class="btn btn-warning">
+                            <i class="fas fa-save mr-2"></i> Salvar alterações
+                        </button>
+
+                        <button type="button" class="btn btn-light paiva-btn-light" data-close="true">
+                            <i class="fas fa-times mr-2"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <script src="js/scriptinquilino.js"></script>
-    <script src="vendor2/jquery/jquery.min.js"></script>
-    <script src="vendor2/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor2/jquery-easing/jquery.easing.min.js"></script>
-    <script src="js2/sb-admin-2.min.js"></script>
+    <!-- TOAST -->
+    <div class="paiva-toast" id="toast" aria-live="polite" aria-atomic="true">
+        <div class="paiva-toast__bar"></div>
+        <div class="paiva-toast__content">
+            <div class="paiva-toast__icon" id="toastIcon"><i class="fas fa-check"></i></div>
+            <div class="paiva-toast__text">
+                <div class="paiva-toast__title" id="toastTitle">Tudo certo</div>
+                <div class="paiva-toast__msg" id="toastMsg">Ação realizada.</div>
+            </div>
+            <button class="paiva-toast__close" id="toastClose" aria-label="Fechar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
 </body>
+
+<script src="js/scriptinquilino.js"></script>
+<script src="vendor2/jquery/jquery.min.js"></script>
+<script src="vendor2/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor2/jquery-easing/jquery.easing.min.js"></script>
+<script src="js2/sb-admin-2.min.js"></script>
 
 </html>

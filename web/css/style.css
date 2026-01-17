@@ -655,3 +655,61 @@ textarea:focus {
 .paiva-prop-meta strong {
     color: rgba(17, 24, 39, .72);
 }
+
+/* =========================
+   INQUILINOS - GRID + CARDS
+========================= */
+
+.paiva-form-grid-inq {
+    display: grid;
+    grid-template-columns: 0.7fr 1.2fr 0.8fr;
+    gap: 12px;
+    align-items: end;
+}
+
+.paiva-form-grid-inq .form-group:nth-child(4),
+.paiva-form-grid-inq .form-group:nth-child(5),
+.paiva-form-grid-inq .form-group:nth-child(6),
+.paiva-form-grid-inq .form-group:nth-child(7) {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 992px) {
+    .paiva-form-grid-inq {
+        grid-template-columns: 1fr;
+    }
+}
+
+.paiva-inq-card {
+    border-radius: 18px !important;
+    border: 1px solid rgba(17, 24, 39, .08) !important;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, .10) !important;
+    overflow: hidden;
+    position: relative;
+}
+
+.paiva-inq-card:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--paiva-accent), var(--paiva-accent-dark));
+    opacity: .95;
+}
+
+.paiva-inq-card .card-body {
+    padding-left: 18px;
+}
+
+.paiva-inq-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: rgba(17, 24, 39, .82);
+}
+
+.paiva-inq-meta strong {
+    color: rgba(17, 24, 39, .72);
+}
