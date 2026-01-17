@@ -1,8 +1,8 @@
 /* =========================
    PRESTAÇÃO DE CONTAS (ADM) - PADRÃO PAIVA (igual Comunicados)
    - Cards + Abas por condomínio + Todos
-   - Busca
-   - Modal de edição (card)
+   - Busca (filtro decente)
+   - Sem edição (removido)
    - Toast
    - Cloudinary mantido
 ========================= */
@@ -20,11 +20,6 @@ const tabsContent = document.querySelector("#tabsCondominiosContent");
 const filtroPrestacao = document.querySelector("#filtroPrestacao");
 const qtdPrestacoes = document.querySelector("#qtdPrestacoes");
 const emptyStatePrestacao = document.querySelector("#emptyStatePrestacao");
-
-// Modal
-const modalEdit = document.querySelector("#modalEditPrestacao");
-const selectCondominioEdit = document.querySelector("#CondominioIDEditPrest");
-const fileHintEdit = document.querySelector("#fileHintEditPrest");
 
 // Toast
 const toastEl = document.querySelector("#toastPrest");
@@ -51,16 +46,20 @@ let condominiosCache = [];
 // =========================
 let toastTimer = null;
 function showToast(type, title, msg) {
+  if (!toastEl) return;
+
   toastEl.classList.remove("show", "success", "error", "info");
   toastEl.classList.add("show", type);
 
-  toastTitle.textContent = title || "Aviso";
-  toastMsg.textContent = msg || "";
+  if (toastTitle) toastTitle.textContent = title || "Aviso";
+  if (toastMsg) toastMsg.textContent = msg || "";
 
-  toastIcon.innerHTML =
-    type === "success" ? `<i class="fas fa-check"></i>` :
-      type === "error" ? `<i class="fas fa-times"></i>` :
-        `<i class="fas fa-info"></i>`;
+  if (toastIcon) {
+    toastIcon.innerHTML =
+      type === "success" ? `<i class="fas fa-check"></i>` :
+        type === "error" ? `<i class="fas fa-times"></i>` :
+          `<i class="fas fa-info"></i>`;
+  }
 
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toastEl.classList.remove("show"), 3500);
@@ -68,36 +67,13 @@ function showToast(type, title, msg) {
 toastClose?.addEventListener("click", () => toastEl.classList.remove("show"));
 
 // =========================
-// MODAL
-// =========================
-function openModal() {
-  modalEdit.classList.remove("d-none");
-  modalEdit.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-}
-function closeModal() {
-  modalEdit.classList.add("d-none");
-  modalEdit.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-}
-modalEdit?.addEventListener("click", (e) => {
-  const el = e.target;
-  if (el?.getAttribute?.("data-close") === "true") closeModal();
-});
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !modalEdit.classList.contains("d-none")) closeModal();
-});
-
-// =========================
 // HINTS FILE
 // =========================
 document.querySelector("#documento")?.addEventListener("change", (e) => {
   const f = e.target.files?.[0];
-  if (filePrestacaoHint) filePrestacaoHint.textContent = f ? `Selecionado: ${f.name}` : "Nenhum arquivo selecionado.";
-});
-document.querySelector("#documentoEditPrest")?.addEventListener("change", (e) => {
-  const f = e.target.files?.[0];
-  if (fileHintEdit) fileHintEdit.textContent = f ? `Selecionado: ${f.name}` : "Mantendo o documento atual.";
+  if (filePrestacaoHint) {
+    filePrestacaoHint.textContent = f ? `Selecionado: ${f.name}` : "Nenhum arquivo selecionado.";
+  }
 });
 
 // =========================
@@ -111,7 +87,6 @@ function slugId(str) {
     .toLowerCase();
 }
 
-// evita bug de timezone com yyyy-mm-dd
 function parseISODateLocal(iso) {
   if (!iso) return null;
   if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
@@ -122,10 +97,43 @@ function parseISODateLocal(iso) {
   return Number.isNaN(dt.getTime()) ? null : dt;
 }
 
-function formatMes(iso) {
+function pad2(n) {
+  return String(n).padStart(2, "0");
+}
+
+function formatMesLabel(iso) {
   const dt = parseISODateLocal(iso);
   if (!dt) return "—";
   return dt.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+}
+
+// vários formatos pra busca ficar BOA
+function buildMesSearchTokens(iso) {
+  const dt = parseISODateLocal(iso);
+  if (!dt) return [];
+  const y = dt.getFullYear();
+  const m = pad2(dt.getMonth() + 1);
+  const nome = dt.toLocaleDateString("pt-BR", { month: "long" });
+  // tokens: "2026-01", "01/2026", "01-2026", "janeiro 2026", "2026"
+  return [
+    `${y}-${m}`,
+    `${m}/${y}`,
+    `${m}-${y}`,
+    `${nome} ${y}`,
+    `${y}`,
+    `${nome}`,
+  ];
+}
+
+function setActiveTab(paneId) {
+  const btn = tabs?.querySelector(`[data-target="#${paneId}"]`);
+  if (!btn) return;
+
+  if (window.$ && typeof window.$ === "function") {
+    window.$(btn).tab("show");
+  } else {
+    btn.click();
+  }
 }
 
 async function onClickAbrirDocumento(documentoUrl) {
@@ -170,7 +178,7 @@ const cloudinaryUpload = async (file) => {
 };
 
 // =========================
-// CARREGAR CONDOMÍNIOS (2 selects)
+// CARREGAR CONDOMÍNIOS
 // =========================
 async function carregarCondominios() {
   try {
@@ -178,21 +186,15 @@ async function carregarCondominios() {
     const dados = await res.json();
     condominiosCache = Array.isArray(dados) ? dados : [];
 
-    // novo
+    if (!selectCondominio) return;
+
     selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
-    // edit
-    selectCondominioEdit.innerHTML = `<option value="">Selecione o condomínio</option>`;
 
     condominiosCache.forEach((c) => {
-      const opt1 = document.createElement("option");
-      opt1.value = c.condominioid;
-      opt1.textContent = c.nomecondominio;
-      selectCondominio.appendChild(opt1);
-
-      const opt2 = document.createElement("option");
-      opt2.value = c.condominioid;
-      opt2.textContent = c.nomecondominio;
-      selectCondominioEdit.appendChild(opt2);
+      const opt = document.createElement("option");
+      opt.value = c.condominioid;
+      opt.textContent = c.nomecondominio;
+      selectCondominio.appendChild(opt);
     });
   } catch (e) {
     console.error(e);
@@ -201,22 +203,22 @@ async function carregarCondominios() {
 }
 
 // =========================
-// LISTAR + RENDER (ABAS + CARDS)
+// RENDER: ABAS + CARDS
 // =========================
 function renderAbasEConteudo(lista) {
+  if (!tabs || !tabsContent) return;
+
   tabs.innerHTML = "";
   tabsContent.innerHTML = "";
 
-  // total
-  qtdPrestacoes.textContent = String(lista.length);
+  if (qtdPrestacoes) qtdPrestacoes.textContent = String(lista.length);
 
   if (!lista.length) {
-    emptyStatePrestacao.classList.remove("d-none");
+    emptyStatePrestacao?.classList.remove("d-none");
     return;
   }
-  emptyStatePrestacao.classList.add("d-none");
+  emptyStatePrestacao?.classList.add("d-none");
 
-  // aba salva
   const abaSalva = localStorage.getItem(LS_TAB_KEY) || "pane-todos";
 
   // agrupar por condomínio
@@ -244,7 +246,7 @@ function renderAbasEConteudo(lista) {
       <button class="nav-link ${isActiveAll ? "active" : ""}" id="${tabIdAll}"
         data-toggle="tab" data-target="#${paneIdAll}"
         type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="${isActiveAll ? "true" : "false"}">
-        Todos <span class="badge badge-light ml-2">${lista.length}</span>
+        Todos <span class="badge badge-light ml-2" data-badge="${paneIdAll}">${lista.length}</span>
       </button>
     </li>
   `;
@@ -271,7 +273,7 @@ function renderAbasEConteudo(lista) {
         <button class="nav-link ${isActive ? "active" : ""}" id="${tabId}"
           data-toggle="tab" data-target="#${paneId}"
           type="button" role="tab" aria-controls="${paneId}" aria-selected="${isActive ? "true" : "false"}">
-          ${nomeCondominio} <span class="badge badge-light ml-2">${items.length}</span>
+          ${nomeCondominio} <span class="badge badge-light ml-2" data-badge="${paneId}">${items.length}</span>
         </button>
       </li>
     `;
@@ -284,16 +286,30 @@ function renderAbasEConteudo(lista) {
 
     renderCardsNoContainer(document.querySelector(`#cards-${safeId}`), items);
   });
+
+  // se a aba salva não existir no filtro atual, volta pro Todos
+  const paneFinal = document.querySelector(`#${abaSalva}`) ? abaSalva : "pane-todos";
+  localStorage.setItem(LS_TAB_KEY, paneFinal);
+  setActiveTab(paneFinal);
 }
 
 function renderCardsNoContainer(container, lista) {
   if (!container) return;
   container.innerHTML = "";
 
+  if (!lista.length) {
+    container.innerHTML = `
+      <div class="col-12">
+        <div class="text-muted py-3">Nenhum registro encontrado nesta aba.</div>
+      </div>
+    `;
+    return;
+  }
+
   lista.forEach((p) => {
     const id = p.prestacaoid ?? p.id;
     const nomeCondominio = p.nomeCondominio || "—";
-    const mes = formatMes(p.mes);
+    const mesLabel = formatMesLabel(p.mes);
     const documentoUrl = p.documentoUrl || null;
 
     const col = document.createElement("div");
@@ -312,7 +328,7 @@ function renderCardsNoContainer(container, lista) {
         <div class="card-body">
           <div class="d-flex align-items-start justify-content-between">
             <div>
-              <div class="paiva-card-kicker" style="text-transform: capitalize;">${mes}</div>
+              <div class="paiva-card-kicker" style="text-transform: capitalize;">${mesLabel}</div>
               <h5 class="paiva-card-title">Prestação de contas</h5>
               <div class="paiva-card-sub">
                 <i class="fas fa-building mr-1"></i> ${nomeCondominio}
@@ -343,19 +359,21 @@ function renderCardsNoContainer(container, lista) {
       if (documentoUrl) onClickAbrirDocumento(documentoUrl);
     });
 
-
     col.querySelector(`[data-excluir="${id}"]`)?.addEventListener("click", () => {
       onClickExcluirDocumento(id);
     });
   });
 }
 
+// =========================
+// LISTAR
+// =========================
 async function listarPrestacoes() {
   try {
     const res = await fetch(uri);
     const dados = await res.json();
     prestacoesCache = Array.isArray(dados) ? dados : [];
-    aplicarFiltro(); // render com filtro
+    aplicarFiltro(); // já renderiza
   } catch (e) {
     console.error(e);
     showToast("error", "Erro", "Falha ao carregar prestações.");
@@ -363,10 +381,13 @@ async function listarPrestacoes() {
 }
 
 // =========================
-// FILTRO (busca) - igual comunicados
+// FILTRO (BOM)
+// - Busca por condomínio + mês em vários formatos + id
+// - Atualiza badges corretamente
+// - Mantém aba ativa se ainda existir
 // =========================
 function aplicarFiltro() {
-  const q = (filtroPrestacao.value || "").trim().toLowerCase();
+  const q = (filtroPrestacao?.value || "").trim().toLowerCase();
 
   if (!q) {
     renderAbasEConteudo(prestacoesCache);
@@ -374,15 +395,43 @@ function aplicarFiltro() {
   }
 
   const filtrado = prestacoesCache.filter((p) => {
-    const nome = (p.nomeCondominio || "").toLowerCase();
-    const mes = (formatMes(p.mes) || "").toLowerCase();
-    return nome.includes(q) || mes.includes(q);
+    const id = String(p.prestacaoid ?? p.id ?? "");
+    const nome = String(p.nomeCondominio || "").toLowerCase();
+
+    const tokensMes = buildMesSearchTokens(p.mes).map((t) => String(t).toLowerCase());
+    const mesLabel = formatMesLabel(p.mes).toLowerCase();
+
+    // também aceita "jan" etc. (pega pedaços)
+    const base = [
+      id.toLowerCase(),
+      nome,
+      mesLabel,
+      ...tokensMes,
+      String(p.mes || "").toLowerCase(),
+      String(p.CondominioID || "").toLowerCase(),
+    ].join(" | ");
+
+    return base.includes(q);
   });
 
   renderAbasEConteudo(filtrado);
+
+  // se a aba ativa ficou vazia, volta pra Todos
+  const paneAtiva = localStorage.getItem(LS_TAB_KEY) || "pane-todos";
+  const paneEl = document.querySelector(`#${paneAtiva}`);
+  const cardsDentro = paneEl?.querySelectorAll?.(".paiva-card-list")?.length || 0;
+
+  if (paneAtiva !== "pane-todos" && cardsDentro === 0) {
+    localStorage.setItem(LS_TAB_KEY, "pane-todos");
+    setActiveTab("pane-todos");
+  }
 }
 
-// salvar aba ativa (bootstrap)
+filtroPrestacao?.addEventListener("input", aplicarFiltro);
+
+// =========================
+// SALVAR ABA ATIVA
+// =========================
 function bindSalvarAbaAtiva() {
   if (!tabs) return;
 
@@ -391,7 +440,6 @@ function bindSalvarAbaAtiva() {
     if (target) localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
   });
 
-  // fallback (caso o evento não dispare)
   tabs.addEventListener("click", (ev) => {
     const btn = ev.target?.closest?.("[data-toggle='tab']");
     if (!btn) return;
@@ -399,8 +447,6 @@ function bindSalvarAbaAtiva() {
     if (target) localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
   });
 }
-
-filtroPrestacao?.addEventListener("input", aplicarFiltro);
 
 // =========================
 // CREATE
@@ -466,9 +512,6 @@ async function onClickExcluirDocumento(id) {
     showToast("error", "Erro", "Falha ao excluir.");
   }
 }
-
-
-
 
 // =========================
 // INIT
