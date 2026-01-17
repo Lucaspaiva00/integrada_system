@@ -713,3 +713,68 @@ textarea:focus {
 .paiva-inq-meta strong {
     color: rgba(17, 24, 39, .72);
 }
+
+/* =========================
+   ASSEMBLEIAS - GRID + CARDS
+========================= */
+
+.paiva-form-grid-asm {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 12px;
+    align-items: end;
+}
+
+.paiva-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+}
+
+@media (max-width: 992px) {
+    .paiva-form-grid-asm {
+        grid-template-columns: 1fr;
+    }
+
+    .paiva-form-actions {
+        justify-content: stretch;
+    }
+
+    .paiva-form-actions .btn {
+        width: 100%;
+    }
+}
+
+.paiva-asm-card {
+    border-radius: 18px !important;
+    border: 1px solid rgba(17, 24, 39, .08) !important;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, .10) !important;
+    overflow: hidden;
+    position: relative;
+}
+
+.paiva-asm-card:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--paiva-accent), var(--paiva-accent-dark));
+    opacity: .95;
+}
+
+.paiva-asm-card .card-body {
+    padding-left: 18px;
+}
+
+.paiva-asm-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: rgba(17, 24, 39, .82);
+}
+
+.paiva-asm-meta strong {
+    color: rgba(17, 24, 39, .72);
+}
