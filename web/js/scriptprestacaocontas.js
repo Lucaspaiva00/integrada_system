@@ -45,6 +45,7 @@ let condominiosCache = [];
 // TOAST
 // =========================
 let toastTimer = null;
+
 function showToast(type, title, msg) {
   if (!toastEl) return;
 
@@ -114,7 +115,7 @@ function buildMesSearchTokens(iso) {
   const y = dt.getFullYear();
   const m = pad2(dt.getMonth() + 1);
   const nome = dt.toLocaleDateString("pt-BR", { month: "long" });
-  // tokens: "2026-01", "01/2026", "01-2026", "janeiro 2026", "2026"
+
   return [
     `${y}-${m}`,
     `${m}/${y}`,
@@ -242,13 +243,11 @@ function renderAbasEConteudo(lista) {
   const isActiveAll = abaSalva === paneIdAll || !abaSalva;
 
   tabs.innerHTML += `
-    <li class="nav-item" role="presentation">
-      <button class="nav-link ${isActiveAll ? "active" : ""}" id="${tabIdAll}"
-        data-toggle="tab" data-target="#${paneIdAll}"
-        type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="${isActiveAll ? "true" : "false"}">
-        Todos <span class="badge badge-light ml-2" data-badge="${paneIdAll}">${lista.length}</span>
-      </button>
-    </li>
+    <button class="paiva-chip ${isActiveAll ? "active" : ""}" id="${tabIdAll}"
+      data-toggle="tab" data-target="#${paneIdAll}"
+      type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="${isActiveAll ? "true" : "false"}">
+      Todos <span class="paiva-chip__badge" data-badge="${paneIdAll}">${lista.length}</span>
+    </button>
   `;
 
   tabsContent.innerHTML += `
@@ -269,13 +268,12 @@ function renderAbasEConteudo(lista) {
     const isActive = abaSalva === paneId;
 
     tabs.innerHTML += `
-      <li class="nav-item" role="presentation">
-        <button class="nav-link ${isActive ? "active" : ""}" id="${tabId}"
-          data-toggle="tab" data-target="#${paneId}"
-          type="button" role="tab" aria-controls="${paneId}" aria-selected="${isActive ? "true" : "false"}">
-          ${nomeCondominio} <span class="badge badge-light ml-2" data-badge="${paneId}">${items.length}</span>
-        </button>
-      </li>
+      <button class="paiva-chip ${isActive ? "active" : ""}" id="${tabId}"
+        data-toggle="tab" data-target="#${paneId}"
+        type="button" role="tab" aria-controls="${paneId}" aria-selected="${isActive ? "true" : "false"}">
+        ${nomeCondominio}
+        <span class="paiva-chip__badge" data-badge="${paneId}">${items.length}</span>
+      </button>
     `;
 
     tabsContent.innerHTML += `
@@ -285,6 +283,14 @@ function renderAbasEConteudo(lista) {
     `;
 
     renderCardsNoContainer(document.querySelector(`#cards-${safeId}`), items);
+  });
+
+  // mantém active premium (bootstrap nem sempre reflete no nosso botão)
+  tabs.querySelectorAll(".paiva-chip").forEach((b) => {
+    b.addEventListener("click", () => {
+      tabs.querySelectorAll(".paiva-chip").forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+    });
   });
 
   // se a aba salva não existir no filtro atual, volta pro Todos
@@ -373,7 +379,7 @@ async function listarPrestacoes() {
     const res = await fetch(uri);
     const dados = await res.json();
     prestacoesCache = Array.isArray(dados) ? dados : [];
-    aplicarFiltro(); // já renderiza
+    aplicarFiltro();
   } catch (e) {
     console.error(e);
     showToast("error", "Erro", "Falha ao carregar prestações.");
@@ -382,9 +388,6 @@ async function listarPrestacoes() {
 
 // =========================
 // FILTRO (BOM)
-// - Busca por condomínio + mês em vários formatos + id
-// - Atualiza badges corretamente
-// - Mantém aba ativa se ainda existir
 // =========================
 function aplicarFiltro() {
   const q = (filtroPrestacao?.value || "").trim().toLowerCase();
@@ -401,7 +404,6 @@ function aplicarFiltro() {
     const tokensMes = buildMesSearchTokens(p.mes).map((t) => String(t).toLowerCase());
     const mesLabel = formatMesLabel(p.mes).toLowerCase();
 
-    // também aceita "jan" etc. (pega pedaços)
     const base = [
       id.toLowerCase(),
       nome,
@@ -424,6 +426,9 @@ function aplicarFiltro() {
   if (paneAtiva !== "pane-todos" && cardsDentro === 0) {
     localStorage.setItem(LS_TAB_KEY, "pane-todos");
     setActiveTab("pane-todos");
+
+    tabs?.querySelectorAll(".paiva-chip")?.forEach((x) => x.classList.remove("active"));
+    tabs?.querySelector(`[data-target="#pane-todos"]`)?.classList.add("active");
   }
 }
 
@@ -457,6 +462,11 @@ caixaForms?.addEventListener("submit", async (e) => {
   const file = caixaForms.documento?.files?.[0];
   if (!file) {
     showToast("error", "Erro", "Selecione um PDF.");
+    return;
+  }
+
+  if (!selectCondominio?.value) {
+    showToast("error", "Erro", "Selecione um condomínio.");
     return;
   }
 

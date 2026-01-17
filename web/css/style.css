@@ -778,3 +778,109 @@ textarea:focus {
 .paiva-asm-meta strong {
     color: rgba(17, 24, 39, .72);
 }
+
+/* =========================
+   PAIVA - CHIPS PREMIUM (TABS)
+========================= */
+
+.paiva-tabsbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: #0f172a;
+    /* dark premium */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .10);
+}
+
+.paiva-tabsbar__label {
+    color: rgba(255, 255, 255, .75);
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.paiva-tabsbar__chips {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 2px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+}
+
+.paiva-tabsbar__chips::-webkit-scrollbar {
+    height: 8px;
+}
+
+.paiva-tabsbar__chips::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .18);
+    border-radius: 20px;
+}
+
+.paiva-tabsbar__chips::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.paiva-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .12);
+    color: rgba(255, 255, 255, .90);
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1;
+    white-space: nowrap;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.paiva-chip:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, .12);
+    border-color: rgba(255, 255, 255, .20);
+}
+
+.paiva-chip.active {
+    background: #ffffff;
+    color: #0f172a;
+    border-color: rgba(0, 0, 0, .08);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
+}
+
+.paiva-chip__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, .14);
+    color: rgba(255, 255, 255, .95);
+}
+
+.paiva-chip.active .paiva-chip__badge {
+    background: rgba(15, 23, 42, .10);
+    color: #0f172a;
+}
+
+/* quebra de linha bonita quando tiver MUITA aba (fallback) */
+@media (max-width: 768px) {
+    .paiva-tabsbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
