@@ -10,7 +10,6 @@ const read = async (req, res) => {
       orderBy: { assembleiaid: "desc" },
     });
 
-    // Normaliza a saída para o front
     const assembleias = assembleiasRaw.map((a) => ({
       assembleiaid: a.assembleiaid,
       descricao: a.descricao,
@@ -28,7 +27,7 @@ const read = async (req, res) => {
   }
 };
 
-// 📤 Criar assembleia com upload de documento
+// 📤 Criar assembleia
 const create = async (req, res) => {
   try {
     const { descricao, CondominioID, documentoUrl } = req.body;
@@ -50,7 +49,7 @@ const create = async (req, res) => {
       },
     });
 
-    const responseObj = {
+    return res.status(201).json({
       assembleiaid: novaAssembleia.assembleiaid,
       descricao: novaAssembleia.descricao,
       documento: novaAssembleia.documento,
@@ -58,15 +57,14 @@ const create = async (req, res) => {
       CondominioID: Number(novaAssembleia.CondominioID),
       nomeCondominio: novaAssembleia.Condominio?.nomecondominio || null,
       status: novaAssembleia.status || "Ativa",
-    };
-
-    res.status(201).json(responseObj);
+    });
   } catch (error) {
     console.error("Erro ao criar assembleia:", error);
     res.status(500).json({ error: "Erro ao criar assembleia" });
   }
 };
 
+// 🗑️ Excluir assembleia
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
@@ -76,19 +74,20 @@ const remove = async (req, res) => {
       return res.status(400).json({ error: "ID não informado." });
     }
 
-    const prestacao = await prisma.comunicados.delete({
-      where: { comunicadosid: Number(id) },
+    const assembleia = await prisma.assembleia.delete({
+      where: { assembleiaid: Number(id) },
     });
 
     return res.status(200).json({
       message: "Excluído com sucesso.",
-      prestacao,
+      assembleia,
     });
   } catch (err) {
-    console.error("Erro ao excluir:", err);
-    return res
-      .status(500)
-      .json({ message: "Erro ao excluir", prestacao: null });
+    console.error("Erro ao excluir assembleia:", err);
+    return res.status(500).json({
+      message: "Erro ao excluir",
+      assembleia: null,
+    });
   }
 };
 
