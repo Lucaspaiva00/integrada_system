@@ -2,34 +2,120 @@
    PRESTAÇÃO DE CONTAS (ADM)
    - Abas por condomínio
    - Aba "Todos"
+   - Filtro de condomínios (mostra/oculta abas)
+   - Salva aba ativa (Bootstrap 4 / SB Admin 2)
    - Mantém Cloudinary como estava (API_KEY/SECRET no front)
 ========================= */
 
 const caixaForms = document.querySelector("#caixaForms");
 const selectCondominio = document.querySelector("#condominioSelect");
 
-const uri = "https://integrada-api.onrender.com/prestacaocontascontroller";
-const uriDev = "http://localhost:3000/prestacaocontascontroller";
-
 const tabs = document.querySelector("#tabsCondominios");
 const tabsContent = document.querySelector("#tabsCondominiosContent");
 
-// ✅ NOVO: chave para guardar aba ativa
+const filtroPrestacao = document.querySelector("#filtroPrestacao");
+
+// PROD
+const uri = "https://integrada-api.onrender.com/prestacaocontascontroller";
+const uriCondominio = "https://integrada-api.onrender.com/condominiocontroller";
+
+// DEV (se quiser trocar manualmente)
+const uriDev = "http://localhost:3000/prestacaocontascontroller";
+
+// ✅ chave para guardar aba ativa
 const LS_TAB_KEY = "prestacao_tab_ativa";
+
+// cache para filtro
+let prestacoesCache = [];
+let gruposCache = []; // [{ paneId, tabId, nome, total }]
+
+/* =========================
+   Helpers
+========================= */
+function slugId(str) {
+  return String(str || "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "")
+    .toLowerCase();
+}
+
+// evita bug de timezone em YYYY-MM-DD
+function parseISODateLocal(iso) {
+  if (!iso) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+  const dt = new Date(iso);
+  return Number.isNaN(dt.getTime()) ? null : dt;
+}
+
+function formatMes(mesISO) {
+  const dt = parseISODateLocal(mesISO);
+  if (!dt) return "—";
+  return dt.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+}
+
+function setActiveTab(paneId) {
+  // paneId sem "#"
+  const btn = tabs?.querySelector(`[data-target="#${paneId}"]`);
+  if (btn) {
+    // bootstrap 4 usa tab('show') via jquery
+    if (window.$ && typeof window.$ === "function") {
+      window.$(btn).tab("show");
+    } else {
+      // fallback: simula click
+      btn.click();
+    }
+  }
+}
+
+function renderTabelaPorCondominio(tbodyEl, lista, incluiNomeCondominio) {
+  tbodyEl.innerHTML = "";
+
+  if (!Array.isArray(lista) || !lista.length) {
+    tbodyEl.innerHTML = `
+      <tr>
+        <td colspan="${incluiNomeCondominio ? 4 : 3}" class="text-center text-muted">
+          Nenhuma prestação cadastrada para este condomínio.
+        </td>
+      </tr>`;
+    return;
+  }
+
+  lista.forEach((e) => {
+    const mesFormatado = formatMes(e.mes);
+    const nome = e.nomeCondominio || "—";
+
+    const linkDocumento = e.documentoUrl
+      ? `<button type="button" class="btn btn-sm btn-primary" onclick="onClickAbrirDocumento('${e.documentoUrl}')">📄 Abrir PDF</button>`
+      : `<span class="text-muted">Sem documento</span>`;
+
+    tbodyEl.innerHTML += `
+      <tr>
+        ${incluiNomeCondominio ? `<td>${nome}</td>` : ""}
+        <td style="text-transform: capitalize;">${mesFormatado}</td>
+        <td>${linkDocumento}</td>
+        <td style="width: 90px;">
+          <button type="button" class="btn btn-sm btn-danger" onclick="onClickExcluirDocumento('${e.prestacaoid}')">🗑️</button>
+        </td>
+      </tr>
+    `;
+  });
+}
 
 /* =========================
    1) Carregar condomínios no select
 ========================= */
 const carregarCondominios = async () => {
   try {
-    const response = await fetch(
-      "https://integrada-api.onrender.com/condominiocontroller"
-    );
+    const response = await fetch(uriCondominio);
     const condominios = await response.json();
 
     selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;
 
-    condominios.forEach((c) => {
+    (Array.isArray(condominios) ? condominios : []).forEach((c) => {
       selectCondominio.innerHTML += `
         <option value="${c.condominioid}">
           ${c.nomecondominio}
@@ -42,66 +128,25 @@ const carregarCondominios = async () => {
 };
 
 /* =========================
-   Helpers
+   ✅ Salvar aba ativa (Bootstrap 4)
+   - Evento oficial: shown.bs.tab
+   - Fallback: click no botão
 ========================= */
-function slugId(str) {
-  return String(str || "")
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "")
-    .toLowerCase();
-}
+function bindSalvarAbaAtiva() {
+  if (!tabs) return;
 
-function formatMes(mesISO) {
-  return new Date(mesISO).toLocaleDateString("pt-BR", {
-    month: "long",
-    year: "numeric",
-  });
-}
-
-function renderTabelaPorCondominio(tbodyEl, lista) {
-  tbodyEl.innerHTML = "";
-
-  if (!lista.length) {
-    tbodyEl.innerHTML = `
-      <tr>
-        <td colspan="3" class="text-center text-muted">
-          Nenhuma prestação cadastrada para este condomínio.
-        </td>
-      </tr>`;
-    return;
-  }
-
-  lista.forEach((e) => {
-    const mesFormatado = formatMes(e.mes);
-
-    const linkDocumento = e.documentoUrl
-      ? `<button onclick="onClickAbrirDocumento('${e.documentoUrl}')" class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
-      : `<span class="text-muted">Sem documento</span>`;
-
-    tbodyEl.innerHTML += `
-      <tr>
-        <td style="text-transform: capitalize;">${mesFormatado}</td>
-        <td>${linkDocumento}</td>
-        <td>
-          <button class="btn btn-sm btn-danger" onclick="onClickExcluirDocumento('${e.prestacaoid}')">🗑️</button>
-        </td>
-      </tr>
-    `;
-  });
-}
-
-/* =========================
-   ✅ NOVO: salvar a aba ativa
-   (Bootstrap dispara esse evento quando troca de aba)
-========================= */
-if (tabs) {
+  // 1) pelo evento do bootstrap (quando existir)
   tabs.addEventListener("shown.bs.tab", (ev) => {
-    // ev.target pode ser <button> (bs5) ou <a> (bs4); aqui usamos data-target
-    const target = ev.target.getAttribute("data-target");
-    if (target) {
-      // "#pane-..." -> "pane-..."
-      localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
-    }
+    const target = ev.target?.getAttribute?.("data-target");
+    if (target) localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
+  });
+
+  // 2) fallback por clique
+  tabs.addEventListener("click", (ev) => {
+    const btn = ev.target?.closest?.("[data-toggle='tab']");
+    if (!btn) return;
+    const target = btn.getAttribute("data-target");
+    if (target) localStorage.setItem(LS_TAB_KEY, target.replace("#", ""));
   });
 }
 
@@ -113,16 +158,14 @@ const listarPrestacoes = async () => {
     const response = await fetch(uri);
     const prestacoes = await response.json();
 
-    // ✅ NOVO: aplicar estilo premium/scroll horizontal só via classes
-    // (você coloca o CSS depois)
-    if (tabs) {
-      tabs.classList.add("nav", "nav-pills", "tabs-premium__nav");
-    }
+    prestacoesCache = Array.isArray(prestacoes) ? prestacoes : [];
 
+    // reset
     tabs.innerHTML = "";
     tabsContent.innerHTML = "";
+    gruposCache = [];
 
-    if (!prestacoes.length) {
+    if (!prestacoesCache.length) {
       tabs.innerHTML = `
         <li class="nav-item">
           <button class="nav-link active" type="button">Sem registros</button>
@@ -132,37 +175,37 @@ const listarPrestacoes = async () => {
       return;
     }
 
-    // ✅ NOVO: recuperar aba salva (se não existir, vai para Todos)
+    // recupera aba salva (default Todos)
     const abaSalva = localStorage.getItem(LS_TAB_KEY) || "pane-todos";
 
     // Agrupar por condomínio (ID + Nome)
     const grupos = new Map();
-    prestacoes.forEach((p) => {
+    prestacoesCache.forEach((p) => {
       const key = `${p.CondominioID}|||${p.nomeCondominio || "Sem condomínio"}`;
       if (!grupos.has(key)) grupos.set(key, []);
       grupos.get(key).push(p);
     });
 
-    // Ordenar por nome
+    // Ordenar por nome do condomínio
     const gruposOrdenados = Array.from(grupos.entries()).sort((a, b) => {
       const nomeA = a[0].split("|||")[1].toLowerCase();
       const nomeB = b[0].split("|||")[1].toLowerCase();
       return nomeA.localeCompare(nomeB);
     });
 
-    /* ===== ABA TODOS (primeira) ===== */
+    /* ===== ABA TODOS ===== */
     const tabIdAll = "tab-todos";
     const paneIdAll = "pane-todos";
-
-    const isActiveAll = abaSalva === paneIdAll;
+    const isActiveAll = abaSalva === paneIdAll || !abaSalva;
 
     tabs.innerHTML += `
       <li class="nav-item" role="presentation">
         <button class="nav-link ${isActiveAll ? "active" : ""}" id="${tabIdAll}"
           data-toggle="tab" data-target="#${paneIdAll}"
-          type="button" role="tab" aria-controls="${paneIdAll}" aria-selected="${isActiveAll ? "true" : "false"}">
+          type="button" role="tab" aria-controls="${paneIdAll}"
+          aria-selected="${isActiveAll ? "true" : "false"}">
           Todos
-          <span class="badge badge-light ml-2">${prestacoes.length}</span>
+          <span class="badge badge-light ml-2">${prestacoesCache.length}</span>
         </button>
       </li>
     `;
@@ -184,26 +227,13 @@ const listarPrestacoes = async () => {
     `;
 
     const tbodyTodos = document.querySelector("#tbody-todos");
-    tbodyTodos.innerHTML = "";
+    renderTabelaPorCondominio(tbodyTodos, prestacoesCache, true);
 
-    prestacoes.forEach((e) => {
-      const mesFormatado = formatMes(e.mes);
-      const nome = e.nomeCondominio || "—";
-
-      const linkDocumento = e.documentoUrl
-        ? `<button onclick="onClickAbrirDocumento('${e.documentoUrl}')" class="btn btn-sm btn-primary"> 📄 Abrir PDF </button>`
-        : `<span class="text-muted">Sem documento</span>`;
-
-      tbodyTodos.innerHTML += `
-        <tr>
-          <td>${nome}</td>
-          <td style="text-transform: capitalize;">${mesFormatado}</td>
-          <td>${linkDocumento}</td>
-          <td>
-            <button class="btn btn-sm btn-danger" onclick="onClickExcluirDocumento('${e.prestacaoid}')">🗑️</button>
-          </td>
-        </tr>
-      `;
+    gruposCache.push({
+      paneId: paneIdAll,
+      tabId: tabIdAll,
+      nome: "Todos",
+      total: prestacoesCache.length,
     });
 
     /* ===== ABAS POR CONDOMÍNIO ===== */
@@ -220,7 +250,8 @@ const listarPrestacoes = async () => {
         <li class="nav-item" role="presentation">
           <button class="nav-link ${isActive ? "active" : ""}" id="${tabId}"
             data-toggle="tab" data-target="#${paneId}"
-            type="button" role="tab" aria-controls="${paneId}" aria-selected="${isActive ? "true" : "false"}">
+            type="button" role="tab" aria-controls="${paneId}"
+            aria-selected="${isActive ? "true" : "false"}">
             ${nomeCondominio}
             <span class="badge badge-light ml-2">${lista.length}</span>
           </button>
@@ -243,14 +274,28 @@ const listarPrestacoes = async () => {
       `;
 
       const tbody = document.querySelector(`#tbody-${safeId}`);
-      renderTabelaPorCondominio(tbody, lista);
+      renderTabelaPorCondominio(tbody, lista, false);
+
+      gruposCache.push({
+        paneId,
+        tabId,
+        nome: nomeCondominio,
+        total: lista.length,
+      });
     });
 
-    // ✅ NOVO: se a aba salva não existir mais (condomínio removido), volta pro Todos
+    // se a aba salva não existir mais, volta pro Todos
     const existePaneSalva = document.querySelector(`#${abaSalva}`);
     if (!existePaneSalva) {
-      localStorage.setItem(LS_TAB_KEY, "pane-todos");
+      localStorage.setItem(LS_TAB_KEY, paneIdAll);
     }
+
+    // aplica filtro atual (se tiver texto)
+    aplicarFiltroAbas();
+
+    // força abrir aba salva (garante)
+    const paneFinal = localStorage.getItem(LS_TAB_KEY) || paneIdAll;
+    setActiveTab(paneFinal);
   } catch (error) {
     console.error("Erro ao carregar prestações:", error);
     tabs.innerHTML = "";
@@ -258,7 +303,45 @@ const listarPrestacoes = async () => {
   }
 };
 
-Promise.all([carregarCondominios(), listarPrestacoes()]);
+/* =========================
+   ✅ Filtro de abas (por nome do condomínio)
+   - Filtra as abas de condomínio (não remove o conteúdo, só oculta)
+========================= */
+function aplicarFiltroAbas() {
+  if (!filtroPrestacao || !tabs) return;
+
+  const q = (filtroPrestacao.value || "").trim().toLowerCase();
+
+  // se vazio, mostra todas
+  if (!q) {
+    gruposCache.forEach((g) => {
+      const tabBtn = document.getElementById(g.tabId);
+      if (tabBtn) tabBtn.closest("li")?.classList.remove("d-none");
+    });
+    return;
+  }
+
+  gruposCache.forEach((g) => {
+    const tabBtn = document.getElementById(g.tabId);
+    if (!tabBtn) return;
+
+    // "Todos" sempre aparece
+    if (g.paneId === "pane-todos") {
+      tabBtn.closest("li")?.classList.remove("d-none");
+      return;
+    }
+
+    const match = (g.nome || "").toLowerCase().includes(q);
+    tabBtn.closest("li")?.classList.toggle("d-none", !match);
+  });
+
+  // se a aba ativa ficou escondida, volta pro Todos
+  const activeBtn = tabs.querySelector(".nav-link.active");
+  const activeLiHidden = activeBtn?.closest("li")?.classList.contains("d-none");
+  if (activeLiHidden) setActiveTab("pane-todos");
+}
+
+filtroPrestacao?.addEventListener("input", aplicarFiltroAbas);
 
 /* =========================
    3) Cloudinary Upload (MANTIDO COMO ESTAVA)
@@ -278,15 +361,10 @@ const cloudinaryUpload = async (file) => {
 
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/integrada/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
+      { method: "POST", body: data }
     ).then((res) => res.json());
 
-    if (res.error) {
-      throw new Error(res.error.message);
-    }
+    if (res.error) throw new Error(res.error.message);
 
     return { data: res.secure_url, error: null };
   } catch (error) {
@@ -301,7 +379,13 @@ const cloudinaryUpload = async (file) => {
 const onSubmitCadastrarPrestacao = async (e) => {
   e.preventDefault();
 
-  const uploadResult = await cloudinaryUpload(caixaForms.documento.files[0]);
+  const file = caixaForms.documento?.files?.[0];
+  if (!file) {
+    alert("❌ Selecione um PDF!");
+    return;
+  }
+
+  const uploadResult = await cloudinaryUpload(file);
 
   if (uploadResult.error) {
     alert("❌ Erro ao fazer upload do documento!");
@@ -318,10 +402,10 @@ const onSubmitCadastrarPrestacao = async (e) => {
     }),
   });
 
-  if (res.status === 201) {
+  if (res.status === 201 || res.ok) {
     alert("✅ Prestação cadastrada com sucesso!");
     caixaForms.reset();
-    await listarPrestacoes(); // ✅ atualiza a tela (mantém a aba ativa)
+    await listarPrestacoes(); // mantém aba ativa + atualiza
   } else {
     alert("❌ Erro ao cadastrar a prestação de contas!");
   }
@@ -332,28 +416,31 @@ caixaForms.addEventListener("submit", onSubmitCadastrarPrestacao);
 /* =========================
    5) Abrir PDF
 ========================= */
-const onClickAbrirDocumento = async (documentoUrl) => {
-  const response = await fetch(documentoUrl);
-  const blob = await response.blob();
-  const url = URL.createObjectURL(blob);
-  window.open(url, "_blank");
-};
+async function onClickAbrirDocumento(documentoUrl) {
+  try {
+    const response = await fetch(documentoUrl);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  } catch (e) {
+    console.error(e);
+    alert("❌ Não foi possível abrir o documento.");
+  }
+}
 
 /* =========================
    6) Excluir
 ========================= */
-const onClickExcluirDocumento = async (id) => {
-  const confirmar = confirm(
-    "Tem certeza que deseja excluir esta prestação de contas?"
-  );
+async function onClickExcluirDocumento(id) {
+  const confirmar = confirm("Tem certeza que deseja excluir esta prestação de contas?");
   if (!confirmar) return;
 
   try {
     const res = await fetch(`${uri}/${id}`, { method: "DELETE" });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.ok) {
       alert("✅ Prestação de contas excluída com sucesso!");
-      await listarPrestacoes(); // ✅ atualiza a tela (mantém a aba ativa)
+      await listarPrestacoes();
     } else {
       alert("❌ Erro ao excluir a prestação de contas!");
     }
@@ -361,4 +448,12 @@ const onClickExcluirDocumento = async (id) => {
     console.error("Erro ao excluir prestação de contas:", error);
     alert("❌ Erro ao excluir a prestação de contas!");
   }
-};
+}
+
+/* =========================
+   Init
+========================= */
+document.addEventListener("DOMContentLoaded", async () => {
+  bindSalvarAbaAtiva();
+  await Promise.all([carregarCondominios(), listarPrestacoes()]);
+});
