@@ -28,6 +28,7 @@ const resultadoIndividual = document.querySelector("#resultadoIndividual");
 
 const btnAtualizarBoletos = document.querySelector("#btnAtualizarBoletos");
 const tbodyBoletos = document.querySelector("#tbodyBoletos");
+const selectFiltroUnidade = document.querySelector("#selectFiltroUnidade");
 
 // =========================
 // TOAST (mesmo padrão das outras páginas do admin)
@@ -141,15 +142,24 @@ async function carregarUnidades(condominioId) {
 
     if (!doCondominio.length) {
       selectUnidade.innerHTML = `<option value="">Nenhuma unidade cadastrada neste condomínio</option>`;
+      selectFiltroUnidade.innerHTML = `<option value="">Todas as unidades do condomínio</option>`;
       return;
     }
 
     selectUnidade.innerHTML = `<option value="">Selecione a unidade...</option>`;
+    selectFiltroUnidade.innerHTML = `<option value="">Todas as unidades do condomínio</option>`;
     doCondominio.forEach((c) => {
+      const rotulo = `Apto ${c.apartamento} - ${c.nome}`;
+
       const opt = document.createElement("option");
       opt.value = c.clienteid;
-      opt.textContent = `Apto ${c.apartamento} - ${c.nome}`;
+      opt.textContent = rotulo;
       selectUnidade.appendChild(opt);
+
+      const optFiltro = document.createElement("option");
+      optFiltro.value = c.clienteid;
+      optFiltro.textContent = rotulo;
+      selectFiltroUnidade.appendChild(optFiltro);
     });
   } catch (err) {
     console.error(err);
@@ -456,7 +466,11 @@ function renderResultadoLote(dados) {
 async function carregarBoletos(condominioId) {
   try {
     tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">Carregando boletos...</td></tr>`;
-    const res = await fetch(`${baseURL}/boletoscontroller?condominioid=${condominioId}`);
+    const clienteFiltro = selectFiltroUnidade.value;
+    const url = clienteFiltro
+      ? `${baseURL}/boletoscontroller?condominioid=${condominioId}&clienteid=${clienteFiltro}`
+      : `${baseURL}/boletoscontroller?condominioid=${condominioId}`;
+    const res = await fetch(url);
     const boletos = await res.json();
     renderBoletos(Array.isArray(boletos) ? boletos : []);
   } catch (err) {
@@ -485,14 +499,33 @@ function renderBoletos(boletos) {
       <td><span class="badge ${badgeClass}">${escapeHtml(b.status)}</span></td>
       <td>
         <div class="paiva-actions">
-          ${b.nossoNumero ? `<button class="btn btn-sm btn-light paiva-btn-light" data-action="sincronizar" data-id="${b.boletoid}"><i class="fas fa-sync mr-1"></i></button>` : ""}
-          ${b.status !== "PAGO" && b.status !== "CANCELADO" ? `<button class="btn btn-sm btn-outline-danger" data-action="cancelar" data-id="${b.boletoid}"><i class="fas fa-ban mr-1"></i></button>` : ""}
+          ${b.nossoNumero ? `<button class="btn btn-sm btn-light paiva-btn-light" data-action="sincronizar" data-id="${b.boletoid}" title="Sincronizar com o Santander"><i class="fas fa-sync"></i></button>` : ""}
+          <button class="btn btn-sm btn-light paiva-btn-light" data-action="historico" data-id="${b.boletoid}" title="Ver histórico"><i class="fas fa-history"></i></button>
+          ${b.status !== "PAGO" && b.status !== "CANCELADO" ? `<button class="btn btn-sm btn-outline-danger" data-action="cancelar" data-id="${b.boletoid}" title="Cancelar boleto"><i class="fas fa-ban"></i></button>` : ""}
         </div>
       </td>
     `;
     tbodyBoletos.appendChild(tr);
   });
 }
+
+const STATUS_LABEL = {
+  PENDENTE: "Pendente (aguardando o banco)",
+  REGISTRADO: "Registrado no Santander",
+  PAGO: "Pago",
+  VENCIDO: "Vencido",
+  CANCELADO: "Cancelado",
+  ERRO: "Erro ao registrar",
+};
+
+const ORIGEM_LABEL = {
+  geracao: "Geração do boleto",
+  webhook_santander: "Confirmação do Santander",
+  sincronizacao_manual: "Sincronização manual",
+  admin: "Ação do administrador",
+};
+
+const painelHistorico = document.querySelector("#painelHistorico");
 
 tbodyBoletos.addEventListener("click", async (e) => {
   const btn = e.target.closest("button[data-action]");
@@ -503,6 +536,39 @@ tbodyBoletos.addEventListener("click", async (e) => {
   const condominioId = condominioSelecionado();
 
   try {
+    if (action === "historico") {
+      painelHistorico.innerHTML = `<div class="text-muted">Carregando histórico...</div>`;
+      painelHistorico.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      const res = await fetch(`${baseURL}/boletoscontroller/${id}`);
+      const boleto = await res.json();
+
+      const linhas = (boleto.Historico || []).map((h) => {
+        const quando = new Date(h.criadoEm).toLocaleString("pt-BR");
+        const origem = ORIGEM_LABEL[h.origem] || h.origem;
+        const de = h.statusAnterior ? (STATUS_LABEL[h.statusAnterior] || h.statusAnterior) : "—";
+        const para = STATUS_LABEL[h.statusNovo] || h.statusNovo;
+        return `<li><strong>${quando}</strong> — ${de} → <strong>${para}</strong> <span class="text-muted">(${origem})</span></li>`;
+      }).join("");
+
+      painelHistorico.innerHTML = `
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Histórico - Apto ${escapeHtml(boleto.Cliente?.apartamento)} - ${escapeHtml(boleto.Cliente?.nome)}</strong>
+            <button class="btn btn-sm btn-light" id="btnFecharHistorico"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="card-body">
+            <ul class="pl-3 mb-0">${linhas || "<li>Nenhum evento registrado ainda.</li>"}</ul>
+          </div>
+        </div>
+      `;
+
+      document.querySelector("#btnFecharHistorico")?.addEventListener("click", () => {
+        painelHistorico.innerHTML = "";
+      });
+      return;
+    }
+
     if (action === "sincronizar") {
       const res = await fetch(`${baseURL}/boletoscontroller/${id}/sincronizar`);
       if (res.ok) {
@@ -536,6 +602,12 @@ btnAtualizarBoletos.addEventListener("click", () => {
     showToast({ type: "warn", title: "Atenção", message: "Selecione um condomínio primeiro." });
     return;
   }
+  carregarBoletos(id);
+});
+
+selectFiltroUnidade.addEventListener("change", () => {
+  const id = condominioSelecionado();
+  if (!id) return;
   carregarBoletos(id);
 });
 
