@@ -49,6 +49,63 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow"
+                    aria-expanded="true" aria-controls="collapseTwow">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                    <span>Condominos</span>
+                </a>
+                <div id="collapseTwow" class="collapse" aria-labelledby="headingTwow" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
+                        <h6 class="collapse-header">Páginas similares</h6>
+                        <a class="collapse-item" href="condomino.html">Cadastre um Proprietário</a>
+                        <a class="collapse-item" href="inquilino.html">Cadastre um Inquilino</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow2"
+                    aria-expanded="true" aria-controls="collapseTwow2">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span>Assembléias</span>
+                </a>
+                <div id="collapseTwow2" class="collapse" aria-labelledby="headingTwow2" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
+                        <h6 class="collapse-header">Páginas similares</h6>
+                        <a class="collapse-item" href="assembleias.html">Convoque uma assembleia</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow3"
+                    aria-expanded="true" aria-controls="collapseTwow3">
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <span>Comunicado</span>
+                </a>
+                <div id="collapseTwow3" class="collapse" aria-labelledby="headingTwow3" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
+                        <h6 class="collapse-header">Páginas similares</h6>
+                        <a class="collapse-item" href="comunicados.html">Encaminhe um comunicado</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwow4"
+                    aria-expanded="true" aria-controls="collapseTwow4">
+                    <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i>
+                    <span>Prestação de contas</span>
+                </a>
+                <div id="collapseTwow4" class="collapse" aria-labelledby="headingTwow4" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
+                        <h6 class="collapse-header">Páginas similares</h6>
+                        <a class="collapse-item" href="prestacaocontas.html">Envie a Prestação de contas</a>
+                    </div>
+                </div>
+            </li>
+
             <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCobranca"
                     aria-expanded="true" aria-controls="collapseCobranca">
@@ -195,13 +252,13 @@
                                 aqui o que esse condomínio realmente cobra.</small>
                         </div>
                         <div class="card-body">
-                            <form id="formItem" class="paiva-form-grid">
-                                <div class="form-group mb-0">
+                            <form id="formItem" class="form-row align-items-end">
+                                <div class="form-group col-md-4 mb-3">
                                     <label>Nome do item</label>
                                     <input type="text" class="form-control" name="nome"
                                         placeholder="Ex: Taxa Condominial" required>
                                 </div>
-                                <div class="form-group mb-0">
+                                <div class="form-group col-md-4 mb-3">
                                     <label>Tipo</label>
                                     <select class="form-control" name="tipo" id="selectTipoItem" required>
                                         <option value="FIXO">Fixo (mesmo valor todo mês)</option>
@@ -209,26 +266,26 @@
                                         <option value="VARIAVEL">Variável (digitado a cada mês)</option>
                                     </select>
                                 </div>
-                                <div class="form-group mb-0" id="campoValorPadrao">
+                                <div class="form-group col-md-4 mb-3" id="campoValorPadrao">
                                     <label>Valor padrão (R$)</label>
                                     <input type="number" step="0.01" min="0" class="form-control" name="valorPadrao">
                                 </div>
-                                <div class="form-group mb-0 d-none" id="campoValorMedido">
+                                <div class="form-group col-md-4 mb-3 d-none" id="campoValorMedido">
                                     <label>Valor por unidade (R$)</label>
                                     <input type="number" step="0.0001" min="0" class="form-control" name="valorPorUnidade">
                                 </div>
-                                <div class="form-group mb-0 d-none" id="campoUnidadeMedida">
+                                <div class="form-group col-md-4 mb-3 d-none" id="campoUnidadeMedida">
                                     <label>Unidade de medida</label>
                                     <input type="text" class="form-control" name="unidadeMedida" placeholder="m3">
                                 </div>
-                                <div class="form-group mb-0">
+                                <div class="form-group col-md-4 mb-3">
                                     <label>Cobrança</label>
                                     <select class="form-control" name="obrigatorio">
                                         <option value="true">Obrigatório (entra em todo boleto)</option>
                                         <option value="false">Opcional (só quem for ativado por unidade)</option>
                                     </select>
                                 </div>
-                                <div class="paiva-form-actions">
+                                <div class="col-12 text-right">
                                     <button id="btnSalvarItem" type="submit" class="btn btn-primary paiva-btn-primary">
                                         <i class="fas fa-plus mr-2"></i> Adicionar item
                                     </button>
@@ -256,10 +313,39 @@
                         </div>
                     </div>
 
+                    <!-- GERAÇÃO INDIVIDUAL -->
+                    <div class="card shadow mb-4 paiva-form-card">
+                        <div class="card-header">
+                            <h6 class="m-0 font-weight-bold">4. Gerar boleto de uma unidade específica</h6>
+                            <small class="text-muted">Use isso pra emitir o boleto de um morador avulso, sem
+                                gerar de todo mundo do condomínio.</small>
+                        </div>
+                        <div class="card-body">
+                            <form id="formIndividual" class="form-row align-items-end">
+                                <div class="form-group col-md-6 mb-3">
+                                    <label>Unidade / morador</label>
+                                    <select id="selectUnidade" class="form-control" required>
+                                        <option value="">Selecione o condomínio acima primeiro...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4 mb-3">
+                                    <label>Competência (mês de referência)</label>
+                                    <input type="month" class="form-control" name="competenciaIndividual" required>
+                                </div>
+                                <div class="col-md-2 mb-3 text-right">
+                                    <button id="btnGerarIndividual" type="submit" class="btn btn-primary paiva-btn-primary btn-block">
+                                        <i class="fas fa-file-invoice-dollar mr-2"></i> Gerar
+                                    </button>
+                                </div>
+                            </form>
+                            <div id="resultadoIndividual"></div>
+                        </div>
+                    </div>
+
                     <!-- GERAÇÃO EM LOTE -->
                     <div class="card shadow mb-4 paiva-form-card">
                         <div class="card-header">
-                            <h6 class="m-0 font-weight-bold">4. Gerar boletos do mês</h6>
+                            <h6 class="m-0 font-weight-bold">5. Gerar boletos do mês (todas as unidades)</h6>
                             <small class="text-muted">Gera o boleto de todas as unidades do condomínio
                                 selecionado para a competência escolhida.</small>
                         </div>
@@ -283,7 +369,12 @@
                     <!-- LISTA DE BOLETOS -->
                     <div class="card shadow mb-4 paiva-table-card">
                         <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold">Boletos do condomínio</h6>
+                            <div>
+                                <h6 class="m-0 font-weight-bold">Boletos do condomínio</h6>
+                                <small class="text-muted">Acompanhe aqui se cada boleto está pendente, registrado
+                                    no banco, pago ou vencido. Use "Atualizar" pra consultar a situação mais
+                                    recente direto no Santander.</small>
+                            </div>
                             <button id="btnAtualizarBoletos" class="btn btn-sm btn-light paiva-btn-light">
                                 <i class="fas fa-sync mr-1"></i> Atualizar lista
                             </button>
