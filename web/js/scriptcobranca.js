@@ -21,6 +21,11 @@ const formLote = document.querySelector("#formLote");
 const btnGerarLote = document.querySelector("#btnGerarLote");
 const resultadoLote = document.querySelector("#resultadoLote");
 
+const selectUnidade = document.querySelector("#selectUnidade");
+const formIndividual = document.querySelector("#formIndividual");
+const btnGerarIndividual = document.querySelector("#btnGerarIndividual");
+const resultadoIndividual = document.querySelector("#resultadoIndividual");
+
 const btnAtualizarBoletos = document.querySelector("#btnAtualizarBoletos");
 const tbodyBoletos = document.querySelector("#tbodyBoletos");
 
@@ -117,7 +122,83 @@ selectCondominio.addEventListener("change", () => {
   if (!id) return;
   carregarConfig(id);
   carregarItens(id);
+  carregarUnidades(id);
   carregarBoletos(id);
+});
+
+// =========================
+// Unidades do condomínio (pra geração individual)
+// =========================
+async function carregarUnidades(condominioId) {
+  try {
+    selectUnidade.innerHTML = `<option value="">Carregando unidades...</option>`;
+    const res = await fetch(`${baseURL}/clientescontroller`);
+    const clientes = await res.json();
+
+    const doCondominio = (Array.isArray(clientes) ? clientes : []).filter(
+      (c) => Number(c.CondominioID) === Number(condominioId)
+    );
+
+    if (!doCondominio.length) {
+      selectUnidade.innerHTML = `<option value="">Nenhuma unidade cadastrada neste condomínio</option>`;
+      return;
+    }
+
+    selectUnidade.innerHTML = `<option value="">Selecione a unidade...</option>`;
+    doCondominio.forEach((c) => {
+      const opt = document.createElement("option");
+      opt.value = c.clienteid;
+      opt.textContent = `Apto ${c.apartamento} - ${c.nome}`;
+      selectUnidade.appendChild(opt);
+    });
+  } catch (err) {
+    console.error(err);
+    selectUnidade.innerHTML = `<option value="">Erro ao carregar unidades</option>`;
+  }
+}
+
+formIndividual.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const clienteid = selectUnidade.value;
+  if (!clienteid) {
+    showToast({ type: "warn", title: "Atenção", message: "Selecione a unidade." });
+    return;
+  }
+
+  const mesInput = formIndividual.competenciaIndividual.value;
+  if (!mesInput) {
+    showToast({ type: "warn", title: "Atenção", message: "Escolha a competência (mês)." });
+    return;
+  }
+  const competencia = `${mesInput}-01`;
+
+  btnGerarIndividual.disabled = true;
+  resultadoIndividual.innerHTML = `<div class="text-muted mt-2">Gerando boleto...</div>`;
+
+  try {
+    const res = await fetch(`${baseURL}/boletoscontroller`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clienteid: Number(clienteid), competencia }),
+    });
+
+    const dados = await res.json();
+
+    if (res.status === 201) {
+      resultadoIndividual.innerHTML = `<div class="alert alert-success mt-2 mb-0">Boleto gerado com sucesso.</div>`;
+      showToast({ type: "success", title: "Boleto gerado", message: "Já aparece na lista abaixo." });
+      formIndividual.reset();
+      carregarBoletos(condominioSelecionado());
+    } else {
+      resultadoIndividual.innerHTML = `<div class="alert alert-danger mt-2 mb-0">${escapeHtml(dados.error || "Não foi possível gerar o boleto.")}</div>`;
+    }
+  } catch (err) {
+    console.error(err);
+    resultadoIndividual.innerHTML = `<div class="alert alert-danger mt-2 mb-0">Falha de conexão ao gerar o boleto.</div>`;
+  } finally {
+    btnGerarIndividual.disabled = false;
+  }
 });
 
 // =========================
