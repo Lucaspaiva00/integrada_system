@@ -7,6 +7,12 @@ import * as comunicadosController from "./controllers/comunicadoscontroller.cjs"
 import * as prestacaoContasController from "./controllers/prestacaocontascontroller.cjs";
 import * as loginControllerfrom from "./controllers/logincontroller.cjs";
 import * as filesController from "./controllers/filescontroller.cjs";
+import * as boletosController from "./controllers/boletoscontroller.cjs";
+import * as configuracaoCobrancaController from "./controllers/configuracaocobrancacontroller.cjs";
+import * as itensCobrancaController from "./controllers/itenscobrancacontroller.cjs";
+import * as clienteItemCobrancaController from "./controllers/clienteitemcobrancacontroller.cjs";
+import * as leiturasController from "./controllers/leiturascontroller.cjs";
+import * as webhookController from "./controllers/webhookcontroller.cjs";
 
 const router = Router();
 
@@ -51,6 +57,35 @@ router.delete("/comunicadoscontroller/:id", comunicadosController.delete);
 router.get("/prestacaocontascontroller", prestacaoContasController.read);
 router.post("/prestacaocontascontroller", prestacaoContasController.create);
 router.delete("/prestacaocontascontroller/:id", prestacaoContasController.delete);
+
+// BOLETOS (Santander)
+router.post("/boletoscontroller", boletosController.create);
+router.post("/boletoscontroller/lote", boletosController.gerarLote);
+router.get("/boletoscontroller", boletosController.read);
+router.get("/boletoscontroller/:id", boletosController.readById);
+router.get("/boletoscontroller/:id/sincronizar", boletosController.sincronizarStatus);
+router.delete("/boletoscontroller/:id", boletosController.cancelar);
+
+// CONFIGURAÇÃO DE COBRANÇA (regras por condomínio: vencimento, multa, juros, workspace Santander)
+router.get("/configuracaocobrancacontroller/:condominioid", configuracaoCobrancaController.readByCondominio);
+router.put("/configuracaocobrancacontroller/:condominioid", configuracaoCobrancaController.upsert);
+
+// ITENS DE COBRANÇA (catálogo por condomínio: taxa, gás, água, fundo de reserva...)
+router.post("/itenscobrancacontroller", itensCobrancaController.create);
+router.get("/itenscobrancacontroller", itensCobrancaController.read);
+router.put("/itenscobrancacontroller/:id", itensCobrancaController.update);
+router.delete("/itenscobrancacontroller/:id", itensCobrancaController.desativar);
+
+// VÍNCULO DE ITEM DE COBRANÇA POR UNIDADE (opt-in/opt-out e valor customizado)
+router.get("/clienteitemcobrancacontroller/:clienteid", clienteItemCobrancaController.readByCliente);
+router.put("/clienteitemcobrancacontroller", clienteItemCobrancaController.upsert);
+
+// LEITURAS DE CONSUMO (água, gás - itens do tipo MEDIDO)
+router.get("/leiturascontroller", leiturasController.read);
+router.put("/leiturascontroller", leiturasController.upsert);
+
+// WEBHOOK do Santander (confirmação de pagamento/baixa)
+router.post("/webhooks/santander", webhookController.receberNotificacao);
 
 // FILES
 router.get("/documentos/:modulo/:filename", filesController.readFile);

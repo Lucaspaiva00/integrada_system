@@ -15,15 +15,102 @@ datasource db {
 }
 
 model Condominio {
-  condominioid    Int               @id @default(autoincrement())
-  nomecondominio  String
-  endereco        String
-  telefone        String
-  Clientes        Clientes[]
-  assembleia      assembleia[]
-  Inquilinos      Inquilinos[]
-  PrestacaoContas PrestacaoContas[]
-  comunicados     comunicados[]
+  condominioid        Int                  @id @default(autoincrement())
+  nomecondominio      String
+  endereco            String
+  telefone            String
+  Clientes            Clientes[]
+  assembleia          assembleia[]
+  Inquilinos          Inquilinos[]
+  PrestacaoContas     PrestacaoContas[]
+  comunicados         comunicados[]
+  ItensCobranca       ItemCobranca[]
+  ConfiguracaoCobranca ConfiguracaoCobranca?
+}
+
+// Uma linha por condomínio. É aqui que cada condomínio guarda as regras
+// que mudam de um pro outro: dia de vencimento, multa, juros, desconto por
+// antecipação e qual "workspace" de cobrança do Santander usar (cada
+// condomínio normalmente tem CNPJ e conta bancária próprios).
+model ConfiguracaoCobranca {
+  condominioid            Int        @id
+  Condominio              Condominio @relation(fields: [condominioid], references: [condominioid], onDelete: Cascade)
+
+  diaVencimento           Int        @default(10) // dia do mês em que o boleto vence
+  percentualMulta         Decimal    @default(2.0) @db.Decimal(5, 2) // % sobre o valor, aplicado no 1º dia de atraso
+  percentualJurosAoMes    Decimal    @default(1.0) @db.Decimal(5, 2) // % ao mês, pró-rata dia
+  percentualDescontoAntecipado Decimal @default(0) @db.Decimal(5, 2)
+  diasDescontoAntecipado  Int        @default(0) // paga com N dias de antecedência -> ganha o desconto acima
+
+  santanderWorkspaceId    String? // convênio/workspace de cobrança específico deste condomínio no Santander
+  ativo                   Boolean    @default(true)
+
+  criadoEm                DateTime   @default(now())
+  atualizadoEm            DateTime   @updatedAt
+}
+
+enum TipoItemCobranca {
+  FIXO // mesmo valor todo mês (ex: taxa condominial, fundo de reserva)
+  MEDIDO // cobrado por consumo, precisa de leitura (ex: água, gás)
+  VARIAVEL // valor digitado manualmente a cada competência (ex: obra extra, rateio)
+}
+
+// Catálogo de itens que UM condomínio pode cobrar. Existe um registro por
+// condomínio + item: o condomínio que não tem gás simplesmente nunca cria a
+// linha "Gás" aqui, e nenhuma unidade dele nunca vai ver esse item.
+model ItemCobranca {
+  itemcobrancaid   Int              @id @default(autoincrement())
+  CondominioID     Int
+  Condominio       Condominio       @relation(fields: [CondominioID], references: [condominioid], onDelete: Cascade)
+
+  nome             String // "Taxa Condominial", "Gás", "Água", "Fundo de Reserva", "Estacionamento"...
+  tipo             TipoItemCobranca
+  valorPadrao      Decimal?         @db.Decimal(10, 2) // usado quando tipo = FIXO
+  valorPorUnidade  Decimal?         @db.Decimal(10, 4) // usado quando tipo = MEDIDO (R$ por m³, por ex.)
+  unidadeMedida    String? // "m3", "kwh"... só relevante para MEDIDO
+  obrigatorio      Boolean          @default(true) // se true, entra em todo boleto do condomínio automaticamente
+  ativo            Boolean          @default(true)
+
+  ClienteItens     ClienteItemCobranca[]
+  Leituras         LeituraConsumo[]
+  BoletoItens      BoletoItem[]
+
+  criadoEm         DateTime         @default(now())
+}
+
+// Ativa/desativa e permite customizar o valor de um item para UMA unidade
+// específica. Ex: condomínio tem "Gás" no catálogo, mas a cobertura não tem
+// gás encanado -> aqui fica ativo=false só pra essa unidade. Ou: uma vaga de
+// garagem extra que só aquele apartamento paga.
+model ClienteItemCobranca {
+  id               Int          @id @default(autoincrement())
+  clienteid        Int
+  Cliente          Clientes     @relation(fields: [clienteid], references: [clienteid], onDelete: Cascade)
+  itemcobrancaid   Int
+  ItemCobranca     ItemCobranca @relation(fields: [itemcobrancaid], references: [itemcobrancaid], onDelete: Cascade)
+
+  ativo            Boolean      @default(true)
+  valorPersonalizado Decimal?   @db.Decimal(10, 2) // sobrescreve o valorPadrao do item, se preenchido
+
+  @@unique([clienteid, itemcobrancaid])
+}
+
+// Leitura de consumo mensal para itens do tipo MEDIDO (água, gás...).
+model LeituraConsumo {
+  leituraid       Int          @id @default(autoincrement())
+  clienteid       Int
+  Cliente         Clientes     @relation(fields: [clienteid], references: [clienteid], onDelete: Cascade)
+  itemcobrancaid  Int
+  ItemCobranca    ItemCobranca @relation(fields: [itemcobrancaid], references: [itemcobrancaid], onDelete: Cascade)
+
+  competencia     DateTime // usar sempre dia 1 do mês de referência
+  leituraAnterior Decimal      @db.Decimal(10, 3)
+  leituraAtual    Decimal      @db.Decimal(10, 3)
+  consumo         Decimal      @db.Decimal(10, 3) // leituraAtual - leituraAnterior, calculado na API
+
+  criadoEm        DateTime     @default(now())
+
+  @@unique([clienteid, itemcobrancaid, competencia])
 }
 
 model Clientes {
@@ -33,9 +120,17 @@ model Clientes {
   cpf          String       @unique
   telefone     String
   email        String
+  endereco     String?
+  bairro       String?
+  cidade       String?
+  uf           String?
+  cep          String?
   CondominioID Int
   Condominio   Condominio   @relation(fields: [CondominioID], references: [condominioid])
   Inquilinos   Inquilinos[]
+  Boletos      Boleto[]
+  ItensAtivos  ClienteItemCobranca[]
+  Leituras     LeituraConsumo[]
 }
 
 model Inquilinos {
@@ -74,4 +169,80 @@ model PrestacaoContas {
   mes          DateTime
   CondominioID Int
   Condominio   Condominio @relation(fields: [CondominioID], references: [condominioid])
+}
+
+enum StatusBoleto {
+  PENDENTE // registrado localmente, aguardando confirmação do banco
+  REGISTRADO // confirmado no Santander, disponível para pagamento
+  PAGO
+  VENCIDO
+  CANCELADO // baixado antes do vencimento (ex: erro de lançamento)
+  ERRO // falhou ao registrar no banco
+}
+
+model Boleto {
+  boletoid        Int            @id @default(autoincrement())
+  clienteid       Int
+  Cliente         Clientes       @relation(fields: [clienteid], references: [clienteid])
+
+  competencia     DateTime // dia 1 do mês/ano de referência (ex: 2026-10-01 = cobrança de outubro/2026)
+  valorTotal      Decimal        @db.Decimal(10, 2) // soma dos BoletoItem
+  valorPago       Decimal?       @db.Decimal(10, 2)
+  dataPagamento   DateTime?
+  vencimento      DateTime
+  status          StatusBoleto   @default(PENDENTE)
+
+  // snapshot das regras da ConfiguracaoCobranca no momento da emissão -
+  // guardar aqui evita que uma mudança futura na config altere boletos já emitidos
+  percentualMulta      Decimal   @db.Decimal(5, 2)
+  percentualJurosAoMes Decimal   @db.Decimal(5, 2)
+
+  // dados de integração com o Santander (preenchidos após o registro na API)
+  nossoNumero     String?        @unique
+  codigoBarras    String?
+  linhaDigitavel  String?
+  qrCodePix       String?
+  workspaceId     String?
+  respostaBanco   Json? // payload bruto de retorno da API, útil para auditoria/depuração
+
+  Itens           BoletoItem[]
+  Historico       BoletoHistorico[]
+
+  criadoEm        DateTime       @default(now())
+  atualizadoEm    DateTime       @updatedAt
+
+  @@unique([clienteid, competencia]) // uma unidade não pode ter 2 boletos pra mesma competência
+}
+
+// Composição do boleto - é isso que resolve "cada condomínio cobra coisas
+// diferentes": o boleto do condomínio com gás tem uma linha "Gás" calculada
+// pela leitura do mês; o boleto de quem não tem gás simplesmente não tem essa
+// linha. valorUnitario/quantidade ficam guardados pra dar transparência ao
+// morador (ex: consumo de água em m³ x tarifa).
+model BoletoItem {
+  boletoitemid   Int           @id @default(autoincrement())
+  boletoid       Int
+  Boleto         Boleto        @relation(fields: [boletoid], references: [boletoid], onDelete: Cascade)
+  itemcobrancaid Int?
+  ItemCobranca   ItemCobranca? @relation(fields: [itemcobrancaid], references: [itemcobrancaid])
+
+  descricao      String // copiado do ItemCobranca.nome no momento da geração (ou digitado, se avulso)
+  quantidade     Decimal       @default(1) @db.Decimal(10, 3)
+  valorUnitario  Decimal       @db.Decimal(10, 4)
+  valorTotal     Decimal       @db.Decimal(10, 2)
+}
+
+// Auditoria de toda mudança de status do boleto - de onde veio (webhook do
+// banco, sincronização manual, ação do admin) e quando.
+model BoletoHistorico {
+  id             Int          @id @default(autoincrement())
+  boletoid       Int
+  Boleto         Boleto       @relation(fields: [boletoid], references: [boletoid], onDelete: Cascade)
+
+  statusAnterior StatusBoleto?
+  statusNovo     StatusBoleto
+  origem         String // "webhook_santander" | "sincronizacao_manual" | "admin" | "geracao"
+  detalhe        Json?
+
+  criadoEm       DateTime     @default(now())
 }
