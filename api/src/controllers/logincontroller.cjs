@@ -34,9 +34,9 @@ const loginProprietario = async (req, res) => {
     return res.status(200).json({
       message: "Login realizado com sucesso!",
       cliente: {
+        clienteid: cliente.clienteid,
         nome: cliente.nome,
         apartamento: cliente.apartamento,
-        condominio: cliente.Condominio.nomecondominio,
         condominioid: cliente.Condominio.condominioid,
         condominio: {
           nome: cliente.Condominio.nomecondominio,

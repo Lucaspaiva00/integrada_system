@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Boletos</title>
+    <link rel="stylesheet" href="css/style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+        .boleto-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .boleto-card__topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .boleto-card__valor {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .boleto-status {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+
+        .boleto-status.PENDENTE { background: #fff3cd; color: #8a6d1a; }
+        .boleto-status.REGISTRADO { background: #d6ecff; color: #0b5da0; }
+        .boleto-status.PAGO { background: #d8f5df; color: #1c7c3c; }
+        .boleto-status.VENCIDO { background: #ffe0e0; color: #b02a2a; }
+        .boleto-status.CANCELADO { background: #eee; color: #777; }
+        .boleto-status.ERRO { background: #ffe0e0; color: #b02a2a; }
+
+        .boleto-card__linha {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: #f4f4f4;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            word-break: break-all;
+        }
+
+        .boleto-card__linha button {
+            border: none;
+            background: #444;
+            color: #fff;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .boleto-card__itens {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .boleto-card__itens summary {
+            cursor: pointer;
+            color: #0b5da0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <span class="menu-btn"><i class="fas fa-bars"></i></span>
+        <h1>Meus Boletos</h1>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <span class="close-btn" id="closeBtn"><i class="fas fa-times"></i></span>
+        <div class="cards-container">
+            <div class="card"><i class="fas fa-bullhorn"></i>
+                <p><a href="index.html">Home</a></p>
+            </div>
+            <div class="card"><i class="fas fa-file-invoice-dollar"></i>
+                <p><a href="boleto.html">Meus Boletos</a></p>
+            </div>
+            <div class="card"><i class="fas fa-bullhorn"></i>
+                <p><a href="comunicados.html">Comunicados</a></p>
+            </div>
+            <div class="card"><i class="fas fa-chart-bar"></i>
+                <p><a href="prestacaocontas.html">Prestação de Contas</a></p>
+            </div>
+            <div class="card"><i class="fas fa-users"></i>
+                <p><a href="assembleias.html">Assembleias</a></p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div id="caixaBoletos" style="padding: 12px;">
+            <p style="text-align:center; color:#666;">Carregando seus boletos...</p>
+        </div>
+    </main>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.querySelector('.menu-btn');
+        const closeBtn = document.getElementById('closeBtn');
+        menuBtn.addEventListener('click', () => sidebar.classList.add('active'));
+        closeBtn.addEventListener('click', () => sidebar.classList.remove('active'));
+    </script>
+    <script src="js/boleto.js"></script>
+
+</body>
+
+</html>
