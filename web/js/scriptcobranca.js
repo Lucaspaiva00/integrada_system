@@ -26,10 +26,6 @@ const formIndividual = document.querySelector("#formIndividual");
 const btnGerarIndividual = document.querySelector("#btnGerarIndividual");
 const resultadoIndividual = document.querySelector("#resultadoIndividual");
 
-const btnAtualizarBoletos = document.querySelector("#btnAtualizarBoletos");
-const tbodyBoletos = document.querySelector("#tbodyBoletos");
-const selectFiltroUnidade = document.querySelector("#selectFiltroUnidade");
-
 // =========================
 // TOAST (mesmo padrão das outras páginas do admin)
 // =========================
@@ -77,21 +73,6 @@ function formatarMoeda(valor) {
   return numero.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-function formatarData(iso) {
-  if (!iso) return "—";
-  const data = new Date(iso);
-  return data.toLocaleDateString("pt-BR");
-}
-
-const STATUS_BADGE = {
-  PENDENTE: "badge-warning",
-  REGISTRADO: "badge-info",
-  PAGO: "badge-success",
-  VENCIDO: "badge-danger",
-  CANCELADO: "badge-secondary",
-  ERRO: "badge-danger",
-};
-
 function condominioSelecionado() {
   return selectCondominio.value ? Number(selectCondominio.value) : null;
 }
@@ -124,7 +105,6 @@ selectCondominio.addEventListener("change", () => {
   carregarConfig(id);
   carregarItens(id);
   carregarUnidades(id);
-  carregarBoletos(id);
 });
 
 // =========================
@@ -142,24 +122,15 @@ async function carregarUnidades(condominioId) {
 
     if (!doCondominio.length) {
       selectUnidade.innerHTML = `<option value="">Nenhuma unidade cadastrada neste condomínio</option>`;
-      selectFiltroUnidade.innerHTML = `<option value="">Todas as unidades do condomínio</option>`;
       return;
     }
 
     selectUnidade.innerHTML = `<option value="">Selecione a unidade...</option>`;
-    selectFiltroUnidade.innerHTML = `<option value="">Todas as unidades do condomínio</option>`;
     doCondominio.forEach((c) => {
-      const rotulo = `Apto ${c.apartamento} - ${c.nome}`;
-
       const opt = document.createElement("option");
       opt.value = c.clienteid;
-      opt.textContent = rotulo;
+      opt.textContent = `Apto ${c.apartamento} - ${c.nome}`;
       selectUnidade.appendChild(opt);
-
-      const optFiltro = document.createElement("option");
-      optFiltro.value = c.clienteid;
-      optFiltro.textContent = rotulo;
-      selectFiltroUnidade.appendChild(optFiltro);
     });
   } catch (err) {
     console.error(err);
@@ -196,10 +167,9 @@ formIndividual.addEventListener("submit", async (e) => {
     const dados = await res.json();
 
     if (res.status === 201) {
-      resultadoIndividual.innerHTML = `<div class="alert alert-success mt-2 mb-0">Boleto gerado com sucesso.</div>`;
-      showToast({ type: "success", title: "Boleto gerado", message: "Já aparece na lista abaixo." });
+      resultadoIndividual.innerHTML = `<div class="alert alert-success mt-2 mb-0">Boleto gerado com sucesso. <a href="boletos.html">Ver na consulta de boletos</a>.</div>`;
+      showToast({ type: "success", title: "Boleto gerado", message: "Confira na página de Consulta de Boletos." });
       formIndividual.reset();
-      carregarBoletos(condominioSelecionado());
     } else {
       resultadoIndividual.innerHTML = `<div class="alert alert-danger mt-2 mb-0">${escapeHtml(dados.error || "Não foi possível gerar o boleto.")}</div>`;
     }
@@ -429,7 +399,6 @@ formLote.addEventListener("submit", async (e) => {
 
     const dados = await res.json();
     renderResultadoLote(dados);
-    carregarBoletos(condominioId);
   } catch (err) {
     console.error(err);
     resultadoLote.innerHTML = `<div class="alert alert-danger mb-0">Falha de conexão ao gerar os boletos.</div>`;
@@ -457,159 +426,9 @@ function renderResultadoLote(dados) {
       ${dados.falhas > 0 ? `<strong>${dados.falhas}</strong> precisam de atenção (veja abaixo).` : ""}
     </div>
     <ul class="pl-3 mb-0" style="font-size: 0.9rem;">${linhas}</ul>
+    <div class="mt-3"><a href="boletos.html">Ver todos os boletos deste condomínio →</a></div>
   `;
 }
-
-// =========================
-// 5) Listagem de boletos
-// =========================
-async function carregarBoletos(condominioId) {
-  try {
-    tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">Carregando boletos...</td></tr>`;
-    const clienteFiltro = selectFiltroUnidade.value;
-    const url = clienteFiltro
-      ? `${baseURL}/boletoscontroller?condominioid=${condominioId}&clienteid=${clienteFiltro}`
-      : `${baseURL}/boletoscontroller?condominioid=${condominioId}`;
-    const res = await fetch(url);
-    const boletos = await res.json();
-    renderBoletos(Array.isArray(boletos) ? boletos : []);
-  } catch (err) {
-    console.error(err);
-    tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">Erro ao carregar boletos.</td></tr>`;
-  }
-}
-
-function renderBoletos(boletos) {
-  if (!boletos.length) {
-    tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">Nenhum boleto gerado ainda para este condomínio.</td></tr>`;
-    return;
-  }
-
-  tbodyBoletos.innerHTML = "";
-  boletos.forEach((b) => {
-    const badgeClass = STATUS_BADGE[b.status] || "badge-light";
-    const competencia = new Date(b.competencia).toLocaleDateString("pt-BR", { month: "2-digit", year: "numeric" });
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${escapeHtml(b.Cliente?.apartamento)} - ${escapeHtml(b.Cliente?.nome)}</td>
-      <td>${competencia}</td>
-      <td>${formatarData(b.vencimento)}</td>
-      <td>${formatarMoeda(b.valorTotal)}</td>
-      <td><span class="badge ${badgeClass}">${escapeHtml(b.status)}</span></td>
-      <td>
-        <div class="paiva-actions">
-          ${b.nossoNumero ? `<button class="btn btn-sm btn-light paiva-btn-light" data-action="sincronizar" data-id="${b.boletoid}" title="Sincronizar com o Santander"><i class="fas fa-sync"></i></button>` : ""}
-          <button class="btn btn-sm btn-light paiva-btn-light" data-action="historico" data-id="${b.boletoid}" title="Ver histórico"><i class="fas fa-history"></i></button>
-          ${b.status !== "PAGO" && b.status !== "CANCELADO" ? `<button class="btn btn-sm btn-outline-danger" data-action="cancelar" data-id="${b.boletoid}" title="Cancelar boleto"><i class="fas fa-ban"></i></button>` : ""}
-        </div>
-      </td>
-    `;
-    tbodyBoletos.appendChild(tr);
-  });
-}
-
-const STATUS_LABEL = {
-  PENDENTE: "Pendente (aguardando o banco)",
-  REGISTRADO: "Registrado no Santander",
-  PAGO: "Pago",
-  VENCIDO: "Vencido",
-  CANCELADO: "Cancelado",
-  ERRO: "Erro ao registrar",
-};
-
-const ORIGEM_LABEL = {
-  geracao: "Geração do boleto",
-  webhook_santander: "Confirmação do Santander",
-  sincronizacao_manual: "Sincronização manual",
-  admin: "Ação do administrador",
-};
-
-const painelHistorico = document.querySelector("#painelHistorico");
-
-tbodyBoletos.addEventListener("click", async (e) => {
-  const btn = e.target.closest("button[data-action]");
-  if (!btn) return;
-
-  const action = btn.getAttribute("data-action");
-  const id = btn.getAttribute("data-id");
-  const condominioId = condominioSelecionado();
-
-  try {
-    if (action === "historico") {
-      painelHistorico.innerHTML = `<div class="text-muted">Carregando histórico...</div>`;
-      painelHistorico.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-      const res = await fetch(`${baseURL}/boletoscontroller/${id}`);
-      const boleto = await res.json();
-
-      const linhas = (boleto.Historico || []).map((h) => {
-        const quando = new Date(h.criadoEm).toLocaleString("pt-BR");
-        const origem = ORIGEM_LABEL[h.origem] || h.origem;
-        const de = h.statusAnterior ? (STATUS_LABEL[h.statusAnterior] || h.statusAnterior) : "—";
-        const para = STATUS_LABEL[h.statusNovo] || h.statusNovo;
-        return `<li><strong>${quando}</strong> — ${de} → <strong>${para}</strong> <span class="text-muted">(${origem})</span></li>`;
-      }).join("");
-
-      painelHistorico.innerHTML = `
-        <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <strong>Histórico - Apto ${escapeHtml(boleto.Cliente?.apartamento)} - ${escapeHtml(boleto.Cliente?.nome)}</strong>
-            <button class="btn btn-sm btn-light" id="btnFecharHistorico"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="card-body">
-            <ul class="pl-3 mb-0">${linhas || "<li>Nenhum evento registrado ainda.</li>"}</ul>
-          </div>
-        </div>
-      `;
-
-      document.querySelector("#btnFecharHistorico")?.addEventListener("click", () => {
-        painelHistorico.innerHTML = "";
-      });
-      return;
-    }
-
-    if (action === "sincronizar") {
-      const res = await fetch(`${baseURL}/boletoscontroller/${id}/sincronizar`);
-      if (res.ok) {
-        showToast({ type: "info", title: "Sincronizado", message: "Situação do boleto atualizada com o Santander." });
-      } else {
-        showToast({ type: "error", title: "Erro", message: "Não consegui sincronizar com o Santander agora." });
-      }
-    }
-
-    if (action === "cancelar") {
-      if (!confirm("Tem certeza que quer cancelar este boleto? Essa ação avisa o Santander pra baixar o título.")) return;
-      const res = await fetch(`${baseURL}/boletoscontroller/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        showToast({ type: "success", title: "Boleto cancelado", message: "O boleto foi baixado." });
-      } else {
-        const erro = await res.json().catch(() => ({}));
-        showToast({ type: "error", title: "Erro ao cancelar", message: erro.error || "Não foi possível cancelar." });
-      }
-    }
-
-    carregarBoletos(condominioId);
-  } catch (err) {
-    console.error(err);
-    showToast({ type: "error", title: "Falha de conexão", message: "Verifique a internet / API e tente novamente." });
-  }
-});
-
-btnAtualizarBoletos.addEventListener("click", () => {
-  const id = condominioSelecionado();
-  if (!id) {
-    showToast({ type: "warn", title: "Atenção", message: "Selecione um condomínio primeiro." });
-    return;
-  }
-  carregarBoletos(id);
-});
-
-selectFiltroUnidade.addEventListener("change", () => {
-  const id = condominioSelecionado();
-  if (!id) return;
-  carregarBoletos(id);
-});
 
 // init
 carregarCondominios();
