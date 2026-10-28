@@ -884,3 +884,21 @@ textarea:focus {
         align-items: stretch;
     }
 }
+
+/* Dashboard: cinco indicadores sem alterar as grades das outras telas. */
+.paiva-dashboard-summary {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+.paiva-summary-item { min-width: 0; }
+@media (max-width: 1199px) {
+    .paiva-dashboard-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+    .paiva-dashboard-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+}
+@media (max-width: 479px) {
+    .paiva-dashboard-summary { grid-template-columns: 1fr; }
+}

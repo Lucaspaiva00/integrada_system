@@ -176,47 +176,58 @@
                 <!-- CONTEÚDO -->
                 <div class="container-fluid">
 
-                    <div class="row">
+                    <div class="paiva-dashboard-summary" aria-label="Resumo dos cadastros" aria-live="polite">
                         <!-- Total de Condomínios -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="paiva-summary-item">
                             <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
                                     <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Total de
                                         Condomínios</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdCondominios">0</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdCondominios">—</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cadastro de proprietários, separado dos inquilinos -->
+                        <div class="paiva-summary-item">
+                            <div class="card shadow h-100 py-2 paiva-card">
+                                <div class="card-body">
+                                    <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Total de Proprietários</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdProprietarios">—</div>
+                                    <small class="text-muted">Cadastros na plataforma</small>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Total de Inquilinos -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="paiva-summary-item">
                             <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
                                     <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Total de
                                         Inquilinos</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdInquilinos">0</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdInquilinos">—</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Total de Comunicados -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="paiva-summary-item">
                             <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
                                     <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Comunicados
                                         Enviados</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdComunicados">0</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdComunicados">—</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Total de Assembleias -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="paiva-summary-item">
                             <div class="card shadow h-100 py-2 paiva-card">
                                 <div class="card-body">
                                     <div class="text-xs font-weight-bold text-paiva text-uppercase mb-1">Assembleias
                                         Cadastradas</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdAssembleias">0</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="qtdAssembleias">—</div>
                                 </div>
                             </div>
                         </div>
@@ -237,11 +248,12 @@
                                             <th style="min-width: 200px;">Nome do Condomínio</th>
                                             <th style="min-width: 200px;">Endereço</th>
                                             <th style="min-width: 140px;">Telefone</th>
+                                            <th class="text-center">Proprietários</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyCondominiosDashboard">
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted py-4">
+                                            <td colspan="4" class="text-center text-muted py-4">
                                                 Carregando condomínios...
                                             </td>
                                         </tr>
