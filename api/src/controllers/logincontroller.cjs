@@ -1,46 +1,43 @@
+const { issue } = require('../security/proprietario.cjs');
 const prisma = require("../../prisma/connection.cjs");
 
 // Login do proprietário (Clientes)
 const loginProprietario = async (req, res) => {
-  const { apartamento, cpf } = req.body;
+  const { apartamento, cpf } = req.body || {};
 
-  if (!apartamento || !cpf) {
+  if (typeof apartamento !== 'string' || !apartamento.trim() || apartamento.length > 100 || typeof cpf !== 'string' || !/^\d{4}$/.test(cpf)) {
     return res
       .status(400)
       .json({ error: "Apartamento e CPF são obrigatórios." });
   }
 
   try {
-    // Busca o cliente pelo apartamento
-    const cliente = await prisma.clientes.findFirst({
-      where: { apartamento },
-      include: {
+    // Resolve repeated apartment numbers without choosing another condominium by accident.
+    const cliente = await prisma.clientes.findMany({
+      where: { apartamento: apartamento.trim() },
+      select: { clienteid: true, nome: true, apartamento: true, cpf: true,
         Condominio: {
           select: { nomecondominio: true, condominioid: true },
         },
       },
     });
 
-    if (!cliente) {
-      return res.status(404).json({ error: "Apartamento não encontrado." });
+    const matches = cliente.filter(c => String(c.cpf).replace(/\D/g, '').slice(-4) === cpf);
+    if (matches.length !== 1) {
+      return res.status(401).json({ error: "Imóvel ou CPF inválido. Se persistir, contate a administradora." });
     }
-
-    // Pega apenas os últimos 4 dígitos do CPF real e compara
-    const ultimosQuatro = cliente.cpf.slice(-4);
-    if (ultimosQuatro !== cpf) {
-      return res.status(401).json({ error: "CPF inválido." });
-    }
-
+    const owner = matches[0];
     return res.status(200).json({
       message: "Login realizado com sucesso!",
+      token: issue(owner.clienteid, owner.Condominio.condominioid),
       cliente: {
-        clienteid: cliente.clienteid,
-        nome: cliente.nome,
-        apartamento: cliente.apartamento,
-        condominioid: cliente.Condominio.condominioid,
+        clienteid: owner.clienteid,
+        nome: owner.nome,
+        apartamento: owner.apartamento,
+        condominioid: owner.Condominio.condominioid,
         condominio: {
-          nome: cliente.Condominio.nomecondominio,
-          condominioid: cliente.Condominio.condominioid,
+          nome: owner.Condominio.nomecondominio,
+          condominioid: owner.Condominio.condominioid,
         },
       },
     });

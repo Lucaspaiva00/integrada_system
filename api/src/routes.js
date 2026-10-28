@@ -14,14 +14,22 @@ import * as clienteItemCobrancaController from "./controllers/clienteitemcobranc
 import * as leiturasController from "./controllers/leiturascontroller.cjs";
 import * as webhookController from "./controllers/webhookcontroller.cjs";
 
+import portal from "./controllers/portalcontroller.cjs";
+import security from "./security/proprietario.cjs";
 const router = Router();
+router.use('/portal', security.authenticate);
+router.get('/portal/me', portal.me);
+router.get('/portal/boletos', portal.boletos);
+router.get('/portal/comunicados', portal.comunicados);
+router.get('/portal/prestacoes', portal.prestacoes);
+router.get('/portal/assembleias', portal.assembleias);
 
 router.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
 
-router.post("/login/proprietario", loginControllerfrom.loginProprietario);
+router.post("/login/proprietario", security.loginLimit, loginControllerfrom.loginProprietario);
 
 router.get("/", (req, res) => res.json("API respondendo"));
 

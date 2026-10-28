@@ -1,153 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login do Propietário</title>
-  <link rel="stylesheet" href="css/style2.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <style>
-    body {
-      background-color: #f5f5f5;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .login-container {
-      background: #fff;
-      width: 90%;
-      max-width: 400px;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .login-container h2 {
-      color: #333;
-      margin-bottom: 1rem;
-    }
-
-    .login-container p {
-      color: #666;
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .login-container input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.3s;
-    }
-
-    .login-container input:focus {
-      border-color: #333;
-      outline: none;
-    }
-
-    .login-container button {
-      width: 100%;
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .login-container button:hover {
-      background-color: #555;
-    }
-
-    #msg {
-      margin-top: 10px;
-      color: red;
-      font-size: 0.9rem;
-    }
-
-    footer {
-      position: absolute;
-      bottom: 15px;
-      font-size: 0.8rem;
-      color: #888;
-      text-align: center;
-      width: 100%;
-    }
-
-    .icon {
-      font-size: 3rem;
-      color: #333;
-      margin-bottom: 1rem;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="login-container">
-    <i class="fas fa-user-circle icon"></i>
-    <h2>Login do Proprietario</h2>
-    <p>Entre com seu imóvel e os 4 últimos dígitos do seu cpf para acessar o sistema</p>
-
-    <form id="loginForm">
-      <input type="text" name="apartamento" placeholder="Digite o seu ímovel" required>
-      <input type="text" name="cpf" maxlength="4" placeholder="4 últimos dígitos do CPF">
-      <button type="submit">Entrar</button>
-    </form>
-
-    <div id="msg"></div>
-  </div>
-
-  <footer>© 2025 Paiva Tech - Todos os direitos reservados</footer>
-
-  <script>
-    const form = document.querySelector("#loginForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const data = {
-        apartamento: form.apartamento.value.trim(),
-        cpf: form.cpf.value.trim()
-      };
-
-      const res = await fetch("https://integrada-api.onrender.com/login/proprietario", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const json = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("inquilino", JSON.stringify(json.cliente));
-        window.location.href = "index.html";
-      } else {
-        document.querySelector("#msg").innerText = json.error || "❌ Credenciais inválidas.";
-      }
-    });
-  </script>
-</body>
-
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src https://integrada-api.onrender.com; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="theme-color" content="#0b0c10" />
+    <title>Acesso do proprietário | Integrada</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script defer src="js/app.js"></script>
+  </head>
+  <body data-page="login">
+    <a class="skip" href="#content">Ir para o conteúdo</a>
+    <div id="app"></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
 </html>

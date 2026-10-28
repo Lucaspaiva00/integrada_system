@@ -1,0 +1,7 @@
+{
+  "appId": "br.com.paivatech.integrada",
+  "appName": "Integrada",
+  "webDir": "www",
+  "server": { "androidScheme": "https", "cleartext": false },
+  "android": { "allowMixedContent": false, "backgroundColor": "#0b0c10" }
+}
