@@ -6,7 +6,8 @@ const read = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const data = req.body;
+  const { nomecondominio, endereco, telefone } = req.body;
+  const data = { nomecondominio, endereco, telefone };
   const condominio = await prisma.condominio.create({ data });
   return res.status(201).json(condominio);
 };
@@ -15,7 +16,8 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const data = req.body;
+    const { nomecondominio, endereco, telefone } = req.body;
+    const data = { nomecondominio, endereco, telefone };
 
     const condominio = await prisma.condominio.update({
       where: { condominioid: id },
@@ -37,7 +39,7 @@ const readById = async (req, res) => {
     const condominio = await prisma.condominio.findUnique({
       where: { condominioid: id },
       include: {
-        Clientes: true, // Proprietários
+        Clientes: { omit: { boletoCodigoHash: true } },
         Inquilinos: true, // Inquilinos
       },
     });

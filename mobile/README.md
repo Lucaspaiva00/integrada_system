@@ -3,7 +3,6 @@
 HTML/CSS/JavaScript em `../web_user` é a única fonte das telas web e Android.
 Identidade derivada de `web/css/style.css`: #0b0c10, #11131a, #e11d2e,
 cards claros com borda vermelha, raios de 16px e menu lateral escuro.
-Nenhuma migração ou alteração no painel administrativo.
 
 ## Compilar
 
@@ -22,7 +21,7 @@ Para distribuição permanente, gerar chave de release privada e preservá-la;
 instalações debug não são a estratégia de atualização de produção.
 Não há servidor remoto carregado no WebView: telas ficam no APK, somente os
 pedidos HTTPS usam a API existente. Sem permissão de arquivos, câmera ou localização.
-Documentos abrem no navegador nativo. Clipboard e botão Voltar usam plugins Capacitor.
+Os boletos PDF abrem no leitor do Android ou são salvos pelo seletor de arquivos. Os demais documentos mantêm a abertura no navegador nativo.
 Não há modo offline, push ou versão iOS nativa.
 
 ## API e publicação
@@ -50,10 +49,16 @@ rotas de leitura/escrita e documentos. O login com quatro dígitos também deve
 futuramente evoluir para senha ou código validado. Não afirmar que a API inteira
 está protegida com esta alteração.
 
-O schema Boleto não tem campo de PDF. Por isso o app exibe linha digitável,
-código de barras/Pix quando fornecidos, valores, composição, situação e pagamento;
-não inventa URL de boleto nem consulta o Santander diretamente. Comunicados,
-prestações e assembleias exibem documentos HTTPS existentes.
+Configure `BOLETOS_ADMIN_PASSWORD` no Render com uma senha aleatória de pelo
+menos 32 caracteres. Em **Boletos**, o administrador seleciona condomínio e
+proprietário, anexa o PDF e gera um código individual para entregar diretamente
+ao proprietário. O portal solicita esse código para liberar a consulta. Uma
+renovação invalida imediatamente o código anterior.
+
+A API mantém os PDFs no PostgreSQL e valida a sessão e o código a cada leitura.
+Os dados dos boletos anteriores continuam disponíveis após a autenticação
+adicional. As versões antigas do APK precisam ser atualizadas para consultar
+boletos. A compilação no GitHub Actions gera um APK debug para homologação.
 
 ## Validação
 

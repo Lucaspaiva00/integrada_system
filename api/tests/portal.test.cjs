@@ -87,7 +87,7 @@ test("portal ignores injected owner/condominium IDs and restricts all queries on
     assert.equal(res.code, 200);
     assert.deepEqual(
       query.where,
-      name === "boletos" ? { clienteid: 7 } : { CondominioID: 3 },
+      name === "boletos" ? { clienteid: 7, Cliente: undefined } : { CondominioID: 3 },
     );
     assert.equal(query.select?.respostaBanco, undefined);
   }

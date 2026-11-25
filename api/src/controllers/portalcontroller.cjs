@@ -33,10 +33,10 @@ const run = (fn) => async (req, res) => {
   }
 };
 const me = run(async (_req, c) => profile(c));
-const boletos = run(async (_req, c) =>
+const boletos = run(async (req, c) =>
   prisma.boleto.findMany({
-    where: { clienteid: c.clienteid },
-    orderBy: { vencimento: "desc" },
+    where: { clienteid: c.clienteid, Cliente: req.boletoScope?.Cliente },
+    orderBy: { competencia: "desc" },
     select: {
       boletoid: true,
       competencia: true,

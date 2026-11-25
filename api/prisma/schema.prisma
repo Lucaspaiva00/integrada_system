@@ -20,6 +20,7 @@ model Condominio {
   endereco            String
   telefone            String
   Clientes            Clientes[]
+  BoletosPDF          BoletoPDF[]
   assembleia          assembleia[]
   Inquilinos          Inquilinos[]
   PrestacaoContas     PrestacaoContas[]
@@ -129,6 +130,8 @@ model Clientes {
   Condominio   Condominio   @relation(fields: [CondominioID], references: [condominioid])
   Inquilinos   Inquilinos[]
   Boletos      Boleto[]
+  BoletosPDF   BoletoPDF[]
+  boletoCodigoHash String?
   ItensAtivos  ClienteItemCobranca[]
   Leituras     LeituraConsumo[]
 }
@@ -245,4 +248,17 @@ model BoletoHistorico {
   detalhe        Json?
 
   criadoEm       DateTime     @default(now())
+}
+
+model BoletoPDF {
+  id           Int        @id @default(autoincrement())
+  clienteid    Int
+  condominioid Int
+  competencia  DateTime   @db.Date
+  pdf          Bytes
+  Cliente      Clientes   @relation(fields: [clienteid], references: [clienteid])
+  Condominio   Condominio @relation(fields: [condominioid], references: [condominioid])
+
+  @@unique([condominioid, clienteid, competencia])
+  @@index([clienteid, condominioid])
 }

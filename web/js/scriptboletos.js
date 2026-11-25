@@ -1,286 +1,231 @@
-// =========================
-// scriptboletos.js - página dedicada de consulta de boletos
-// =========================
+(() => {
+  const api = "https://integrada-api.onrender.com/admin";
+  const key = "integrada.boletos.admin";
+  const $ = (id) => document.getElementById(id);
+  const login = $("login");
+  const manager = $("manager");
+  const condo = $("condominio");
+  const owner = $("proprietario");
+  const feedback = $("feedback");
+  const replacement = $("replacement");
+  let token = sessionStorage.getItem(key);
+  let replacementId;
+  let listRequest = 0;
+  let ownerRequest = 0;
+  let owners = [];
 
-const baseURL = "https://integrada-api.onrender.com";
+  function showLogin() {
+    token = null;
+    sessionStorage.removeItem(key);
+    hideCode();
+    $("documents").replaceChildren();
+    manager.hidden = true;
+    login.hidden = false;
+  }
 
-const selectCondominio = document.querySelector("#selectCondominio");
-const selectFiltroUnidade = document.querySelector("#selectFiltroUnidade");
-const btnAtualizarBoletos = document.querySelector("#btnAtualizarBoletos");
-const tbodyBoletos = document.querySelector("#tbodyBoletos");
-const painelHistorico = document.querySelector("#painelHistorico");
-
-// =========================
-// TOAST (mesmo padrão das outras páginas do admin)
-// =========================
-const toast = document.getElementById("toast");
-const toastTitle = document.getElementById("toastTitle");
-const toastMsg = document.getElementById("toastMsg");
-const toastIcon = document.getElementById("toastIcon");
-const toastClose = document.getElementById("toastClose");
-let toastTimer = null;
-
-function showToast({ type = "success", title = "Tudo certo", message = "" }) {
-  toast.classList.remove("is-success", "is-error", "is-info", "is-warn");
-  const map = {
-    success: { cls: "is-success", icon: "fa-check" },
-    error: { cls: "is-error", icon: "fa-times" },
-    info: { cls: "is-info", icon: "fa-info" },
-    warn: { cls: "is-warn", icon: "fa-exclamation" },
-  };
-  const cfg = map[type] || map.success;
-  toast.classList.add(cfg.cls);
-  toastTitle.textContent = title;
-  toastMsg.textContent = message;
-  toastIcon.innerHTML = `<i class="fas ${cfg.icon}"></i>`;
-  toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
-}
-toastClose?.addEventListener("click", () => {
-  toast.classList.remove("show");
-  clearTimeout(toastTimer);
-});
-
-function escapeHtml(str) {
-  return String(str ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function formatarMoeda(valor) {
-  const numero = Number(valor);
-  if (Number.isNaN(numero)) return "—";
-  return numero.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
-function formatarData(iso) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("pt-BR");
-}
-
-const STATUS_BADGE = {
-  PENDENTE: "badge-warning",
-  REGISTRADO: "badge-info",
-  PAGO: "badge-success",
-  VENCIDO: "badge-danger",
-  CANCELADO: "badge-secondary",
-  ERRO: "badge-danger",
-};
-
-const STATUS_LABEL = {
-  PENDENTE: "Pendente (aguardando o banco)",
-  REGISTRADO: "Registrado no Santander",
-  PAGO: "Pago",
-  VENCIDO: "Vencido",
-  CANCELADO: "Cancelado",
-  ERRO: "Erro ao registrar",
-};
-
-const ORIGEM_LABEL = {
-  geracao: "Geração do boleto",
-  webhook_santander: "Confirmação do Santander",
-  sincronizacao_manual: "Sincronização manual",
-  admin: "Ação do administrador",
-};
-
-function condominioSelecionado() {
-  return selectCondominio.value ? Number(selectCondominio.value) : null;
-}
-
-// =========================
-// Carregar condomínios
-// =========================
-async function carregarCondominios() {
-  try {
-    const res = await fetch(`${baseURL}/condominiocontroller`);
-    const dados = await res.json();
-
-    selectCondominio.innerHTML = `<option value="">Selecione...</option>`;
-    (Array.isArray(dados) ? dados : []).forEach((c) => {
-      const opt = document.createElement("option");
-      opt.value = c.condominioid;
-      opt.textContent = c.nomecondominio;
-      selectCondominio.appendChild(opt);
+  async function request(path, options = {}, pdf = false) {
+    const res = await fetch(api + path, {
+      ...options,
+      cache: "no-store",
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
     });
-  } catch (err) {
-    console.error(err);
-    selectCondominio.innerHTML = `<option value="">Erro ao carregar condomínios</option>`;
-    showToast({ type: "error", title: "Falha de conexão", message: "Não consegui carregar os condomínios." });
-  }
-}
-
-selectCondominio.addEventListener("change", () => {
-  const id = condominioSelecionado();
-  painelHistorico.innerHTML = "";
-  if (!id) {
-    tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">Selecione um condomínio acima.</td></tr>`;
-    selectFiltroUnidade.innerHTML = `<option value="">Todas as unidades do condomínio</option>`;
-    return;
-  }
-  carregarUnidades(id);
-  carregarBoletos(id);
-});
-
-// =========================
-// Unidades do condomínio (só pro filtro)
-// =========================
-async function carregarUnidades(condominioId) {
-  try {
-    const res = await fetch(`${baseURL}/clientescontroller`);
-    const clientes = await res.json();
-
-    const doCondominio = (Array.isArray(clientes) ? clientes : []).filter(
-      (c) => Number(c.CondominioID) === Number(condominioId)
-    );
-
-    selectFiltroUnidade.innerHTML = `<option value="">Todas as unidades do condomínio</option>`;
-    doCondominio.forEach((c) => {
-      const opt = document.createElement("option");
-      opt.value = c.clienteid;
-      opt.textContent = `Apto ${c.apartamento} - ${c.nome}`;
-      selectFiltroUnidade.appendChild(opt);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-selectFiltroUnidade.addEventListener("change", () => {
-  const id = condominioSelecionado();
-  if (!id) return;
-  carregarBoletos(id);
-});
-
-// =========================
-// Listagem de boletos
-// =========================
-async function carregarBoletos(condominioId) {
-  try {
-    tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">Carregando boletos...</td></tr>`;
-    const clienteFiltro = selectFiltroUnidade.value;
-    const url = clienteFiltro
-      ? `${baseURL}/boletoscontroller?condominioid=${condominioId}&clienteid=${clienteFiltro}`
-      : `${baseURL}/boletoscontroller?condominioid=${condominioId}`;
-    const res = await fetch(url);
-    const boletos = await res.json();
-    renderBoletos(Array.isArray(boletos) ? boletos : []);
-  } catch (err) {
-    console.error(err);
-    tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">Erro ao carregar boletos.</td></tr>`;
-  }
-}
-
-function renderBoletos(boletos) {
-  if (!boletos.length) {
-    tbodyBoletos.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">Nenhum boleto gerado ainda para este condomínio.</td></tr>`;
-    return;
+    if (res.status === 401 && path !== "/login") showLogin();
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.error || "Não foi possível concluir. Tente novamente.");
+    }
+    return pdf ? res.blob() : res.status === 204 ? null : res.json();
   }
 
-  tbodyBoletos.innerHTML = "";
-  boletos.forEach((b) => {
-    const badgeClass = STATUS_BADGE[b.status] || "badge-light";
-    const competencia = new Date(b.competencia).toLocaleDateString("pt-BR", { month: "2-digit", year: "numeric" });
+  async function run(action, button) {
+    feedback.textContent = "";
+    if (button) button.disabled = true;
+    try {
+      await action();
+    } catch (error) {
+      feedback.textContent = error.message;
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
 
+  function hideCode() {
+    $("code").value = "";
+    $("code-result").hidden = true;
+  }
+
+  function updateCodeButton() {
+    const selected = owners.find((item) => String(item.clienteid) === owner.value);
+    const button = $("issue-code");
+    button.disabled = !selected;
+    button.textContent = selected?.temCodigo ? "Renovar código de acesso" : "Gerar código de acesso";
+  }
+
+  function formWithPDF(file) {
+    if (!file || file.size > 4 * 1024 * 1024) throw new Error("Anexe um PDF de até 4 MB.");
+    const data = new FormData();
+    data.set("pdf", file);
+    return data;
+  }
+
+  async function openDocument(item, download) {
+    const preview = download ? null : window.open("about:blank", "_blank");
+    if (!download && !preview) throw new Error("Permita a abertura de uma nova aba ou use Baixar.");
+    if (preview) preview.opener = null;
+    try {
+      const blob = await request(`/boletos/${item.id}?download=${Number(download)}`, {}, true);
+      const url = URL.createObjectURL(blob);
+      if (preview) preview.location.replace(url);
+      else {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `boleto-${item.competencia.slice(0, 7)}-${item.id}.pdf`;
+        link.click();
+      }
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (error) {
+      preview?.close();
+      throw error;
+    }
+  }
+
+  function renderRow(item) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${escapeHtml(b.Cliente?.apartamento)} - ${escapeHtml(b.Cliente?.nome)}</td>
-      <td>${competencia}</td>
-      <td>${formatarData(b.vencimento)}</td>
-      <td>${formatarMoeda(b.valorTotal)}</td>
-      <td><span class="badge ${badgeClass}">${escapeHtml(b.status)}</span></td>
-      <td>
-        <div class="paiva-actions">
-          ${b.nossoNumero ? `<button class="btn btn-sm btn-light paiva-btn-light" data-action="sincronizar" data-id="${b.boletoid}" title="Sincronizar com o Santander"><i class="fas fa-sync"></i></button>` : ""}
-          <button class="btn btn-sm btn-light paiva-btn-light" data-action="historico" data-id="${b.boletoid}" title="Ver histórico"><i class="fas fa-history"></i></button>
-          ${b.status !== "PAGO" && b.status !== "CANCELADO" ? `<button class="btn btn-sm btn-outline-danger" data-action="cancelar" data-id="${b.boletoid}" title="Cancelar boleto"><i class="fas fa-ban"></i></button>` : ""}
-        </div>
-      </td>
-    `;
-    tbodyBoletos.appendChild(tr);
-  });
-}
+    tr.insertCell().textContent = new Date(item.competencia).toLocaleDateString("pt-BR", {
+      month: "long", year: "numeric", timeZone: "UTC",
+    });
+    tr.insertCell().textContent = `${item.Cliente.nome} · ${item.Cliente.apartamento}`;
+    const actions = tr.insertCell();
+    const buttons = [
+      ["Visualizar", () => openDocument(item, false)],
+      ["Baixar", () => openDocument(item, true)],
+      ["Substituir", () => {
+        replacementId = item.id;
+        replacement.value = "";
+        replacement.click();
+      }],
+      ["Excluir", async () => {
+        if (!confirm("Excluir este PDF do portal do proprietário?")) return;
+        await request(`/boletos/${item.id}`, { method: "DELETE" });
+        await loadList();
+        feedback.textContent = "PDF excluído.";
+      }],
+    ];
+    for (const [label, action] of buttons) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn btn-sm btn-outline-primary mr-1 mb-1";
+      button.textContent = label;
+      button.onclick = () => run(action, button);
+      actions.append(button);
+    }
+    return tr;
+  }
 
-tbodyBoletos.addEventListener("click", async (e) => {
-  const btn = e.target.closest("button[data-action]");
-  if (!btn) return;
+  async function loadList() {
+    const seq = ++listRequest;
+    $("records").hidden = true;
+    $("documents").replaceChildren();
+    $("empty").textContent = condo.value ? "Carregando PDFs…" : "Selecione um condomínio.";
+    if (!condo.value) return;
+    const query = new URLSearchParams({ condominioid: condo.value, clienteid: owner.value });
+    const rows = await request(`/boletos?${query}`);
+    if (seq !== listRequest || !token) return;
+    $("empty").textContent = rows.length ? "" : "Nenhum PDF disponibilizado.";
+    $("records").hidden = !rows.length;
+    $("documents").replaceChildren(...rows.map(renderRow));
+  }
 
-  const action = btn.getAttribute("data-action");
-  const id = btn.getAttribute("data-id");
-  const condominioId = condominioSelecionado();
+  async function selectCondo() {
+    const seq = ++ownerRequest;
+    hideCode();
+    owner.disabled = true;
+    owners = [];
+    owner.replaceChildren(new Option("Selecione o proprietário", ""));
+    updateCodeButton();
+    await Promise.all([
+      loadList(),
+      (async () => {
+        if (!condo.value) return;
+        const result = await request(`/boletos/condominios/${condo.value}/proprietarios`);
+        if (seq !== ownerRequest || !token) return;
+        owners = result;
+        owner.append(...owners.map((item) => new Option(`${item.nome} · ${item.apartamento}`, item.clienteid)));
+        owner.disabled = false;
+      })(),
+    ]);
+  }
 
-  try {
-    if (action === "historico") {
-      painelHistorico.innerHTML = `<div class="text-muted">Carregando histórico...</div>`;
-      painelHistorico.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  async function enter() {
+    const condos = await request("/boletos/condominios");
+    condo.replaceChildren(new Option("Selecione o condomínio", ""), ...condos.map(
+      (item) => new Option(item.nomecondominio, item.condominioid),
+    ));
+    await selectCondo();
+    login.hidden = true;
+    manager.hidden = false;
+  }
 
-      const res = await fetch(`${baseURL}/boletoscontroller/${id}`);
-      const boleto = await res.json();
-
-      const linhas = (boleto.Historico || []).map((h) => {
-        const quando = new Date(h.criadoEm).toLocaleString("pt-BR");
-        const origem = ORIGEM_LABEL[h.origem] || h.origem;
-        const de = h.statusAnterior ? (STATUS_LABEL[h.statusAnterior] || h.statusAnterior) : "—";
-        const para = STATUS_LABEL[h.statusNovo] || h.statusNovo;
-        return `<li><strong>${quando}</strong> — ${de} → <strong>${para}</strong> <span class="text-muted">(${origem})</span></li>`;
-      }).join("");
-
-      painelHistorico.innerHTML = `
-        <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <strong>Histórico - Apto ${escapeHtml(boleto.Cliente?.apartamento)} - ${escapeHtml(boleto.Cliente?.nome)}</strong>
-            <button class="btn btn-sm btn-light" id="btnFecharHistorico"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="card-body">
-            <ul class="pl-3 mb-0">${linhas || "<li>Nenhum evento registrado ainda.</li>"}</ul>
-          </div>
-        </div>
-      `;
-
-      document.querySelector("#btnFecharHistorico")?.addEventListener("click", () => {
-        painelHistorico.innerHTML = "";
+  login.onsubmit = (event) => {
+    event.preventDefault();
+    run(async () => {
+      const result = await request("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: $("senha").value }),
       });
-      return;
+      login.reset();
+      token = result.token;
+      sessionStorage.setItem(key, token);
+      await enter();
+    }, event.submitter);
+  };
+  condo.onchange = () => run(selectCondo);
+  owner.onchange = () => {
+    hideCode();
+    updateCodeButton();
+    run(loadList);
+  };
+  $("exit-module").onclick = () => sessionStorage.removeItem(key);
+  $("signout").onclick = () => {
+    feedback.textContent = "";
+    showLogin();
+  };
+  $("issue-code").onclick = () => run(async () => {
+    const selected = owners.find((item) => String(item.clienteid) === owner.value);
+    if (!selected) return;
+    const condoId = condo.value;
+    const ownerId = owner.value;
+    if (selected.temCodigo && !confirm("O código anterior deixará de funcionar. Renovar?")) return;
+    const result = await request(`/boletos/condominios/${condoId}/proprietarios/${ownerId}/codigo`, { method: "POST" });
+    selected.temCodigo = true;
+    if (condo.value === condoId && owner.value === ownerId && token) {
+      $("code").value = result.codigo;
+      $("code-result").hidden = false;
     }
+  }, $("issue-code")).finally(updateCodeButton);
+  $("attach").onsubmit = (event) => {
+    event.preventDefault();
+    run(async () => {
+      const data = formWithPDF($("pdf").files[0]);
+      data.set("condominioid", condo.value);
+      data.set("clienteid", owner.value);
+      data.set("competencia", $("competencia").value);
+      await request("/boletos", { method: "POST", body: data });
+      $("pdf").value = "";
+      await loadList();
+      feedback.textContent = "Boleto disponibilizado para o proprietário.";
+    }, $("publish"));
+  };
+  replacement.onchange = () => {
+    if (!replacement.files.length) return;
+    run(async () => {
+      await request(`/boletos/${replacementId}`, { method: "PUT", body: formWithPDF(replacement.files[0]) });
+      await loadList();
+      feedback.textContent = "PDF substituído.";
+    });
+  };
 
-    if (action === "sincronizar") {
-      const res = await fetch(`${baseURL}/boletoscontroller/${id}/sincronizar`);
-      if (res.ok) {
-        showToast({ type: "info", title: "Sincronizado", message: "Situação do boleto atualizada com o Santander." });
-      } else {
-        showToast({ type: "error", title: "Erro", message: "Não consegui sincronizar com o Santander agora." });
-      }
-    }
-
-    if (action === "cancelar") {
-      if (!confirm("Tem certeza que quer cancelar este boleto? Essa ação avisa o Santander pra baixar o título.")) return;
-      const res = await fetch(`${baseURL}/boletoscontroller/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        showToast({ type: "success", title: "Boleto cancelado", message: "O boleto foi baixado." });
-      } else {
-        const erro = await res.json().catch(() => ({}));
-        showToast({ type: "error", title: "Erro ao cancelar", message: erro.error || "Não foi possível cancelar." });
-      }
-    }
-
-    carregarBoletos(condominioId);
-  } catch (err) {
-    console.error(err);
-    showToast({ type: "error", title: "Falha de conexão", message: "Verifique a internet / API e tente novamente." });
-  }
-});
-
-btnAtualizarBoletos.addEventListener("click", () => {
-  const id = condominioSelecionado();
-  if (!id) {
-    showToast({ type: "warn", title: "Atenção", message: "Selecione um condomínio primeiro." });
-    return;
-  }
-  carregarBoletos(id);
-});
-
-// init
-carregarCondominios();
+  if (token) run(enter);
+  else showLogin();
+})();

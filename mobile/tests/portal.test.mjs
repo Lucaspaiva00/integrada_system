@@ -34,6 +34,7 @@ const user = {
   condominio: { nome: "Condomínio de Teste" },
 };
 const data = {
+  "boletos-pdf": [{ id: 42, competencia: "2026-11-01", temPdf: true }],
   boletos: [
     {
       competencia: "2026-10-01",
@@ -78,15 +79,22 @@ test("mobile and desktop layouts, authenticated navigation and hostile data", as
         async (route) => {
           const path = new URL(route.request().url()).pathname;
           assert.match(route.request().headers().authorization, /Bearer test/);
+          if (path.startsWith("/portal/boletos")) {
+            assert.equal(route.request().headers()["x-boleto-code"], "a".repeat(32));
+          }
+          if (path === "/portal/boletos-pdf/42") {
+            return route.fulfill({ contentType: "application/pdf", body: "%PDF-1.7\n%%EOF" });
+          }
           await route.fulfill({
             json:
               path === "/portal/me" ? user : data[path.split("/").at(-1)] || [],
           });
         },
       );
-      await page.addInitScript(() =>
-        sessionStorage.setItem("integrada.token", "test"),
-      );
+      await page.addInitScript(() => {
+        sessionStorage.setItem("integrada.token", "test");
+        sessionStorage.setItem("integrada.boleto.code", "a".repeat(32));
+      });
       for (const file of [
         "index.html",
         "boleto.html",
@@ -104,6 +112,14 @@ test("mobile and desktop layouts, authenticated navigation and hostile data", as
           `${width}: ${file} horizontal overflow`,
         );
         assert.equal(await page.locator("main script,main img").count(), 0);
+        if (file === "boleto.html") {
+          await page.getByRole("button", { name: "Visualizar PDF" }).waitFor();
+          if (width === 390) {
+            const pending = page.waitForEvent("download");
+            await page.getByRole("button", { name: "Baixar PDF" }).click();
+            assert.equal((await pending).suggestedFilename(), "boleto-2026-11-42.pdf");
+          }
+        }
         if (file === "assembleias.html")
           assert.equal(await page.locator("[data-document]").count(), 0);
         if (width < 700) {
@@ -166,6 +182,8 @@ test("login, loading failure, retry, empty state, session expiry and logout", as
     await page.screenshot({ path: "/tmp/integrada-home.png", fullPage: true });
     mode = "error";
     await page.goto(base + "/boleto.html");
+    await page.getByLabel("Código de acesso").fill("a".repeat(32));
+    await page.getByRole("button", { name: "Consultar boletos" }).click();
     await page.getByRole("button", { name: "Tentar novamente" }).waitFor();
     mode = "ok";
     await page.getByRole("button", { name: "Tentar novamente" }).click();

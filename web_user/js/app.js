@@ -18,7 +18,7 @@
     assembleias: "Assembleias",
   };
   const descriptions = {
-    boletos: "Consulte suas cobranças e acompanhe os pagamentos.",
+    boletos: "Visualize e baixe os boletos enviados pela administradora.",
     comunicados: "Fique por dentro dos avisos da administradora.",
     prestacoes: "Transparência na gestão do seu condomínio.",
     assembleias: "Acompanhe as assembleias e seus documentos.",
@@ -53,7 +53,12 @@
     );
   const brand = `<div class="brand"><span class="brand-mark">${icon("building")}</span><div>INTEGRADA<small>GESTÃO DE CONDOMÍNIOS</small></div></div>`;
   let token = sessionStorage.getItem("integrada.token");
+  const boletoCodeKey = "integrada.boleto.code";
+  let leaving = false;
   function logout() {
+    if (leaving) return;
+    leaving = true;
+    sessionStorage.removeItem(boletoCodeKey);
     sessionStorage.removeItem("integrada.token");
     localStorage.removeItem("inquilino");
     location.replace("login_inquilino.html");
@@ -78,13 +83,16 @@
           ...options.headers,
         },
       });
-      const data = await res.json();
+      const data = options.pdf && res.ok ? await res.blob() : await res.json();
       if (res.status === 401 && page !== "login") {
         logout();
         throw new Error("Sua sessão expirou.");
       }
-      if (!res.ok)
-        throw new Error(data.error || "Não foi possível carregar os dados.");
+      if (!res.ok) {
+        const error = new Error(data.error || "Não foi possível carregar os dados.");
+        error.status = res.status;
+        throw error;
+      }
       return data;
     } catch (error) {
       if (error.name === "AbortError")
@@ -140,7 +148,10 @@
       : "";
   }
   function boleto(b) {
-    return `<article class="card"><div class="card-head"><div><div class="eyebrow">Competência</div><h2 style="margin-top:8px">${esc(date(b.competencia, true))}</h2></div><span class="badge ${esc(b.status)}">${esc(b.status)}</span></div><div class="amount">${esc(money(b.valorTotal))}</div><div class="facts"><div><small>Vencimento</small><strong>${esc(date(b.vencimento))}</strong></div>${b.dataPagamento ? `<div><small>Pagamento</small><strong>${esc(date(b.dataPagamento))}</strong></div>` : ""}${b.valorPago != null ? `<div><small>Valor pago</small><strong>${esc(money(b.valorPago))}</strong></div>` : ""}</div>${copyBox(b.linhaDigitavel, "Copiar linha digitável")}${!b.linhaDigitavel && b.codigoBarras ? copyBox(b.codigoBarras, "Copiar código de barras") : ""}${copyBox(b.qrCodePix, "Copiar código Pix")}${!b.linhaDigitavel && b.status === "PENDENTE" ? "<p>Aguardando confirmação do banco.</p>" : ""}${b.Itens?.length ? `<details><summary>Ver composição do boleto</summary>${b.Itens.map((i) => `<div class="item-row"><span>${esc(i.descricao)}</span><strong>${esc(money(i.valorTotal))}</strong></div>`).join("")}</details>` : ""}</article>`;
+    if (b.temPdf) {
+      return `<article class="card"><div class="eyebrow">Referência</div><h2>${esc(date(b.competencia, true))}</h2><div class="facts"><button class="button secondary" type="button" data-boleto="${esc(b.id)}" data-reference="${esc(b.competencia.slice(0, 7))}">Visualizar PDF</button><button class="button secondary" type="button" data-boleto="${esc(b.id)}" data-reference="${esc(b.competencia.slice(0, 7))}" data-download>Baixar PDF</button></div></article>`;
+    }
+    return `<article class="card"><div class="card-head"><div><div class="eyebrow">Competência</div><h2 style="margin-top:8px">${esc(date(b.competencia, true))}</h2></div><span class="badge ${esc(b.status)}">${esc(b.status)}</span></div><div class="amount">${esc(money(b.valorTotal))}</div><div class="facts"><div><small>Vencimento</small><strong>${esc(date(b.vencimento))}</strong></div>${b.dataPagamento ? `<div><small>Pagamento</small><strong>${esc(date(b.dataPagamento))}</strong></div>` : ""}${b.valorPago != null ? `<div><small>Valor pago</small><strong>${esc(money(b.valorPago))}</strong></div>` : ""}</div>${copyBox(b.linhaDigitavel, "Copiar linha digitável")}${!b.linhaDigitavel && b.codigoBarras ? copyBox(b.codigoBarras, "Copiar código de barras") : ""}${copyBox(b.qrCodePix, "Copiar código Pix")}${b.Itens?.length ? `<details><summary>Ver composição do boleto</summary>${b.Itens.map((i) => `<div class="item-row"><span>${esc(i.descricao)}</span><strong>${esc(money(i.valorTotal))}</strong></div>`).join("")}</details>` : ""}</article>`;
   }
   function record(item) {
     return `<article class="card"><div class="card-head"><div class="icon-box">${icon(page)}</div>${item.datacomunicado ? `<span class="badge">${esc(date(item.datacomunicado))}</span>` : ""}</div><h2>${page === "prestacoes" ? esc(date(item.mes, true)) : page === "assembleias" ? "Assembleia" : "Comunicado"}</h2>${item.descricao ? `<p>${esc(item.descricao)}</p>` : ""}${documentLink(item.documentoUrl || item.documento)}</article>`;
@@ -214,14 +225,79 @@
           .join("")}</div>`;
     } else load();
   }
+  function boletoHeaders() {
+    return { "X-Boleto-Code": sessionStorage.getItem(boletoCodeKey) || "" };
+  }
+  function askBoletoCode(list, message = "") {
+    list.innerHTML = `<div class="card"><h2>Acesso aos boletos</h2><p>Use o código individual fornecido pela administradora.</p><form id="boletoAccess"><label for="boletoCode">Código de acesso</label><input id="boletoCode" type="password" minlength="32" maxlength="32" pattern="[a-fA-F0-9]{32}" required><button class="button" type="submit">Consultar boletos</button><p class="error" role="alert">${esc(message)}</p></form></div>`;
+    document.querySelector("#boletoAccess").onsubmit = (event) => {
+      event.preventDefault();
+      sessionStorage.setItem(boletoCodeKey, document.querySelector("#boletoCode").value.trim());
+      load();
+    };
+  }
+  async function openBoleto(button) {
+    const download = button.hasAttribute("data-download");
+    const native = window.Capacitor?.isNativePlatform();
+    const preview = !native && !download ? window.open("about:blank", "_blank") : null;
+    if (!native && !download && !preview) return toast("Permita a abertura de uma nova aba ou use Baixar PDF.");
+    if (preview) preview.opener = null;
+    button.disabled = true;
+    try {
+      const blob = await request(`/portal/boletos-pdf/${button.dataset.boleto}?download=${Number(download)}`, {
+        pdf: true, headers: boletoHeaders(),
+      });
+      const filename = `boleto-${button.dataset.reference}-${button.dataset.boleto}.pdf`;
+      if (native) {
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result.split(",")[1]);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+        await window.Capacitor.Plugins.IntegradaPDF.open({ base64, filename, download });
+      } else {
+        const url = URL.createObjectURL(blob);
+        if (preview) preview.location.replace(url);
+        else {
+          const anchor = document.createElement("a");
+          anchor.href = url;
+          anchor.download = filename;
+          anchor.click();
+        }
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      }
+    } catch (error) {
+      preview?.close();
+      toast(error.message || "Não foi possível abrir o PDF.");
+      if (error.status === 403) {
+        sessionStorage.removeItem(boletoCodeKey);
+        load();
+      }
+    } finally {
+      button.disabled = false;
+    }
+  }
   async function load() {
     const list = document.querySelector("#records");
     const button = document.querySelector("#refresh");
+    if (page === "boletos" && !sessionStorage.getItem(boletoCodeKey)) {
+      askBoletoCode(list);
+      return;
+    }
     button.disabled = true;
     list.innerHTML =
       '<div class="loading" role="status">Carregando dados do condomínio…</div>';
     try {
-      const data = await request(`/portal/${page}`);
+      let data;
+      if (page === "boletos") {
+        const options = { headers: boletoHeaders() };
+        const [current, legacy] = await Promise.all([
+          request("/portal/boletos-pdf", options),
+          request("/portal/boletos", options),
+        ]);
+        data = [...current, ...legacy].sort((a, b) => new Date(b.competencia) - new Date(a.competencia));
+      } else data = await request(`/portal/${page}`);
       if (!Array.isArray(data))
         throw new Error("Resposta inválida do servidor.");
       list.innerHTML = data.length
@@ -232,6 +308,11 @@
               : "A administradora ainda não disponibilizou registros para seu condomínio.",
           );
     } catch (error) {
+      if (page === "boletos" && error.status === 403) {
+        sessionStorage.removeItem(boletoCodeKey);
+        askBoletoCode(list, error.message);
+        return;
+      }
       list.innerHTML = `<div class="card empty"><h2>Não foi possível carregar</h2><p>${esc(error.message)}</p><button class="button" id="retry">Tentar novamente</button></div>`;
       document.querySelector("#retry").onclick = load;
     } finally {
@@ -262,6 +343,7 @@
           throw new Error(
             "O acesso do aplicativo ainda não foi habilitado na API. Contate a administradora.",
           );
+        sessionStorage.removeItem(boletoCodeKey);
         sessionStorage.setItem("integrada.token", data.token);
         localStorage.removeItem("inquilino");
         location.replace("index.html");
@@ -274,6 +356,8 @@
     };
   }
   document.addEventListener("click", async (e) => {
+    const pdf = e.target.closest("[data-boleto]");
+    if (pdf) return openBoleto(pdf);
     const copy = e.target.closest("[data-copy]");
     if (copy) {
       try {

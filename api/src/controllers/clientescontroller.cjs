@@ -3,6 +3,7 @@ const prisma = require("../../prisma/connection.cjs");
 const read = async (req, res) => {
   try {
     const clientes = await prisma.clientes.findMany({
+      omit: { boletoCodigoHash: true },
       include: {
         Condominio: {
           select: {
@@ -37,6 +38,7 @@ const create = async (req, res) => {
         email: data.email,
         CondominioID: Number(data.CondominioID),
       },
+      omit: { boletoCodigoHash: true },
       include: {
         Condominio: {
           select: {
@@ -80,6 +82,7 @@ const update = async (req, res) => {
     const cliente = await prisma.clientes.update({
       where: { clienteid: id },
       data: updateData,
+      omit: { boletoCodigoHash: true },
       include: {
         Condominio: { select: { nomecondominio: true } },
       },

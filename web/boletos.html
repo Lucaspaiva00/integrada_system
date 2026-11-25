@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consulta de Boletos | Integrada</title>
+    <title>Boletos | Integrada</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link href="vendor2/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -106,20 +106,11 @@
                 </div>
             </li>
 
-            <li class="nav-item active">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCobranca"
-                    aria-expanded="true" aria-controls="collapseCobranca">
+            <li class="nav-item">
+                <a class="nav-link" href="boletos.html">
                     <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i>
-                    <span>Cobrança</span>
+                    <span>Boletos</span>
                 </a>
-                <div id="collapseCobranca" class="collapse show" aria-labelledby="headingCobranca"
-                    data-parent="#accordionSidebar">
-                    <div class="py-2 collapse-inner rounded paiva-collapse-inner">
-                        <h6 class="collapse-header">Páginas similares</h6>
-                        <a class="collapse-item" href="cobranca.html">Boletos e configuração</a>
-                        <a class="collapse-item active" href="boletos.html">Consulta de Boletos</a>
-                    </div>
-                </div>
             </li>
 
             <hr class="sidebar-divider d-none d-md-block">
@@ -147,7 +138,7 @@
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="login.html">
+                                <a class="dropdown-item" href="index.html" id="exit-module">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Sair
                                 </a>
@@ -156,111 +147,60 @@
                     </ul>
                 </nav>
 
-                <!-- PAGE CONTENT -->
-                <div class="container-fluid">
-
-                    <div class="paiva-pagehead mb-4">
-                        <div class="d-flex align-items-start justify-content-between flex-wrap">
-                            <div>
-                                <div class="paiva-breadcrumb">
-                                    <a href="index.html"><i class="fas fa-home mr-1"></i> Dashboard</a>
-                                    <span class="mx-2">/</span>
-                                    <span>Consulta de Boletos</span>
+                <main class="container-fluid">
+                    <h1 class="paiva-title mb-3">Boletos</h1>
+                    <p role="status" id="feedback"></p>
+                    <form id="login" class="card card-body shadow mb-4" hidden>
+                        <label for="senha">Senha administrativa de boletos</label>
+                        <input id="senha" class="form-control mb-3" type="password" autocomplete="current-password" required>
+                        <button class="btn btn-primary align-self-start">Entrar</button>
+                    </form>
+                    <section id="manager" hidden>
+                        <div class="card card-body shadow mb-4">
+                            <form id="attach">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="condominio">Condomínio</label>
+                                        <select class="form-control" id="condominio" required></select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="proprietario">Proprietário</label>
+                                        <select class="form-control" id="proprietario" required disabled></select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="competencia">Mês e ano de referência</label>
+                                        <input class="form-control" id="competencia" type="month" min="2000-01" max="2999-12" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="pdf">Boleto em PDF (até 4 MB)</label>
+                                        <input class="form-control-file" id="pdf" type="file" accept="application/pdf,.pdf" required>
+                                    </div>
                                 </div>
-                                <h1 class="paiva-title">Consulta de Boletos</h1>
-                                <p class="paiva-subtitle">Veja os boletos emitidos de cada condomínio, filtre por
-                                    unidade e acompanhe pendente/pago/vencido.</p>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <a href="cobranca.html" class="btn btn-light paiva-btn-light mr-2">
-                                    <i class="fas fa-cog mr-2"></i> Configuração e geração
-                                </a>
-                                <a href="index.html" class="btn btn-light paiva-btn-light">
-                                    <i class="fas fa-arrow-left mr-2"></i> Voltar
-                                </a>
+                                <button class="btn btn-primary mb-2" id="publish">Disponibilizar boleto</button>
+                                <button class="btn btn-outline-primary mb-2" type="button" id="issue-code" disabled>Gerar código de acesso</button>
+                                <button class="btn btn-link mb-2" type="button" id="signout">Sair de Boletos</button>
+                            </form>
+                            <div id="code-result" hidden>
+                                <label for="code">Código individual. Envie-o diretamente ao proprietário.</label>
+                                <input class="form-control" id="code" readonly>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- SELETOR DE CONDOMÍNIO -->
-                    <div class="card shadow mb-4 paiva-form-card">
-                        <div class="card-header">
-                            <h6 class="m-0 font-weight-bold">Selecione o condomínio</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-row">
-                                <div class="form-group col-md-6 mb-0">
-                                    <label>Condomínio</label>
-                                    <select id="selectCondominio" class="form-control">
-                                        <option value="">Carregando condomínios...</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6 mb-0">
-                                    <label>Filtrar por unidade / morador</label>
-                                    <select id="selectFiltroUnidade" class="form-control">
-                                        <option value="">Todas as unidades do condomínio</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- LISTA DE BOLETOS -->
-                    <div class="card shadow mb-4 paiva-table-card">
-                        <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
-                            <div>
-                                <h6 class="m-0 font-weight-bold">Boletos</h6>
-                                <small class="text-muted">Pendente = aguardando o banco. Registrado = já disponível
-                                    pra pagamento. Use "Atualizar" pra consultar a situação mais recente no
-                                    Santander.</small>
-                            </div>
-                            <button id="btnAtualizarBoletos" class="btn btn-sm btn-light paiva-btn-light">
-                                <i class="fas fa-sync mr-1"></i> Atualizar lista
-                            </button>
-                        </div>
-                        <div class="card-body pt-0">
-                            <div class="table-responsive">
-                                <table class="table table-sm table-hover" id="tabelaBoletos">
-                                    <thead class="paiva-thead">
-                                        <tr>
-                                            <th>Unidade</th>
-                                            <th>Competência</th>
-                                            <th>Vencimento</th>
-                                            <th>Valor</th>
-                                            <th>Status</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyBoletos">
-                                        <tr><td colspan="6" class="text-center text-muted py-4">Selecione um condomínio acima.</td></tr>
-                                    </tbody>
+                        <div class="card card-body shadow mb-4">
+                            <h2 class="h5">PDFs disponibilizados</h2>
+                            <p id="empty"></p>
+                            <div class="table-responsive" id="records" hidden>
+                                <table class="table">
+                                    <thead><tr><th>Referência</th><th>Proprietário</th><th>Ações</th></tr></thead>
+                                    <tbody id="documents"></tbody>
                                 </table>
                             </div>
-                            <div id="painelHistorico" class="mt-3"></div>
+                            <input type="file" id="replacement" accept="application/pdf,.pdf" hidden>
                         </div>
-                    </div>
-
-                </div><!-- /.container-fluid -->
-
+                    </section>
+                </main>
             </div>
         </div>
     </div>
-
-    <!-- TOAST -->
-    <div class="paiva-toast" id="toast" aria-live="polite" aria-atomic="true">
-        <div class="paiva-toast__bar"></div>
-        <div class="paiva-toast__content">
-            <div class="paiva-toast__icon" id="toastIcon"><i class="fas fa-check"></i></div>
-            <div class="paiva-toast__text">
-                <div class="paiva-toast__title" id="toastTitle">Tudo certo</div>
-                <div class="paiva-toast__msg" id="toastMsg">Ação realizada.</div>
-            </div>
-            <button class="paiva-toast__close" id="toastClose" aria-label="Fechar">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
-
 </body>
 
 <script src="js/scriptboletos.js"></script>
