@@ -195,7 +195,7 @@ const cloudinaryUpload = async (file) => {
 // =========================
 async function carregarCondominios() {
   try {
-    const res = await fetch(uriCondominio);
+    const res = await window.IntegradaAdmin.apiFetch(uriCondominio);
     const dados = await res.json();
     condominiosCache = Array.isArray(dados) ? dados : [];
 

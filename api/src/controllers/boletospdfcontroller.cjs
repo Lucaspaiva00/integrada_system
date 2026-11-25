@@ -1,4 +1,3 @@
-const { createHash, randomBytes } = require("node:crypto");
 const multer = require("multer");
 const prisma = require("../../prisma/connection.cjs");
 
@@ -26,7 +25,6 @@ function upload(req, res, next) {
 const id = (value) => typeof value === "string" && /^[1-9]\d{0,9}$/.test(value) &&
   Number(value) <= 2147483647 ? Number(value) : null;
 const notFound = (res) => res.status(404).json({ error: "Boleto ou proprietário não encontrado." });
-const hashCode = (code) => createHash("sha256").update(code).digest("hex");
 const handle = (fn) => async (req, res, next) => {
   try {
     await fn(req, res, next);
@@ -51,12 +49,10 @@ const owners = handle(async (req, res) => {
   if (!condominioid) return notFound(res);
   const rows = await prisma.clientes.findMany({
     where: { CondominioID: condominioid },
-    select: { clienteid: true, nome: true, apartamento: true, boletoCodigoHash: true },
+    select: { clienteid: true, nome: true, apartamento: true },
     orderBy: { nome: "asc" },
   });
-  res.json(rows.map(({ boletoCodigoHash, ...owner }) => ({
-    ...owner, temCodigo: Boolean(boletoCodigoHash),
-  })));
+  res.json(rows);
 });
 
 function ownerScope(condominioid, clienteid) {
@@ -110,32 +106,14 @@ const remove = handle(async (req, res) => {
   res.status(204).end();
 });
 
-const issueCode = handle(async (req, res) => {
-  const clienteid = id(req.params.clienteid);
-  const condominioid = id(req.params.condominioid);
-  if (!clienteid || !condominioid) return notFound(res);
-  const codigo = randomBytes(16).toString("hex");
-  await prisma.clientes.update({
-    where: { clienteid, CondominioID: condominioid },
-    data: { boletoCodigoHash: hashCode(codigo) },
-    select: { clienteid: true },
-  });
-  res.json({ codigo });
-});
-
 const authorizeOwner = handle(async (req, res, next) => {
   const { clienteid, condominioid } = req.proprietario;
-  const code = req.get("X-Boleto-Code")?.trim().toLowerCase();
-  if (!code || !/^[a-f0-9]{32}$/.test(code)) {
-    return res.status(403).json({ error: "Informe o código de acesso aos boletos." });
-  }
   const where = ownerScope(condominioid, clienteid);
-  where.Cliente.boletoCodigoHash = hashCode(code);
   const owner = await prisma.clientes.findFirst({
     where: { clienteid, ...where.Cliente },
     select: { clienteid: true },
   });
-  if (!owner) return res.status(403).json({ error: "Código inválido. Consulte a administradora." });
+  if (!owner) return res.status(401).json({ error: "Sua sessão expirou. Entre novamente." });
   req.boletoScope = where;
   next();
 });
@@ -168,4 +146,4 @@ const send = handle(async (req, res) => {
   }).send(Buffer.from(record.pdf));
 });
 
-module.exports = { upload, condos, owners, list, create, replace, remove, issueCode, authorizeOwner, ownerList, send };
+module.exports = { upload, condos, owners, list, create, replace, remove, authorizeOwner, ownerList, send };

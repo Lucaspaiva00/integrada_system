@@ -79,9 +79,6 @@ test("mobile and desktop layouts, authenticated navigation and hostile data", as
         async (route) => {
           const path = new URL(route.request().url()).pathname;
           assert.match(route.request().headers().authorization, /Bearer test/);
-          if (path.startsWith("/portal/boletos")) {
-            assert.equal(route.request().headers()["x-boleto-code"], "a".repeat(32));
-          }
           if (path === "/portal/boletos-pdf/42") {
             return route.fulfill({ contentType: "application/pdf", body: "%PDF-1.7\n%%EOF" });
           }
@@ -93,7 +90,6 @@ test("mobile and desktop layouts, authenticated navigation and hostile data", as
       );
       await page.addInitScript(() => {
         sessionStorage.setItem("integrada.token", "test");
-        sessionStorage.setItem("integrada.boleto.code", "a".repeat(32));
       });
       for (const file of [
         "index.html",
@@ -182,8 +178,6 @@ test("login, loading failure, retry, empty state, session expiry and logout", as
     await page.screenshot({ path: "/tmp/integrada-home.png", fullPage: true });
     mode = "error";
     await page.goto(base + "/boleto.html");
-    await page.getByLabel("Código de acesso").fill("a".repeat(32));
-    await page.getByRole("button", { name: "Consultar boletos" }).click();
     await page.getByRole("button", { name: "Tentar novamente" }).waitFor();
     mode = "ok";
     await page.getByRole("button", { name: "Tentar novamente" }).click();

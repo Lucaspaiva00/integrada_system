@@ -33,7 +33,16 @@
     return path && pagePath.test(path.split("?")[0]) ? path : "index.html";
   }
 
-  window.IntegradaAdmin = { token, save, redirect, destination };
+  async function apiFetch(url, options = {}) {
+    const session = token();
+    const headers = new Headers(options.headers);
+    if (session) headers.set("Authorization", `Bearer ${session}`);
+    const response = await fetch(url, { ...options, headers });
+    if (response.status === 401 && token() === session) redirect();
+    return response;
+  }
+
+  window.IntegradaAdmin = { token, save, redirect, destination, apiFetch };
 
   if (!token() && sessionStorage.getItem(oldKey)) save(sessionStorage.getItem(oldKey));
   if (loginPage) {

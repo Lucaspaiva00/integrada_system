@@ -96,7 +96,7 @@ document.addEventListener("keydown", (e) => {
 // CARREGAR BASES
 // =========================
 async function carregarCondominios() {
-  const res = await fetch(uriCondominio);
+  const res = await window.IntegradaAdmin.apiFetch(uriCondominio);
   const data = await res.json();
   cacheConds = Array.isArray(data) ? data : [];
 
@@ -105,7 +105,7 @@ async function carregarCondominios() {
 }
 
 async function carregarProprietarios() {
-  const res = await fetch(uriClientes);
+  const res = await window.IntegradaAdmin.apiFetch(uriClientes);
   const data = await res.json();
   cacheProps = Array.isArray(data) ? data : [];
 
@@ -178,7 +178,7 @@ formNovo?.addEventListener("submit", async (e) => {
   btnNovoSubmit.disabled = true;
 
   try {
-    const res = await fetch(uri, {
+    const res = await window.IntegradaAdmin.apiFetch(uri, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -208,7 +208,7 @@ async function carregarInquilinos() {
     cardsContainer.innerHTML = `<div class="col-12 text-center text-muted py-4">Carregando inquilinos...</div>`;
     emptyState.classList.add("d-none");
 
-    const res = await fetch(uri);
+    const res = await window.IntegradaAdmin.apiFetch(uri);
     const dados = await res.json();
 
     cacheInq = Array.isArray(dados) ? dados : [];
@@ -334,7 +334,7 @@ formEditar?.addEventListener("submit", async (e) => {
   btnSalvarEdicao.disabled = true;
 
   try {
-    const res = await fetch(`${uri}/${id}`, {
+    const res = await window.IntegradaAdmin.apiFetch(`${uri}/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

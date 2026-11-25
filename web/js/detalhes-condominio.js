@@ -30,7 +30,7 @@ async function carregarDetalhes() {
         setText("condominioIdBadge", id);
 
         // 1) Dados do condomínio
-        const resp = await fetch(`${baseURL}/condominiocontroller/${id}`);
+        const resp = await window.IntegradaAdmin.apiFetch(`${baseURL}/condominiocontroller/${id}`);
         if (!resp.ok) throw new Error("Condomínio não encontrado.");
         const condominio = await resp.json();
 
@@ -39,7 +39,7 @@ async function carregarDetalhes() {
         setText("telefone", condominio.telefone, "Sem telefone");
 
         // 2) Proprietários (clientes)
-        const propResp = await fetch(`${baseURL}/clientescontroller`);
+        const propResp = await window.IntegradaAdmin.apiFetch(`${baseURL}/clientescontroller`);
         if (!propResp.ok) throw new Error("Erro ao buscar proprietários.");
         const proprietarios = await propResp.json();
 
@@ -71,7 +71,7 @@ async function carregarDetalhes() {
         }
 
         // 3) Inquilinos
-        const inqResp = await fetch(`${baseURL}/inquilinoscontroller`);
+        const inqResp = await window.IntegradaAdmin.apiFetch(`${baseURL}/inquilinoscontroller`);
         if (!inqResp.ok) throw new Error("Erro ao buscar inquilinos.");
         const inquilinos = await inqResp.json();
 

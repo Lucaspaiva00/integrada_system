@@ -31,6 +31,8 @@ router.post("/login/proprietario", security.loginLimit, loginControllerfrom.logi
 
 router.get("/", (req, res) => res.json("API respondendo"));
 
+router.use(["/clientescontroller", "/inquilinoscontroller", "/condominiocontroller"], admin.authenticate);
+
 // CLIENTES
 router.post("/clientescontroller", clientesController.create);
 router.get("/clientescontroller", clientesController.read);
@@ -68,7 +70,6 @@ router.post("/admin/login", security.loginLimit, admin.login);
 router.use("/admin/boletos", admin.authenticate);
 router.get("/admin/boletos/condominios", pdf.condos);
 router.get("/admin/boletos/condominios/:condominioid/proprietarios", pdf.owners);
-router.post("/admin/boletos/condominios/:condominioid/proprietarios/:clienteid/codigo", pdf.issueCode);
 router.get("/admin/boletos", pdf.list);
 router.post("/admin/boletos", pdf.upload, pdf.create);
 router.get("/admin/boletos/:id", pdf.send);

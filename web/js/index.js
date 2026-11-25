@@ -5,7 +5,7 @@ const consultas = new Map();
 function buscarRegistros(endpoint) {
   if (!consultas.has(endpoint)) {
     consultas.set(endpoint, (async () => {
-      const response = await fetch(`${baseURL}/${endpoint}`, {
+      const response = await window.IntegradaAdmin.apiFetch(`${baseURL}/${endpoint}`, {
         cache: "no-store",
         signal: AbortSignal.timeout(30000),
       });

@@ -111,7 +111,7 @@ formNovo?.addEventListener("submit", async (e) => {
   btnNovoSubmit.disabled = true;
 
   try {
-    const res = await fetch(uri, {
+    const res = await window.IntegradaAdmin.apiFetch(uri, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -142,7 +142,7 @@ async function listarCondominios() {
     `;
     emptyState.classList.add("d-none");
 
-    const res = await fetch(uri);
+    const res = await window.IntegradaAdmin.apiFetch(uri);
     const dados = await res.json();
 
     cache = Array.isArray(dados) ? dados : [];
@@ -238,7 +238,7 @@ formEditar?.addEventListener("submit", async (e) => {
   btnSalvarEdicao.disabled = true;
 
   try {
-    const res = await fetch(`${uri}/${id}`, {
+    const res = await window.IntegradaAdmin.apiFetch(`${uri}/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

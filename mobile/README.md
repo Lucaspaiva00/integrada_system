@@ -51,14 +51,11 @@ está protegida com esta alteração.
 
 Configure `BOLETOS_ADMIN_PASSWORD` no Render com uma senha aleatória de pelo
 menos 32 caracteres. Em **Boletos**, o administrador seleciona condomínio e
-proprietário, anexa o PDF e gera um código individual para entregar diretamente
-ao proprietário. O portal solicita esse código para liberar a consulta. Uma
-renovação invalida imediatamente o código anterior.
-
-A API mantém os PDFs no PostgreSQL e valida a sessão e o código a cada leitura.
-Os dados dos boletos anteriores continuam disponíveis após a autenticação
-adicional. As versões antigas do APK precisam ser atualizadas para consultar
-boletos. A compilação no GitHub Actions gera um APK debug para homologação.
+proprietário e anexa o PDF. A API mantém o arquivo no PostgreSQL e
+limita a consulta ao proprietário e condomínio da sessão. Os boletos
+anteriores continuam disponíveis. A versão 1.2 do app abre os boletos
+diretamente após o login.
+A compilação no GitHub Actions gera um APK debug para homologação.
 
 ## Validação
 

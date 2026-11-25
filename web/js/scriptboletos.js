@@ -10,7 +10,6 @@
   let replacementId;
   let listRequest = 0;
   let ownerRequest = 0;
-  let owners = [];
 
   async function request(path, options = {}, pdf = false) {
     const token = session.token();
@@ -37,18 +36,6 @@
     } finally {
       if (button) button.disabled = false;
     }
-  }
-
-  function hideCode() {
-    $("code").value = "";
-    $("code-result").hidden = true;
-  }
-
-  function updateCodeButton() {
-    const selected = owners.find((item) => String(item.clienteid) === owner.value);
-    const button = $("issue-code");
-    button.disabled = !selected;
-    button.textContent = selected?.temCodigo ? "Renovar código de acesso" : "Gerar código de acesso";
   }
 
   function formWithPDF(file) {
@@ -128,19 +115,15 @@
 
   async function selectCondo() {
     const seq = ++ownerRequest;
-    hideCode();
     owner.disabled = true;
-    owners = [];
     owner.replaceChildren(new Option("Selecione o proprietário", ""));
-    updateCodeButton();
     await Promise.all([
       loadList(),
       (async () => {
         if (!condo.value) return;
         const result = await request(`/boletos/condominios/${condo.value}/proprietarios`);
         if (seq !== ownerRequest || !session.token()) return;
-        owners = result;
-        owner.append(...owners.map((item) => new Option(`${item.nome} · ${item.apartamento}`, item.clienteid)));
+        owner.append(...result.map((item) => new Option(`${item.nome} · ${item.apartamento}`, item.clienteid)));
         owner.disabled = false;
       })(),
     ]);
@@ -157,23 +140,8 @@
 
   condo.onchange = () => run(selectCondo);
   owner.onchange = () => {
-    hideCode();
-    updateCodeButton();
     run(loadList);
   };
-  $("issue-code").onclick = () => run(async () => {
-    const selected = owners.find((item) => String(item.clienteid) === owner.value);
-    if (!selected) return;
-    const condoId = condo.value;
-    const ownerId = owner.value;
-    if (selected.temCodigo && !confirm("O código anterior deixará de funcionar. Renovar?")) return;
-    const result = await request(`/boletos/condominios/${condoId}/proprietarios/${ownerId}/codigo`, { method: "POST" });
-    selected.temCodigo = true;
-    if (condo.value === condoId && owner.value === ownerId && session.token()) {
-      $("code").value = result.codigo;
-      $("code-result").hidden = false;
-    }
-  }, $("issue-code")).finally(updateCodeButton);
   $("attach").onsubmit = (event) => {
     event.preventDefault();
     run(async () => {

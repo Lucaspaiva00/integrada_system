@@ -174,7 +174,7 @@ const onClickAbrirDocumento = async (documentoUrl) => {
 // ---------------------------
 async function carregarCondominios() {
   try {
-    const res = await fetch(uriCondominio);
+    const res = await window.IntegradaAdmin.apiFetch(uriCondominio);
     const dados = await res.json();
 
     selectCondominio.innerHTML = `<option value="">Selecione o condomínio</option>`;

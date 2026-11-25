@@ -104,7 +104,7 @@ documentoEditInput?.addEventListener("change", () => {
 // Carregar condomínios
 async function carregarCondominios() {
   try {
-    const res = await fetch(uriCondominios);
+    const res = await window.IntegradaAdmin.apiFetch(uriCondominios);
     const dados = await res.json();
     cacheCondominios = Array.isArray(dados) ? dados : [];
 

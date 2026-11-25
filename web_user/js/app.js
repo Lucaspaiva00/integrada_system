@@ -53,12 +53,10 @@
     );
   const brand = `<div class="brand"><span class="brand-mark">${icon("building")}</span><div>INTEGRADA<small>GESTÃO DE CONDOMÍNIOS</small></div></div>`;
   let token = sessionStorage.getItem("integrada.token");
-  const boletoCodeKey = "integrada.boleto.code";
   let leaving = false;
   function logout() {
     if (leaving) return;
     leaving = true;
-    sessionStorage.removeItem(boletoCodeKey);
     sessionStorage.removeItem("integrada.token");
     localStorage.removeItem("inquilino");
     location.replace("login_inquilino.html");
@@ -225,17 +223,6 @@
           .join("")}</div>`;
     } else load();
   }
-  function boletoHeaders() {
-    return { "X-Boleto-Code": sessionStorage.getItem(boletoCodeKey) || "" };
-  }
-  function askBoletoCode(list, message = "") {
-    list.innerHTML = `<div class="card"><h2>Acesso aos boletos</h2><p>Use o código individual fornecido pela administradora.</p><form id="boletoAccess"><label for="boletoCode">Código de acesso</label><input id="boletoCode" type="password" minlength="32" maxlength="32" pattern="[a-fA-F0-9]{32}" required><button class="button" type="submit">Consultar boletos</button><p class="error" role="alert">${esc(message)}</p></form></div>`;
-    document.querySelector("#boletoAccess").onsubmit = (event) => {
-      event.preventDefault();
-      sessionStorage.setItem(boletoCodeKey, document.querySelector("#boletoCode").value.trim());
-      load();
-    };
-  }
   async function openBoleto(button) {
     const download = button.hasAttribute("data-download");
     const native = window.Capacitor?.isNativePlatform();
@@ -245,7 +232,7 @@
     button.disabled = true;
     try {
       const blob = await request(`/portal/boletos-pdf/${button.dataset.boleto}?download=${Number(download)}`, {
-        pdf: true, headers: boletoHeaders(),
+        pdf: true,
       });
       const filename = `boleto-${button.dataset.reference}-${button.dataset.boleto}.pdf`;
       if (native) {
@@ -270,10 +257,6 @@
     } catch (error) {
       preview?.close();
       toast(error.message || "Não foi possível abrir o PDF.");
-      if (error.status === 403) {
-        sessionStorage.removeItem(boletoCodeKey);
-        load();
-      }
     } finally {
       button.disabled = false;
     }
@@ -281,20 +264,15 @@
   async function load() {
     const list = document.querySelector("#records");
     const button = document.querySelector("#refresh");
-    if (page === "boletos" && !sessionStorage.getItem(boletoCodeKey)) {
-      askBoletoCode(list);
-      return;
-    }
     button.disabled = true;
     list.innerHTML =
       '<div class="loading" role="status">Carregando dados do condomínio…</div>';
     try {
       let data;
       if (page === "boletos") {
-        const options = { headers: boletoHeaders() };
         const [current, legacy] = await Promise.all([
-          request("/portal/boletos-pdf", options),
-          request("/portal/boletos", options),
+          request("/portal/boletos-pdf"),
+          request("/portal/boletos"),
         ]);
         data = [...current, ...legacy].sort((a, b) => new Date(b.competencia) - new Date(a.competencia));
       } else data = await request(`/portal/${page}`);
@@ -308,11 +286,6 @@
               : "A administradora ainda não disponibilizou registros para seu condomínio.",
           );
     } catch (error) {
-      if (page === "boletos" && error.status === 403) {
-        sessionStorage.removeItem(boletoCodeKey);
-        askBoletoCode(list, error.message);
-        return;
-      }
       list.innerHTML = `<div class="card empty"><h2>Não foi possível carregar</h2><p>${esc(error.message)}</p><button class="button" id="retry">Tentar novamente</button></div>`;
       document.querySelector("#retry").onclick = load;
     } finally {
@@ -343,7 +316,6 @@
           throw new Error(
             "O acesso do aplicativo ainda não foi habilitado na API. Contate a administradora.",
           );
-        sessionStorage.removeItem(boletoCodeKey);
         sessionStorage.setItem("integrada.token", data.token);
         localStorage.removeItem("inquilino");
         location.replace("index.html");
