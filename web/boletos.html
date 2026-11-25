@@ -2,6 +2,7 @@
 <html lang="pt-br">
 
 <head>
+    <script src="js/admin-session.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Boletos | Integrada</title>
@@ -138,7 +139,7 @@
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="index.html" id="exit-module">
+                                <a class="dropdown-item" href="login.html" data-admin-logout>
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Sair
                                 </a>
@@ -150,11 +151,6 @@
                 <main class="container-fluid">
                     <h1 class="paiva-title mb-3">Boletos</h1>
                     <p role="status" id="feedback"></p>
-                    <form id="login" class="card card-body shadow mb-4" hidden>
-                        <label for="senha">Senha administrativa de boletos</label>
-                        <input id="senha" class="form-control mb-3" type="password" autocomplete="current-password" required>
-                        <button class="btn btn-primary align-self-start">Entrar</button>
-                    </form>
                     <section id="manager" hidden>
                         <div class="card card-body shadow mb-4">
                             <form id="attach">
@@ -178,7 +174,6 @@
                                 </div>
                                 <button class="btn btn-primary mb-2" id="publish">Disponibilizar boleto</button>
                                 <button class="btn btn-outline-primary mb-2" type="button" id="issue-code" disabled>Gerar código de acesso</button>
-                                <button class="btn btn-link mb-2" type="button" id="signout">Sair de Boletos</button>
                             </form>
                             <div id="code-result" hidden>
                                 <label for="code">Código individual. Envie-o diretamente ao proprietário.</label>

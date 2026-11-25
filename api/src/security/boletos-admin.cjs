@@ -13,7 +13,7 @@ function login(req, res) {
   if (typeof supplied !== "string" || !timingSafeEqual(hash(supplied), hash(password))) {
     return res.status(401).json({ error: "Senha administrativa inválida." });
   }
-  const expiry = Math.floor(Date.now() / 1000) + 8 * 60 * 60;
+  const expiry = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
   return res.json({ token: `${expiry}.${sign(expiry).toString("base64url")}` });
 }
 
@@ -24,7 +24,7 @@ function authenticate(req, res, next) {
     const signature = Buffer.from(token[2], "base64url");
     if (timingSafeEqual(signature, sign(token[1]))) return next();
   }
-  return res.status(401).json({ error: "Entre com a senha administrativa de boletos." });
+  return res.status(401).json({ error: "Sua sessão expirou. Entre novamente no painel." });
 }
 
 module.exports = { login, authenticate };

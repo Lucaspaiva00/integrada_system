@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Acesso ao painel | Integrada</title>
+    <script src="js/admin-session.js" data-login></script>
+    <script src="js/admin-login.js" defer></script>
+    <link href="css2/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <main class="container">
+        <div class="row justify-content-center">
+            <form id="admin-login" class="card card-body shadow col-11 col-sm-8 col-md-6 col-lg-5 mt-5 p-4">
+                <h1 class="paiva-title h3 mb-3">Painel da Integrada</h1>
+                <label for="password">Senha do painel</label>
+                <input id="password" class="form-control mb-3" type="password"
+                    autocomplete="current-password" required>
+                <button class="btn btn-primary align-self-start" type="submit">Entrar</button>
+                <p id="status" class="text-danger mb-0 mt-3" role="alert"></p>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

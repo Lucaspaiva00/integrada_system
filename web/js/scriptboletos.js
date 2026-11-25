@@ -1,35 +1,25 @@
 (() => {
   const api = "https://integrada-api.onrender.com/admin";
-  const key = "integrada.boletos.admin";
   const $ = (id) => document.getElementById(id);
-  const login = $("login");
   const manager = $("manager");
   const condo = $("condominio");
   const owner = $("proprietario");
   const feedback = $("feedback");
   const replacement = $("replacement");
-  let token = sessionStorage.getItem(key);
+  const session = window.IntegradaAdmin;
   let replacementId;
   let listRequest = 0;
   let ownerRequest = 0;
   let owners = [];
 
-  function showLogin() {
-    token = null;
-    sessionStorage.removeItem(key);
-    hideCode();
-    $("documents").replaceChildren();
-    manager.hidden = true;
-    login.hidden = false;
-  }
-
   async function request(path, options = {}, pdf = false) {
+    const token = session.token();
     const res = await fetch(api + path, {
       ...options,
       cache: "no-store",
       headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
     });
-    if (res.status === 401 && path !== "/login") showLogin();
+    if (res.status === 401 && session.token() === token) session.redirect();
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
       throw new Error(error.error || "Não foi possível concluir. Tente novamente.");
@@ -130,7 +120,7 @@
     if (!condo.value) return;
     const query = new URLSearchParams({ condominioid: condo.value, clienteid: owner.value });
     const rows = await request(`/boletos?${query}`);
-    if (seq !== listRequest || !token) return;
+    if (seq !== listRequest || !session.token()) return;
     $("empty").textContent = rows.length ? "" : "Nenhum PDF disponibilizado.";
     $("records").hidden = !rows.length;
     $("documents").replaceChildren(...rows.map(renderRow));
@@ -148,7 +138,7 @@
       (async () => {
         if (!condo.value) return;
         const result = await request(`/boletos/condominios/${condo.value}/proprietarios`);
-        if (seq !== ownerRequest || !token) return;
+        if (seq !== ownerRequest || !session.token()) return;
         owners = result;
         owner.append(...owners.map((item) => new Option(`${item.nome} · ${item.apartamento}`, item.clienteid)));
         owner.disabled = false;
@@ -162,34 +152,14 @@
       (item) => new Option(item.nomecondominio, item.condominioid),
     ));
     await selectCondo();
-    login.hidden = true;
     manager.hidden = false;
   }
 
-  login.onsubmit = (event) => {
-    event.preventDefault();
-    run(async () => {
-      const result = await request("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: $("senha").value }),
-      });
-      login.reset();
-      token = result.token;
-      sessionStorage.setItem(key, token);
-      await enter();
-    }, event.submitter);
-  };
   condo.onchange = () => run(selectCondo);
   owner.onchange = () => {
     hideCode();
     updateCodeButton();
     run(loadList);
-  };
-  $("exit-module").onclick = () => sessionStorage.removeItem(key);
-  $("signout").onclick = () => {
-    feedback.textContent = "";
-    showLogin();
   };
   $("issue-code").onclick = () => run(async () => {
     const selected = owners.find((item) => String(item.clienteid) === owner.value);
@@ -199,7 +169,7 @@
     if (selected.temCodigo && !confirm("O código anterior deixará de funcionar. Renovar?")) return;
     const result = await request(`/boletos/condominios/${condoId}/proprietarios/${ownerId}/codigo`, { method: "POST" });
     selected.temCodigo = true;
-    if (condo.value === condoId && owner.value === ownerId && token) {
+    if (condo.value === condoId && owner.value === ownerId && session.token()) {
       $("code").value = result.codigo;
       $("code-result").hidden = false;
     }
@@ -226,6 +196,5 @@
     });
   };
 
-  if (token) run(enter);
-  else showLogin();
+  if (session.token()) run(enter);
 })();
